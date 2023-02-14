@@ -1,28 +1,23 @@
 import express from 'express';
 import {Client, IntentsBitField as Intents } from 'discord.js'
+import ready from './listeners/ready';
+import interactionCreate from "./listeners/interactionCreate";
+import messageCreate from "./listeners/messageCreate";
+
 
 require('dotenv').config();
+const port = process.env.PORT;
+const token = process.env.CLIENT_TOKEN;
 
 const app = express();
-const port = 3000;
-const client = new Client({intents: [Intents.Flags.Guilds, Intents.Flags.GuildMessages]});
+const client = new Client({intents: [Intents.Flags.Guilds, Intents.Flags.GuildMessages, Intents.Flags.MessageContent]});
 
-/*app.get('/', (req, res) => {
-    res.send('Hello World!');
-});*/
+ready(client);
+interactionCreate(client);
 
-client.on("ready", () => {
-    console.log(`Logged in as ${client?.user?.tag}!`);
-})
+client.login(token);
 
-client.login(process.env.CLIENT_TOKEN);
-
-client.on('messageCreate', msg => {
-    console.log(msg);
-    if (msg.content === 'Hello') {
-        msg.reply(`Hello ${msg.author.username}`);
-    }
-});
+messageCreate(client);
 
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
