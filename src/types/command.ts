@@ -1,5 +1,6 @@
-import { CommandInteraction, ChatInputApplicationCommandData, Client } from "discord.js";
+import { CommandInteraction, ChatInputApplicationCommandData } from "discord.js";
+import Botty from "../base/botty";
 
 export interface ICommand extends ChatInputApplicationCommandData {
-    run: (client: Client, interaction: CommandInteraction) => void;
+    run: (client: Botty, interaction: CommandInteraction) => void;
 }

@@ -1,13 +1,13 @@
-import {Client} from "discord.js";
 import {commands} from "../commands";
+import Botty from "../base/botty";
 
-export default (client: Client): void => {
+export default (client: Botty): void => {
     client.on("ready", async () => {
         if (!client.user || !client.application) {
             return;
         }
         await client.application.commands.set(commands);
 
-        console.log(`${client.user.username} is online`);
+        client.logger.log(`${client.user.username} is online`, "log");
     });
 }

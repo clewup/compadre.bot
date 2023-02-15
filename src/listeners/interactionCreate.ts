@@ -1,7 +1,8 @@
-import { CommandInteraction, Client, Interaction } from "discord.js";
+import { CommandInteraction, Interaction } from "discord.js";
 import {commands} from "../commands";
+import Botty from "../base/botty";
 
-export default (client: Client): void => {
+export default (client: Botty): void => {
     client.on("interactionCreate", async (interaction: Interaction) => {
         if (interaction.isCommand() || interaction.isContextMenuCommand()) {
             await handleSlashCommand(client, interaction);
@@ -9,7 +10,7 @@ export default (client: Client): void => {
     });
 };
 
-const handleSlashCommand = async (client: Client, interaction: CommandInteraction): Promise<void> => {
+const handleSlashCommand = async (client: Botty, interaction: CommandInteraction): Promise<void> => {
     const slashCommand = commands.find(c => c.name === interaction.commandName);
 
     if (!slashCommand) {
