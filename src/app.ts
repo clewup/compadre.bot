@@ -4,6 +4,14 @@ import ready from './listeners/ready';
 import interactionCreate from "./listeners/interactionCreate";
 import messageCreate from "./listeners/messageCreate";
 import Botty from './base/botty'
+import guildBanAdd from "./listeners/guildBanAdd";
+import guildBanRemove from "./listeners/guildBanRemove";
+import guildMemberUpdate from "./listeners/guildMemberUpdate";
+import messageDelete from "./listeners/messageDelete";
+import roleCreate from "./listeners/roleCreate";
+import roleDelete from "./listeners/roleDelete";
+import roleUpdate from "./listeners/roleUpdate";
+import userUpdate from "./listeners/userUpdate";
 
 
 require('dotenv').config();
@@ -19,7 +27,15 @@ const init = async () => {
 
     await client.login(token);
 
+    guildBanAdd(client);
+    guildBanRemove(client);
+    guildMemberUpdate(client);
     messageCreate(client);
+    messageDelete(client);
+    roleCreate(client);
+    roleDelete(client);
+    roleUpdate(client)
+    userUpdate(client);
 }
 
 init();

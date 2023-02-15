@@ -4,7 +4,7 @@ export const Hello: ICommand = {
     name: "hello",
     description: "Say hello!",
     run: async (client, interaction) => {
-        const content = "Hello there!"
+        const content = "Hello!"
         await interaction.followUp({
             ephemeral: true,
             content
