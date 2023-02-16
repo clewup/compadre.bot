@@ -6,7 +6,6 @@ export default (client: Botty): void => {
         if (!client.user || !client.application) {
             return;
         }
-        await client.application.commands.set(commands);
 
         client.logger.log(`${client.user.username} is online and serving ${client.users.cache.size} user(s).`, "log");
     });

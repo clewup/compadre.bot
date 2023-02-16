@@ -11,7 +11,7 @@ export default (client: Botty): void => {
 };
 
 const handleSlashCommand = async (client: Botty, interaction: CommandInteraction): Promise<void> => {
-    const slashCommand = commands.find(c => c.name === interaction.commandName);
+    const slashCommand = commands.find(c => c.data.name === interaction.commandName);
 
     if (!slashCommand) {
         await interaction.followUp({ content: "An error has occurred" });
@@ -20,5 +20,5 @@ const handleSlashCommand = async (client: Botty, interaction: CommandInteraction
 
     await interaction.deferReply();
 
-    slashCommand.run(client, interaction);
+    slashCommand.execute(client, interaction);
 };

@@ -1,5 +1,6 @@
-import {ICommand} from "./types/command";
-import {Hello} from "./commands/hello";
-import {Ping} from "./commands/ping";
+import Hello from "./commands/hello";
+import Ping from "./commands/ping";
+import Clear from "./commands/clear";
+import {CommandClass} from "./base/command";
 
-export const commands: ICommand[] = [Hello, Ping]
+export const commands: CommandClass[] = [Hello, Ping, Clear]
