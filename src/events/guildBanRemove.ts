@@ -1,12 +1,8 @@
-import Botty from "../base/botty";
-import {GuildBan} from "discord.js";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 
-export default (client: Botty): void => {
-    client.on("guildBanRemove", async (guildBan ) => {
-        handleBanRemove(guildBan);
-    });
-};
-
-const handleBanRemove = (guildBan: GuildBan) => {
-
-}
+export default new EventClass({
+        name: Events.GuildBanRemove,
+        async execute(guildBan) {}
+    }
+);

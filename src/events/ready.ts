@@ -1,12 +1,11 @@
-import {commands} from "../commands";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 import Botty from "../base/botty";
 
-export default (client: Botty): void => {
-    client.on("ready", async () => {
-        if (!client.user || !client.application) {
-            return;
+export default new EventClass({
+        name: Events.ClientReady,
+        async execute(client) {
+            (client as Botty).logger.log(`${client.user.username} is online and serving ${client.users.cache.size} user(s).`)
         }
-
-        client.logger.log(`${client.user.username} is online and serving ${client.users.cache.size} user(s).`, "log");
-    });
-}
+    }
+);

@@ -1,12 +1,9 @@
-import Botty from "../base/botty";
-import {PartialUser, User} from "discord.js";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 
-export default (client: Botty): void => {
-    client.on("userUpdate", async (user ) => {
-        handleUserUpdate(user);
-    });
-};
-
-const handleUserUpdate = (user: User | PartialUser) => {
-
-}
+export default new EventClass({
+        name: Events.UserUpdate,
+        async execute(user) {
+        }
+    }
+);

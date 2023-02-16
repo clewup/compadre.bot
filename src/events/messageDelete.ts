@@ -1,13 +1,11 @@
-import {Message, PartialMessage} from "discord.js";
-import Botty from "../base/botty";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 
-export default (client: Botty): void => {
-    client.on("messageDelete", async (message) => {
-        await handleMessageDelete(client, message);
-    });
-};
-
-const handleMessageDelete = async (client: Botty, message: Message<boolean> | PartialMessage): Promise<void> => {
-    if(message.author?.bot) return;
-    if(!message.content?.startsWith("/")) return;
-};
+export default new EventClass({
+        name: Events.MessageDelete,
+        async execute(message) {
+            if(message.author?.bot) return;
+            if(!message.content?.startsWith("/")) return;
+        }
+    }
+);

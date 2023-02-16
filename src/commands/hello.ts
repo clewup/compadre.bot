@@ -14,10 +14,10 @@ export default new CommandClass({
         visible: true,
         guildOnly: false,
     },
-    async execute(client: Botty, interaction: ChatInputCommandInteraction<'cached'>) {
+    async execute(interaction: ChatInputCommandInteraction<'cached'>) {
         const content = `Hello, ${interaction.user.username}.`
 
-        await interaction.followUp({
+        await interaction.reply({
             ephemeral: true,
             content
         });

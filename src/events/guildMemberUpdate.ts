@@ -1,12 +1,8 @@
-import Botty from "../base/botty";
-import {GuildMember, PartialGuildMember} from "discord.js";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 
-export default (client: Botty): void => {
-    client.on("guildMemberUpdate", async (oldMember, newMember ) => {
-        handleMemberUpdate(oldMember, newMember);
-    });
-};
-
-const handleMemberUpdate = (oldMember: GuildMember | PartialGuildMember,  newMember: GuildMember) => {
-
-}
+export default new EventClass({
+        name: Events.GuildMemberUpdate,
+        async execute(oldMember, newMember) {}
+    }
+);

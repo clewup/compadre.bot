@@ -1,15 +1,7 @@
-interface ILogger {
-    log: (message: unknown, logType: string) => void;
-}
-
-const Logger: ILogger = {
-    log: (message: unknown, logType: string) => {
+class Logger {
+    public log(message: unknown) {
         const dateTime = new Date().toISOString();
-
-        switch(logType) {
-            case "log":
-                console.log(`${dateTime}: ${message}`)
-        }
+        console.log(`${dateTime}: ${message}`)
     }
 }
 export default Logger;

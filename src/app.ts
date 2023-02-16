@@ -9,10 +9,10 @@ const client = new Botty();
 
 client.start(client);
 
-client.on("disconnect", () => client.logger.log("Bot Disconnected", "log"))
-    .on("reconnecting", () => client.logger.log("Bot Reconnecting", "log"))
-    .on("error", (e) => client.logger.log(e, "log"))
-    .on("warn", (info) => client.logger.log(info, "log"));
+client.on("disconnect", () => client.logger.log("Bot Disconnected"))
+    .on("reconnecting", () => client.logger.log("Bot Reconnecting"))
+    .on("error", (e) => client.logger.log(e))
+    .on("warn", (info) => client.logger.log(info));
 
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);

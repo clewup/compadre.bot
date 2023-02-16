@@ -14,11 +14,14 @@ export default new CommandClass({
         visible: true,
         guildOnly: false,
     },
-    async execute(client: Botty, interaction: ChatInputCommandInteraction<'cached'>, args) {
+    async execute(interaction: ChatInputCommandInteraction<'cached'>, args) {
         const value = args[0];
         const content = `${value} messages cleared.`
 
         interaction.channel?.bulkDelete(value, true);
-        interaction.channel?.send(content);
+        await interaction.reply({
+            ephemeral: true,
+            content
+        });
     }
 })

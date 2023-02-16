@@ -1,12 +1,9 @@
-import Botty from "../base/botty";
-import {Role} from "discord.js";
+import {EventClass} from "../base/event";
+import {Events} from "discord.js";
 
-export default (client: Botty): void => {
-    client.on("roleCreate", async (role ) => {
-        handleRoleCreate(role);
-    });
-};
-
-const handleRoleCreate = (role: Role) => {
-
-}
+export default new EventClass({
+        name: Events.GuildRoleCreate,
+        async execute(role) {
+        }
+    }
+);

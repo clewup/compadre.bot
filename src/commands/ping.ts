@@ -14,10 +14,10 @@ export default new CommandClass({
         visible: true,
         guildOnly: false,
     },
-    async execute(client: Botty, interaction: ChatInputCommandInteraction<'cached'>) {
-        const content = `Latency: \`${interaction.createdTimestamp - interaction.createdTimestamp}ms\`\nAPI Latency: \`${Math.round(client.ws.ping)}ms\``
+    async execute(interaction: ChatInputCommandInteraction<'cached'>) {
+        const content = `Latency: \`${interaction.createdTimestamp - interaction.createdTimestamp}ms\`\nAPI Latency: \`${Math.round(interaction.client.ws.ping)}ms\``
 
-        await interaction.followUp({
+        await interaction.reply({
             ephemeral: true,
             content
         });

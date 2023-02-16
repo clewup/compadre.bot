@@ -14,6 +14,8 @@ import roleUpdate from "../events/roleUpdate";
 import userUpdate from "../events/userUpdate";
 import ready from "../events/ready";
 import interactionCreate from "../events/interactionCreate";
+import {events} from "../events";
+import functions from "../helpers/functions";
 
 class Botty extends Client {
     public logger;
@@ -33,8 +35,8 @@ class Botty extends Client {
                 parse: ["users"]
             }
         });
-        this.logger = Logger;
-        this.functions = Functions;
+        this.logger = new Logger();
+        this.functions = new Functions();
         this.commands = new Collection<string, CommandClass>();
     }
 
@@ -44,24 +46,25 @@ class Botty extends Client {
                 this.commands.set(command.data.name, command);
             }
             else {
-                this.logger.log("A command is not setup correctly.", "log");
+                this.logger.log("A command is not setup correctly.");
             }
         })
 
-        guildBanAdd(client);
-        guildBanRemove(client);
-        guildMemberUpdate(client);
-        messageCreate(client);
-        messageDelete(client);
-        roleCreate(client);
-        roleDelete(client);
-        roleUpdate(client)
-        userUpdate(client);
+        events.forEach((event) => {
+            if (event.name && !!event.execute) {
+                if (event.once) {
+                    this.once(event.name, (...args) => event.execute(...args));
+                } else {
+                    this.on(event.name, (...args) => event.execute(...args));
+                }
+            }
+            else {
+                this.logger.log("An event is not setup correctly.");
+            }
+        })
     }
 
     public async start(client: Botty) {
-        ready(client);
-        interactionCreate(client);
         await this.login(process.env.CLIENT_TOKEN);
         await this.loadModules(client);
     }
