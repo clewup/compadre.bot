@@ -1,6 +1,6 @@
 import Hello from "./commands/hello";
 import Ping from "./commands/ping";
 import Clear from "./commands/clear";
-import {CommandClass} from "./base/command";
+import {Command} from "./base/command";
 
-export const commands: CommandClass[] = [Hello, Ping, Clear]
+export const commands: Command[] = [Hello, Ping, Clear]

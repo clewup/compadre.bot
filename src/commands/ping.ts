@@ -1,8 +1,8 @@
-import {CommandClass} from "../base/command";
+import {Command} from "../base/command";
 import {ChatInputCommandInteraction, SlashCommandBuilder} from "discord.js";
 import Botty from "../base/botty";
 
-export default new CommandClass({
+export default new Command({
     data: new SlashCommandBuilder()
         .setName("ping")
         .setDescription("View your ping.") as SlashCommandBuilder,

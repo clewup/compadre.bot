@@ -1,21 +1,9 @@
 import {Client, Collection, IntentsBitField as Intents} from "discord.js";
 import Logger from "../helpers/logger";
 import Functions from "../helpers/functions";
-import {CommandClass} from "./command";
+import {Command} from "./command";
 import {commands} from "../commands";
-import guildBanAdd from "../events/guildBanAdd";
-import guildBanRemove from "../events/guildBanRemove";
-import guildMemberUpdate from "../events/guildMemberUpdate";
-import messageCreate from "../events/messageCreate";
-import messageDelete from "../events/messageDelete";
-import roleCreate from "../events/roleCreate";
-import roleDelete from "../events/roleDelete";
-import roleUpdate from "../events/roleUpdate";
-import userUpdate from "../events/userUpdate";
-import ready from "../events/ready";
-import interactionCreate from "../events/interactionCreate";
 import {events} from "../events";
-import functions from "../helpers/functions";
 
 class Botty extends Client {
     public logger;
@@ -37,7 +25,7 @@ class Botty extends Client {
         });
         this.logger = new Logger();
         this.functions = new Functions();
-        this.commands = new Collection<string, CommandClass>();
+        this.commands = new Collection<string, Command>();
     }
 
     private async loadModules(client: Botty) {

@@ -1,9 +1,9 @@
 import { Collection, Events, bold, inlineCode } from 'discord.js';
 
-import {EventClass} from "../base/event";
+import {Event} from "../base/event";
 import Botty from "../base/botty";
 
-export default new EventClass({
+export default new Event({
     name: Events.InteractionCreate,
     async execute(interaction) {
         if (!interaction.isCommand()) return;
