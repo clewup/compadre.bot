@@ -1,7 +1,7 @@
 import express from 'express';
 import Botty from './base/botty'
+import 'dotenv/config'
 
-require('dotenv').config();
 const port = process.env.PORT;
 
 const app = express();

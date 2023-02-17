@@ -22,43 +22,6 @@ export default new Event({
             return;
         };
 
-        if (command.opt?.guildOnly && interaction.channel?.isDMBased()) {
-            interaction.reply({
-                content: 'This command can only be used in a guild.',
-                ephemeral: true
-            });
-            return;
-        };
-
-        if (command.opt?.userPermissions) {
-            const missingUserPerms = botty.functions.missingPerms(interaction.member.permissionsIn(interaction.channel!), command.opt?.userPermissions) ?
-                botty.functions.missingPerms(interaction.member.permissionsIn(interaction.channel!), command.opt?.userPermissions) :
-                botty.functions.missingPerms(interaction.memberPermissions, command.opt?.userPermissions);
-
-            if (missingUserPerms?.length) {
-                interaction.reply({
-                    content: `You need the following permission${missingUserPerms.length > 1 ? "s" : ""}: ${missingUserPerms.map(x => inlineCode(x)).join(", ")}`,
-                    ephemeral: true
-                });
-                return;
-            };
-        };
-
-        if (command.opt?.botPermissions) {
-            const missingBotPerms = botty.functions.missingPerms(interaction.guild.members.me?.permissionsIn(interaction.channel!), command.opt?.botPermissions) ?
-                botty.functions.missingPerms(interaction.guild.members.me?.permissionsIn(interaction.channel!), command.opt?.botPermissions) :
-                botty.functions.missingPerms(interaction.guild.members.me?.permissions, command.opt?.botPermissions);
-
-            if (missingBotPerms?.length) {
-                interaction.reply({
-                    content: `I need the following permission${missingBotPerms.length > 1 ? "s" : ""}: ${missingBotPerms.map(x => inlineCode(x)).join(", ")}`,
-                    ephemeral: true
-                });
-                return;
-            };
-        };
-
-
         try {
             await command.execute(interaction);
         } catch (error) {

@@ -1,27 +1,32 @@
 import {Command} from "../base/command";
-import {ChatInputCommandInteraction, SlashCommandBuilder} from "discord.js";
-import Botty from "../base/botty";
+import {ChatInputCommandInteraction, PermissionsBitField, SlashCommandBuilder} from "discord.js";
 
 export default new Command({
     data: new SlashCommandBuilder()
         .setName("clear")
-        .setDescription("Clear a specified amount of messages.") as SlashCommandBuilder,
-    opt: {
-        userPermissions: ['ManageMessages'],
-        botPermissions: ['ManageMessages'],
-        category: 'General',
-        cooldown: 5,
-        visible: true,
-        guildOnly: false,
-    },
-    async execute(interaction: ChatInputCommandInteraction<'cached'>, args) {
-        const value = args[0];
-        const content = `${value} messages cleared.`
+        .setDescription("Clear a specified amount of messages.")
+        .addIntegerOption(option => option
+            .setName("amount")
+            .setRequired(true))
+        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages),
 
-        interaction.channel?.bulkDelete(value, true);
-        await interaction.reply({
-            ephemeral: true,
-            content
-        });
+    async execute(interaction: ChatInputCommandInteraction<'cached'>) {
+        const amount = interaction.options.getInteger("amount");
+        const content = `${amount} messages cleared.`
+
+        if (!amount) {
+            await interaction.reply({
+                content: 'Please provide an amount.',
+                ephemeral: true
+            })
+        }
+
+        else {
+            interaction.channel?.bulkDelete(amount, true);
+            await interaction.reply({
+                ephemeral: true,
+                content
+            });
+        }
     }
 })
