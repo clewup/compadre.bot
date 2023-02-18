@@ -7,6 +7,7 @@ export default new Command({
         .setDescription("Clear a specified amount of messages.")
         .addIntegerOption(option => option
             .setName("amount")
+            .setDescription("The amount of messages to be cleared.")
             .setRequired(true))
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages),
 

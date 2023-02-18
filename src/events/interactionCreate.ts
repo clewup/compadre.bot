@@ -18,7 +18,7 @@ export default new Event({
                 content: `⚠️ There is no command matching ${inlineCode(interaction.commandName)}!`,
                 ephemeral: true,
             });
-            botty.logger.log(`No command matching ${interaction.commandName} was found.`);
+            botty.logger.logWarning(`No command matching ${interaction.commandName} was found.`);
             return;
         };
 
@@ -29,7 +29,7 @@ export default new Event({
                 content: `There was an error while executing this command. \nCheck the console for more info.`,
                 ephemeral: true
             });
-            botty.logger.log(`Error executing ${interaction.commandName}: ${error}`);
+            botty.logger.logWarning(`Error executing ${interaction.commandName}: ${error}`);
         }
     }
 });

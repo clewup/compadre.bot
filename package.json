@@ -16,9 +16,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node ./dist/app.js",
+    "start": "yarn build && node ./dist/app.js",
     "dev": "ts-node ./src/app.ts",
-    "deploy": "yarn build && ts-node ./dist/deploy.js"
+    "deploy": "yarn build && node dist/deploy.js"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.52.0",

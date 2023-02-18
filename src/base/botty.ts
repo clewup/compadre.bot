@@ -1,9 +1,15 @@
-import {Client, Collection, IntentsBitField as Intents} from "discord.js";
+import {Client, Collection, ContextMenuCommandBuilder,
+    IntentsBitField as Intents,
+    REST,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+    RESTPostAPIContextMenuApplicationCommandsJSONBody,
+    SlashCommandBuilder
+} from "discord.js";
 import Logger from "../helpers/logger";
 import Functions from "../helpers/functions";
 import {Command} from "./command";
-import {commands} from "../commands";
-import {events} from "../events";
+import fs from 'node:fs';
+import path from 'node:path';
 
 class Botty extends Client {
     public logger;
@@ -11,7 +17,8 @@ class Botty extends Client {
     public commands;
 
     constructor() {
-        super({intents: [
+        super({
+            intents: [
                 Intents.Flags.Guilds,
                 Intents.Flags.GuildMembers,
                 Intents.Flags.GuildMessages,
@@ -21,40 +28,75 @@ class Botty extends Client {
             ],
             allowedMentions: {
                 parse: ["users"]
-            }
+            },
         });
         this.logger = new Logger();
         this.functions = new Functions();
         this.commands = new Collection<string, Command>();
     }
 
-    private async loadModules(client: Botty) {
-        commands.forEach((command) => {
-            if (command.data && !!command.execute) {
-                this.commands.set(command.data.name, command);
-            }
-            else {
-                this.logger.log("A command is not setup correctly.");
-            }
-        })
+    private async setCommands() {
+        const commandsPath = path.join(__dirname, '..', 'commands');
+        const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js') || file.endsWith('.ts'));
 
-        events.forEach((event) => {
-            if (event.name && !!event.execute) {
+        this.logger.logInfo(`Initializing commands.`);
+        for (const file of commandFiles) {
+            const filePath = path.join(commandsPath, file);
+            let command = await import(filePath);
+            command = command.default;
+
+            if ('data' in command && 'execute' in command) {
+                this.commands.set(command.data.name, command);
+
+            } else {
+                console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+            }
+        }
+    }
+
+    private async setEvents() {
+        const eventsPath = path.join(__dirname, '..', 'events');
+        const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js') || file.endsWith('.ts'));
+
+        this.logger.logInfo(`Initializing events.`);
+        for (const file of eventFiles) {
+            const filePath = path.join(eventsPath, file);
+            let event = await import(filePath);
+            event = event.default;
+
+            if ('name' in event && 'execute' in event) {
                 if (event.once) {
                     this.once(event.name, (...args) => event.execute(...args));
                 } else {
                     this.on(event.name, (...args) => event.execute(...args));
                 }
+            } else {
+                console.log(`[WARNING] The event at ${filePath} is missing a required "name" or "execute" property.`);
             }
-            else {
-                this.logger.log("An event is not setup correctly.");
-            }
-        })
+        }
     }
 
-    public async start(client: Botty) {
-        await this.login(process.env.CLIENT_TOKEN);
-        await this.loadModules(client);
+    // /*private async refreshCommands() {
+    //     const commands: (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[] = [];
+    //     this.commands.forEach((command) => {
+    //         console.log(JSON.stringify(command.data));
+    //     })
+    //
+    //     try {
+    //         this.logger.log("Refreshing commands");
+    //         await this.rest.put(`/${process.env.CLIENT_TOKEN!}/commands`, {
+    //             body: commands,
+    //         })
+    //         this.logger.log(`Successfully refreshed application (/) commands.`);
+    //     }
+    //     catch (error) {
+    //         this.logger.log(error);
+    //     }
+    // }*/
+
+    public async start() {
+        await this.setCommands();
+        await this.setEvents();
     }
 }
 

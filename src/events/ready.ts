@@ -4,8 +4,13 @@ import Botty from "../base/botty";
 
 export default new Event({
         name: Events.ClientReady,
+        once: true,
         async execute(client) {
-            (client as Botty).logger.log(`${client.user.username} is online and serving ${client.users.cache.size} user(s).`)
+            (client as Botty).logger.logInfo(`${client.user.username} is online and serving ${client.users.cache.size} user(s).`);
+
+            client.users.cache.map((guild) => {
+                return (client as Botty).logger.log(`${guild.id} ✅`)
+            })
         }
     }
 );
