@@ -49,7 +49,7 @@ class Botty extends Client {
                 this.commands.set(command.data.name, command);
 
             } else {
-                console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+                this.logger.logWarning(`The command at ${filePath} is missing a required "data" or "execute" property.`);
             }
         }
     }
@@ -71,7 +71,7 @@ class Botty extends Client {
                     this.on(event.name, (...args) => event.execute(...args));
                 }
             } else {
-                console.log(`[WARNING] The event at ${filePath} is missing a required "name" or "execute" property.`);
+                this.logger.logWarning(`The event at ${filePath} is missing a required "name" or "execute" property.`);
             }
         }
     }
@@ -84,7 +84,7 @@ class Botty extends Client {
     //
     //     try {
     //         this.logger.log("Refreshing commands");
-    //         await this.rest.put(`/${process.env.CLIENT_TOKEN!}/commands`, {
+    //         await this.rest.put(`/${process.env.DISCORD_CLIENT_TOKEN!}/commands`, {
     //             body: commands,
     //         })
     //         this.logger.log(`Successfully refreshed application (/) commands.`);

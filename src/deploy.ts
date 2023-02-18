@@ -19,14 +19,14 @@ const refreshCommands = async () => {
         commands.push(command.data.toJSON());
     };
 
-    const rest = new REST({ version: '10' }).setToken(process.env.CLIENT_TOKEN!);
+    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_CLIENT_TOKEN!);
 
     await (async () => {
         try {
             let data: string | any[];
 
             data = await rest.put(
-                Routes.applicationCommands(process.env.APPLICATION_ID!),
+                Routes.applicationCommands(process.env.DISCORD_APPLICATION_ID!),
                 {body: commands},
             ) as Command['data'][];
 
