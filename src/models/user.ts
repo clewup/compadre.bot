@@ -6,29 +6,30 @@ import {
   DataType,
 } from "sequelize-typescript";
 
+export interface IUser {
+  id: string;
+  bot: boolean;
+  username: string;
+  discriminator: string;
+}
+
 @Table({
   timestamps: false,
   tableName: "User",
 })
-class User extends Model {
+class User extends Model<IUser> {
   @PrimaryKey
   @Column({ type: DataType.STRING })
-  Id!: string;
+  id!: string;
 
   @Column({ type: DataType.BOOLEAN })
-  Bot!: boolean;
+  bot!: boolean;
 
   @Column({ type: DataType.STRING })
-  Username!: string;
+  username!: string;
 
   @Column({ type: DataType.STRING })
-  Discriminator!: string;
-
-  @Column({ type: DataType.BOOLEAN })
-  Verified!: boolean;
-
-  @Column({ type: DataType.BOOLEAN })
-  Mfa!: boolean;
+  discriminator!: string;
 }
 
 export default User;

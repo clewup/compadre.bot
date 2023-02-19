@@ -16,8 +16,7 @@ class Database extends Sequelize {
           rejectUnauthorized: false,
         },
       },
-      //logging: (message) => this.logger.logDb(message),
-      logging: false,
+      logging: (message) => this.logger.logDb(message),
       models: [User, Guild],
     });
     this.logger = new Logger();

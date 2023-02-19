@@ -6,32 +6,42 @@ import {
   DataType,
 } from "sequelize-typescript";
 
+export interface IGuild {
+  id: string;
+  name: string;
+  ownerId: string;
+  memberCount: number;
+  joinedTimestamp: number;
+  maximumMembers: number;
+  preferredLocale: string;
+}
+
 @Table({
   timestamps: false,
   tableName: "Guild",
 })
-class Guild extends Model {
+class Guild extends Model<IGuild> {
   @PrimaryKey
   @Column({ type: DataType.STRING })
-  Id!: string;
+  id!: string;
 
   @Column({ type: DataType.STRING })
-  Name!: string;
+  name!: string;
 
   @Column({ type: DataType.STRING })
-  OwnerId!: string;
+  ownerId!: string;
 
   @Column({ type: DataType.BIGINT })
-  MemberCount!: number;
+  memberCount!: number;
 
   @Column({ type: DataType.BIGINT })
-  JoinedTimestamp!: number;
+  joinedTimestamp!: number;
 
   @Column({ type: DataType.BIGINT })
-  MaximumMembers!: number;
+  maximumMembers!: number;
 
   @Column({ type: DataType.STRING })
-  PreferredLocale!: string;
+  preferredLocale!: string;
 }
 
 export default Guild;
