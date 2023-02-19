@@ -1,23 +1,37 @@
-import { Sequelize } from "sequelize-typescript";
-import config from "../config";
+import { Prisma, PrismaClient } from "@prisma/client";
 import Logger from "../helpers/logger";
-import User from "../models/user";
-import Guild from "../models/guild";
 
-class Database extends Sequelize {
+class Database extends PrismaClient<
+  Prisma.PrismaClientOptions,
+  "query" | "error" | "warn"
+> {
   public logger;
 
   constructor() {
-    super(config.databaseUrl || "", {
-      dialect: "postgres",
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
+    super({
+      log: [
+        {
+          emit: "event",
+          level: "query",
         },
-      },
-      logging: (message) => this.logger.logDb(message),
-      models: [User, Guild],
+        {
+          emit: "stdout",
+          level: "error",
+        },
+        {
+          emit: "stdout",
+          level: "warn",
+        },
+      ],
+    });
+    this.$on("query", (e) => {
+      this.logger.logDb(`${e.query}, ${e.params}, ${e.duration}ms`);
+    });
+    this.$on("error", (e) => {
+      this.logger.logError(`${e.message}`);
+    });
+    this.$on("warn", (e) => {
+      this.logger.logWarning(`${e.message}`);
     });
     this.logger = new Logger();
   }
@@ -25,11 +39,16 @@ class Database extends Sequelize {
   public async start() {
     try {
       this.logger.logInfo("Initializing database connection.");
-      await this.authenticate();
-      await this.sync({ force: config.forceDatabaseReset });
+      await this.$connect();
+      await this.$disconnect();
     } catch (error) {
-      this.logger.logError(`Could not initialize the database (${error})`);
+      this.logger.logError(`Could not initialize the database (${error}).`);
     }
   }
+
+  public disconnect() {
+    super.$disconnect();
+  }
 }
+
 export default Database;

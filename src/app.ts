@@ -7,11 +7,11 @@ import Database from "./base/database";
 const port = config.port;
 
 const app = express();
-const db = new Database();
+const database = new Database();
 const botty = new Botty();
 
 const init = async () => {
-  await db.start();
+  await database.start();
   await botty.start();
 };
 

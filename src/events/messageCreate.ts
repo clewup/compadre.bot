@@ -1,6 +1,5 @@
 import { Event } from "../base/event";
 import { Events } from "discord.js";
-import User from "../models/user";
 import UserManager from "../managers/userManager";
 
 export default new Event({

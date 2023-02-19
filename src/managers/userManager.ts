@@ -1,22 +1,31 @@
-import User, { IUser } from "../models/user";
+import Database from "../base/database";
+import { User } from "@prisma/client";
 
 interface IUserManager {
   getUser: (id: string) => Promise<User | null>;
-  createUser: (user: IUser) => Promise<User>;
+  createUser: (user: User) => Promise<User>;
 }
 
 class UserManager implements IUserManager {
-  public async getUser(id: string): Promise<User | null> {
-    return await User.findOne({ where: { id: id } });
+  private database;
+
+  constructor() {
+    this.database = new Database();
   }
 
-  public async createUser(user: IUser): Promise<User> {
-    return await new User({
-      id: user.id,
-      bot: user.bot,
-      username: user.username,
-      discriminator: user.discriminator,
-    }).save();
+  public async getUser(id: string): Promise<User | null> {
+    return await this.database.user.findFirst({ where: { id: id } });
+  }
+
+  public async createUser(user: User): Promise<User> {
+    return this.database.user.create({
+      data: {
+        id: user.id,
+        bot: user.bot,
+        username: user.username,
+        discriminator: user.discriminator,
+      },
+    });
   }
 }
 export default UserManager;
