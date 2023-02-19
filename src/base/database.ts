@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import config from "../config";
 import Logger from "../helpers/logger";
 import User from "../models/user";
+import Guild from "../models/guild";
 
 class Database extends Sequelize {
   public logger;
@@ -17,7 +18,7 @@ class Database extends Sequelize {
       },
       //logging: (message) => this.logger.logDb(message),
       logging: false,
-      models: [User],
+      models: [User, Guild],
     });
     this.logger = new Logger();
   }

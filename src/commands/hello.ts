@@ -6,7 +6,6 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import Botty from "../base/botty";
 
 export default new Command({
   data: new SlashCommandBuilder()

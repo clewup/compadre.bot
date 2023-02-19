@@ -1,7 +1,6 @@
 import { Collection, Events, bold, inlineCode } from "discord.js";
 
 import { Event } from "../base/event";
-import Botty from "../base/botty";
 
 export default new Event({
   name: Events.InteractionCreate,
@@ -9,9 +8,7 @@ export default new Event({
     if (!interaction.isCommand()) return;
     if (!interaction.inCachedGuild()) return;
 
-    const botty = interaction.client as Botty;
-
-    const command = botty.commands.get(interaction.commandName);
+    const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command?.data) {
       interaction.reply({
@@ -20,7 +17,7 @@ export default new Event({
         )}!`,
         ephemeral: true,
       });
-      botty.logger.logWarning(
+      interaction.client.logger.logWarning(
         `No command matching ${interaction.commandName} was found.`
       );
       return;
@@ -33,7 +30,7 @@ export default new Event({
         content: `There was an error while executing this command. \nCheck the console for more info.`,
         ephemeral: true,
       });
-      botty.logger.logWarning(
+      interaction.client.logger.logWarning(
         `Error executing ${interaction.commandName}: ${error}`
       );
     }

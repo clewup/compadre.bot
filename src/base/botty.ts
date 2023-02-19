@@ -12,7 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import config from "../config";
 
-class Botty extends Client {
+class Botty<Ready extends boolean = boolean> extends Client {
   public logger;
   public functions;
   public commands;
