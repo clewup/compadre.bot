@@ -1,9 +1,7 @@
-import {Event} from "../base/event";
-import {Events} from "discord.js";
+import { Event } from "../base/event";
+import { Events } from "discord.js";
 
 export default new Event({
-        name: Events.GuildRoleCreate,
-        async execute(role) {
-        }
-    }
-);
+  name: Events.GuildRoleCreate,
+  async execute(role) {},
+});
