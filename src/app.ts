@@ -1,19 +1,21 @@
 import express from "express";
 import Botty from "./base/botty";
-import "dotenv/config";
 import { Events } from "discord.js";
-import Pg from "./base/pg";
+import config from "./config";
+import Database from "./base/database";
 
-const port = process.env.PORT;
+const port = config.port;
 
 const app = express();
-const pg = new Pg();
+const db = new Database();
 const botty = new Botty();
 
-pg.start();
+const init = async () => {
+  await db.start();
+  await botty.start();
+};
 
-botty.login(process.env.DISCORD_CLIENT_TOKEN);
-botty.start();
+init();
 
 botty
   .on(Events.ShardDisconnect, () => botty.logger.logInfo("Bot Disconnected"))

@@ -1,9 +1,9 @@
 import { REST, Routes } from "discord.js";
 import { Command } from "./base/command.js";
-import "dotenv/config";
 
 import fs from "node:fs";
 import path from "node:path";
+import config from "./config";
 
 const commands: any[] = [];
 
@@ -22,7 +22,7 @@ const refreshCommands = async () => {
   }
 
   const rest = new REST({ version: "10" }).setToken(
-    process.env.DISCORD_CLIENT_TOKEN!
+    config.discordClientToken || ""
   );
 
   await (async () => {
@@ -30,7 +30,7 @@ const refreshCommands = async () => {
       let data: string | any[];
 
       data = (await rest.put(
-        Routes.applicationCommands(process.env.DISCORD_APPLICATION_ID!),
+        Routes.applicationCommands(config.discordApplicationId || ""),
         { body: commands }
       )) as Command["data"][];
 

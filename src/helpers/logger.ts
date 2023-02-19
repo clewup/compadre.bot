@@ -15,5 +15,9 @@ class Logger {
     const dateTime = new Date().toISOString();
     console.log(`\x1b[31m${dateTime}: [ERROR] \x1b[0m${message}`);
   }
+  public logDb(message: unknown) {
+    const dateTime = new Date().toISOString();
+    console.log(`\x1b[35m${dateTime}: [DB] \x1b[0m${message}`);
+  }
 }
 export default Logger;

@@ -1,18 +1,16 @@
 import {
   Client,
   Collection,
-  ContextMenuCommandBuilder,
   IntentsBitField as Intents,
-  REST,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   RESTPostAPIContextMenuApplicationCommandsJSONBody,
-  SlashCommandBuilder,
 } from "discord.js";
 import Logger from "../helpers/logger";
 import Functions from "../helpers/functions";
 import { Command } from "./command";
 import fs from "node:fs";
 import path from "node:path";
+import config from "../config";
 
 class Botty extends Client {
   public logger;
@@ -94,7 +92,7 @@ class Botty extends Client {
   //
   //     try {
   //         this.logger.log("Refreshing commands");
-  //         await this.rest.put(`/${process.env.DISCORD_CLIENT_TOKEN!}/commands`, {
+  //         await this.rest.put(`/${config.discordClientToken}/commands`, {
   //             body: commands,
   //         })
   //         this.logger.log(`Successfully refreshed application (/) commands.`);
@@ -107,6 +105,7 @@ class Botty extends Client {
   public async start() {
     await this.setCommands();
     await this.setEvents();
+    await this.login(config.discordClientToken);
   }
 }
 
