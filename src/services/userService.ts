@@ -1,12 +1,13 @@
 import Database from "../base/database";
 import { User } from "@prisma/client";
+import config from "../config";
 
-interface IUserManager {
+interface IUserService {
   getUser: (id: string) => Promise<User | null>;
   createUser: (user: User) => Promise<User>;
 }
 
-class UserManager implements IUserManager {
+class UserService implements IUserService {
   private database;
 
   constructor() {
@@ -24,8 +25,9 @@ class UserManager implements IUserManager {
         bot: user.bot,
         username: user.username,
         discriminator: user.discriminator,
+        clientAdmin: config.clientAdmins.includes(user.id),
       },
     });
   }
 }
-export default UserManager;
+export default UserService;

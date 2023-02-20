@@ -1,15 +1,15 @@
 import { Event } from "../base/event";
 import { Events } from "discord.js";
-import UserManager from "../managers/userManager";
+import UserService from "../services/userService";
 
 export default new Event({
   name: Events.MessageCreate,
   async execute(message) {
-    const userManager = new UserManager();
+    const userService = new UserService();
 
-    const user = await userManager.getUser(message.author.id);
-    if (!user) {
-      await userManager.createUser(message.author);
+    const existingUser = await userService.getUser(message.author.id);
+    if (!existingUser) {
+      await userService.createUser({ ...message.author, clientAdmin: false });
     }
 
     if (message.author.bot) return;

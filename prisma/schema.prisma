@@ -11,9 +11,9 @@ model Guild {
   id              String  @id @db.VarChar(255)
   name            String? @db.VarChar(255)
   ownerId         String? @db.VarChar(255)
-  memberCount     BigInt?
+  memberCount     Int?
   joinedTimestamp BigInt?
-  maximumMembers  BigInt?
+  maximumMembers  Int?
   preferredLocale String? @db.VarChar(255)
 }
 
@@ -22,4 +22,5 @@ model User {
   bot           Boolean?
   username      String?  @db.VarChar(255)
   discriminator String?  @db.VarChar(255)
+  clientAdmin Boolean?
 }
