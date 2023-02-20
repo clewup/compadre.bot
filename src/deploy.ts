@@ -4,7 +4,9 @@ import { Command } from "./base/command.js";
 import fs from "node:fs";
 import path from "node:path";
 import config from "./config";
+import Logger from "./helpers/logger";
 
+const logger = new Logger();
 const commands: any[] = [];
 
 const commandsPath = path.join(__dirname, "commands");
@@ -38,9 +40,9 @@ const refreshCommands = async () => {
         { body: commands }
       )) as Command["data"][];
 
-      console.log(`Successfully refreshed ${data.length} commands.`);
+      logger.logInfo(`Successfully refreshed ${data.length} commands.`);
     } catch (error) {
-      console.error(error);
+      logger.logError(error);
     }
   })();
 };

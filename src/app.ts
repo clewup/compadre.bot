@@ -3,12 +3,14 @@ import Botty from "./base/botty";
 import { Events } from "discord.js";
 import config from "./config";
 import Database from "./base/database";
+import Logger from "./helpers/logger";
 
 const port = config.port;
 
 const app = express();
 const database = new Database();
 const botty = new Botty();
+const logger = new Logger();
 
 const init = async () => {
   await database.start();
@@ -25,5 +27,5 @@ botty
   .on(Events.Warn, (info) => botty.logger.logWarning(info));
 
 app.listen(port, () => {
-  //return console.log(`Express is listening at http://localhost:${port}`);
+  return logger.logInfo(`Server is listening at http://localhost:${port}.`);
 });

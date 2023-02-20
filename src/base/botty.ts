@@ -89,24 +89,6 @@ class Botty<Ready extends boolean = boolean> extends Client {
     }
   }
 
-  // /*private async refreshCommands() {
-  //     const commands: (RESTPostAPIChatInputApplicationCommandsJSONBody | RESTPostAPIContextMenuApplicationCommandsJSONBody)[] = [];
-  //     this.commands.forEach((command) => {
-  //         console.log(JSON.stringify(command.data));
-  //     })
-  //
-  //     try {
-  //         this.logger.log("Refreshing commands");
-  //         await this.rest.put(`/${config.discordClientToken}/commands`, {
-  //             body: commands,
-  //         })
-  //         this.logger.log(`Successfully refreshed application (/) commands.`);
-  //     }
-  //     catch (error) {
-  //         this.logger.log(error);
-  //     }
-  // }*/
-
   public async start() {
     await this.setCommands();
     await this.setEvents();

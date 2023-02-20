@@ -14,13 +14,9 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Green)
-      .setTitle(`Hello, ${interaction.user.username}`);
-
     await interaction.reply({
       ephemeral: true,
-      embeds: [embed],
+      content: `Hello, ${interaction.user.username}`,
     });
   },
 });

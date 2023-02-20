@@ -26,7 +26,7 @@
     "build": "tsc",
     "start": "yarn build && node ./dist/app.js",
     "dev": "ts-node ./src/app.ts",
-    "deploy": "yarn prisma generate && yarn build && node dist/deploy.js",
+    "deploy": "yarn build && node dist/deploy.js",
     "postinstall": "yarn prisma generate && patch-package"
   },
   "devDependencies": {

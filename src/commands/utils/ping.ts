@@ -14,17 +14,11 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Green)
-      .setTitle(
-        `Latency: \`${
-          interaction.createdTimestamp - interaction.createdTimestamp
-        }ms\`\nAPI Latency: \`${Math.round(interaction.client.ws.ping)}ms\``
-      );
-
     await interaction.reply({
       ephemeral: true,
-      embeds: [embed],
+      content: `Latency: \`${
+        interaction.createdTimestamp - interaction.createdTimestamp
+      }ms\`\nAPI Latency: \`${Math.round(interaction.client.ws.ping)}ms\``,
     });
   },
 });

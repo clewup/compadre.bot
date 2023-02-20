@@ -11,10 +11,7 @@ export default new Event({
     client.guilds.cache.map(async (guild) => {
       const existingGuild = await guildService.getGuild(guild.id);
       if (!existingGuild) {
-        await guildService.createGuild({
-          ...guild,
-          joinedTimestamp: BigInt(guild.joinedTimestamp),
-        });
+        await guildService.createGuild(guild);
       }
     });
 

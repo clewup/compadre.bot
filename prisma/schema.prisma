@@ -15,6 +15,7 @@ model Guild {
   joinedTimestamp BigInt?
   maximumMembers  Int?
   preferredLocale String? @db.VarChar(255)
+  notificationChannel String @db.VarChar(255)
 }
 
 model User {

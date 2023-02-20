@@ -21,14 +21,11 @@ export default new Command({
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const amount = interaction.options.getInteger("amount");
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Green)
-      .setTitle(`${amount} messages cleared.`);
 
     interaction.channel?.bulkDelete(amount!, true);
     await interaction.reply({
       ephemeral: true,
-      embeds: [embed],
+      content: `${amount} messages cleared.`,
     });
   },
 });
