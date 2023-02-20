@@ -38,22 +38,27 @@ class Botty<Ready extends boolean = boolean> extends Client {
 
   private async setCommands() {
     const commandsPath = path.join(__dirname, "..", "commands");
-    const commandFiles = fs
-      .readdirSync(commandsPath)
-      .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
+    const commandFolders = fs.readdirSync(commandsPath);
 
     this.logger.logInfo(`Initializing commands.`);
-    for (const file of commandFiles) {
-      const filePath = path.join(commandsPath, file);
-      let command = await import(filePath);
-      command = command.default;
 
-      if ("data" in command && "execute" in command) {
-        this.commands.set(command.data.name, command);
-      } else {
-        this.logger.logWarning(
-          `The command at ${filePath} is missing a required "data" or "execute" property.`
-        );
+    for (const folder of commandFolders) {
+      const commandFiles = fs
+        .readdirSync(`${commandsPath}/${folder}`)
+        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
+
+      for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, folder, file);
+        let command = await import(filePath);
+        command = command.default;
+
+        if ("data" in command && "execute" in command) {
+          this.commands.set(command.data.name, command);
+        } else {
+          this.logger.logWarning(
+            `The command at ${filePath} is missing a required "data" or "execute" property.`
+          );
+        }
       }
     }
   }

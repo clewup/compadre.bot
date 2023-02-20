@@ -8,17 +8,21 @@ import config from "./config";
 const commands: any[] = [];
 
 const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs
-  .readdirSync(commandsPath)
-  .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
+const commandFolders = fs.readdirSync(commandsPath);
 
 const refreshCommands = async () => {
-  for (const file of commandFiles) {
-    const filePath = `${commandsPath}/${file}`;
-    let command = await import(filePath);
-    command = command.default;
+  for (const folder of commandFolders) {
+    const commandFiles = fs
+      .readdirSync(`${commandsPath}/${folder}`)
+      .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
 
-    commands.push(command.data.toJSON());
+    for (const file of commandFiles) {
+      const filePath = `${commandsPath}/${folder}/${file}`;
+      let command = await import(filePath);
+      command = command.default;
+
+      commands.push(command.data.toJSON());
+    }
   }
 
   const rest = new REST({ version: "10" }).setToken(
