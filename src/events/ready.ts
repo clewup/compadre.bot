@@ -13,6 +13,14 @@ export default new Event({
       if (!existingGuild) {
         await guildService.createGuild(guild);
       }
+      if (
+        existingGuild &&
+        (existingGuild.name !== guild.name ||
+          existingGuild.ownerId !== guild.ownerId ||
+          existingGuild.memberCount !== guild.memberCount)
+      ) {
+        await guildService.updateGuild(guild);
+      }
     });
 
     client.logger.logInfo(

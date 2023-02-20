@@ -43,6 +43,20 @@ class GuildService implements IGuildService {
     });
   }
 
+  public async updateGuild(guild: DiscordGuild): Promise<Guild> {
+    return this.database.guild.update({
+      where: { id: guild.id },
+      data: {
+        name: guild.name,
+        ownerId: guild.ownerId,
+        memberCount: guild.memberCount,
+        joinedTimestamp: guild.joinedTimestamp,
+        maximumMembers: guild.maximumMembers,
+        preferredLocale: guild.preferredLocale,
+      },
+    });
+  }
+
   public async getNotificationChannel(
     guild: DiscordGuild
   ): Promise<TextChannel> {
