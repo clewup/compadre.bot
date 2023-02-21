@@ -2,6 +2,10 @@ import { Collection, Events, bold, inlineCode } from "discord.js";
 
 import { Event } from "../base/event";
 
+/*
+ *    Emitted whenever an interaction is created (eg. slash command).
+ *    Executes a matching command.
+ */
 export default new Event({
   name: Events.InteractionCreate,
   async execute(interaction) {

@@ -10,6 +10,9 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
+/*
+ *    Generates an invite link for the bot.
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("invite")

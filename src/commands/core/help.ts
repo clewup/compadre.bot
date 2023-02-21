@@ -8,6 +8,9 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
+/*
+ *    Shows a list of all available commands and their descriptions.
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("help")

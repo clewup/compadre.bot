@@ -7,6 +7,10 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
+/*
+ *    Clears messages from a channel.
+ *    <params="amount (number)"/>
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("clear")

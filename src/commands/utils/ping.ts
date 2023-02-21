@@ -7,6 +7,9 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
+/*
+ *    Shows the user's latency to the bot and the server.
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("ping")

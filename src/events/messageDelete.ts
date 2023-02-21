@@ -1,6 +1,9 @@
 import { Event } from "../base/event";
 import { Events } from "discord.js";
 
+/*
+ *    Emitted whenever a message is deleted.
+ */
 export default new Event({
   name: Events.MessageDelete,
   async execute(message) {

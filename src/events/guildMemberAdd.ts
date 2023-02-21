@@ -3,6 +3,10 @@ import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
 import UserService from "../services/userService";
 
+/*
+ *    Emitted whenever a user joins a guild.
+ *    Creates the user in the database.
+ */
 export default new Event({
   name: Events.GuildMemberAdd,
   async execute(member) {

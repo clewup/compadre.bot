@@ -8,6 +8,11 @@ import {
 } from "discord.js";
 import GuildService from "../../services/guildService";
 
+/*
+ *    Updates the default notification channel.
+ *    In most cases the default is the "General" channel.
+ *    <params="channel (channel)"/>
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("set-notification-channel")

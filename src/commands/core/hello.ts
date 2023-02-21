@@ -7,6 +7,9 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 
+/*
+ *    Greet the bot.
+ */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("hello")

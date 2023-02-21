@@ -2,6 +2,9 @@ import { Event } from "../base/event";
 import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
 
+/*
+ *    Emitted whenever a user is unbanned from a guild.
+ */
 export default new Event({
   name: Events.GuildBanRemove,
   async execute(guildBan) {
