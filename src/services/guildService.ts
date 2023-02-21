@@ -1,24 +1,15 @@
 import Database from "../base/database";
 import { Guild } from "@prisma/client";
 import { TextChannel, Guild as DiscordGuild } from "discord.js";
+import NotificationConfigService from "./notificationConfigService";
 
-interface IGuildService {
-  getGuild: (id: string) => Promise<Guild | null>;
-  createGuild: (guild: DiscordGuild) => Promise<Guild>;
-  updateGuild: (guild: DiscordGuild) => Promise<Guild>;
-  deleteGuild: (guild: DiscordGuild) => Promise<void>;
-  getNotificationChannel: (guild: DiscordGuild) => Promise<TextChannel>;
-  updateNotificationChannel: (
-    guild: DiscordGuild,
-    notificationChannel: string
-  ) => Promise<Guild>;
-}
-
-class GuildService implements IGuildService {
+class GuildService {
   private database;
+  private notificationConfigService;
 
   constructor() {
     this.database = new Database();
+    this.notificationConfigService = new NotificationConfigService();
   }
 
   public async getGuild(id: string): Promise<Guild | null> {
@@ -45,7 +36,6 @@ class GuildService implements IGuildService {
         joinedTimestamp: guild.joinedTimestamp,
         maximumMembers: guild.maximumMembers,
         preferredLocale: guild.preferredLocale,
-        notificationChannel: generalChannel?.id,
       },
     });
   }
@@ -66,35 +56,6 @@ class GuildService implements IGuildService {
 
   public async deleteGuild(guild: DiscordGuild): Promise<void> {
     await this.database.guild.delete({ where: { id: guild.id } });
-  }
-
-  public async getNotificationChannel(
-    guild: DiscordGuild
-  ): Promise<TextChannel> {
-    const existingGuild = await this.getGuild(guild.id);
-
-    return (await guild.channels.fetch(
-      existingGuild?.notificationChannel!
-    )) as TextChannel;
-  }
-
-  public async updateNotificationChannel(
-    guild: DiscordGuild,
-    notificationChannel: string
-  ): Promise<Guild> {
-    return this.database.guild.update({
-      where: { id: guild.id },
-      data: {
-        id: guild.id,
-        name: guild.name,
-        ownerId: guild.ownerId,
-        memberCount: guild.memberCount,
-        joinedTimestamp: guild.joinedTimestamp,
-        maximumMembers: guild.maximumMembers,
-        preferredLocale: guild.preferredLocale,
-        notificationChannel: notificationChannel,
-      },
-    });
   }
 }
 export default GuildService;

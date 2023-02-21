@@ -1,8 +1,4 @@
-import {
-  SlashCommandBuilder,
-  ContextMenuCommandBuilder,
-  PermissionResolvable,
-} from "discord.js";
+import { SlashCommandBuilder, ContextMenuCommandBuilder } from "discord.js";
 
 interface CommandOptions {
   data: SlashCommandBuilder | ContextMenuCommandBuilder;

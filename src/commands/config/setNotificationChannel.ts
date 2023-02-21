@@ -7,6 +7,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import GuildService from "../../services/guildService";
+import NotificationConfigService from "../../services/notificationConfigService";
 
 /*
  *    Updates the default notification channel.
@@ -26,13 +27,14 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const guildService = new GuildService();
+    const notificationConfigService = new NotificationConfigService();
 
     const notificationChannel = interaction.options.getChannel("channel");
 
-    await guildService.updateNotificationChannel(
+    await notificationConfigService.updateNotificationConfig(
       interaction.guild,
-      notificationChannel?.id!
+      notificationChannel?.id!,
+      true
     );
 
     await interaction.reply({
