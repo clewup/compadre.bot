@@ -5,6 +5,13 @@ import { TextChannel, Guild as DiscordGuild } from "discord.js";
 interface IGuildService {
   getGuild: (id: string) => Promise<Guild | null>;
   createGuild: (guild: DiscordGuild) => Promise<Guild>;
+  updateGuild: (guild: DiscordGuild) => Promise<Guild>;
+  deleteGuild: (guild: DiscordGuild) => Promise<void>;
+  getNotificationChannel: (guild: DiscordGuild) => Promise<TextChannel>;
+  updateNotificationChannel: (
+    guild: DiscordGuild,
+    notificationChannel: string
+  ) => Promise<Guild>;
 }
 
 class GuildService implements IGuildService {
@@ -55,6 +62,10 @@ class GuildService implements IGuildService {
         preferredLocale: guild.preferredLocale,
       },
     });
+  }
+
+  public async deleteGuild(guild: DiscordGuild): Promise<void> {
+    await this.database.guild.delete({ where: { id: guild.id } });
   }
 
   public async getNotificationChannel(
