@@ -16,8 +16,22 @@ export default new Event({
       .setTitle(`${guildBan.user.username} has been banned from the server.`)
       .setThumbnail(guildBan.user.avatar);
 
-    const notificationChannel =
-      await notificationConfigService.getNotificationChannel(guildBan.guild);
-    await notificationChannel?.send({ embeds: [embed] });
+    // [Logging]
+    guildBan.client.logger.logInfo(
+      `${guildBan.client.functions.getUserString(
+        guildBan.user
+      )} has been banned from ${guildBan.client.functions.getGuildString(
+        guildBan.guild
+      )}.`
+    );
+
+    // [Notification]: Send the notification.
+    const notificationConfig =
+      await notificationConfigService.getNotificationConfig(guildBan.guild);
+    if (notificationConfig?.enabled === true) {
+      const notificationChannel =
+        await notificationConfigService.getNotificationChannel(guildBan.guild);
+      await notificationChannel?.send({ embeds: [embed] });
+    }
   },
 });

@@ -5,7 +5,6 @@ import NotificationConfigService from "../services/notificationConfigService";
 
 /*
  *    Emitted whenever the bot is added to a guild.
- *    Creates/updates the guild in the database.
  */
 export default new Event({
   name: Events.GuildCreate,
@@ -13,15 +12,19 @@ export default new Event({
     const guildService = new GuildService();
     const notificationConfigService = new NotificationConfigService();
 
-    guild.client.logger.logInfo(
-      `${guild.client.user.username} has been added to ${guild.name}.`
-    );
-
     const embed = new EmbedBuilder()
       .setColor(Colors.Red)
       .setTitle(`Hello! Thanks for adding me to ${guild.name}`)
       .setDescription("To get started, type '/help'.");
 
+    // [Logging]
+    guild.client.logger.logInfo(
+      `${
+        guild.client.user.username
+      } has been added to ${guild.client.functions.getGuildString(guild)}.`
+    );
+
+    // [Database]: Update the database.
     const existingGuild = await guildService.getGuild(guild.id);
     if (!existingGuild) {
       await guildService.createGuild(guild);
@@ -35,8 +38,13 @@ export default new Event({
       await guildService.updateGuild(guild);
     }
 
-    const notificationChannel =
-      await notificationConfigService.getNotificationChannel(guild);
-    await notificationChannel?.send({ embeds: [embed] });
+    // [Notification]: Send the notification.
+    const notificationConfig =
+      await notificationConfigService.getNotificationConfig(guild);
+    if (notificationConfig?.enabled === true) {
+      const notificationChannel =
+        await notificationConfigService.getNotificationChannel(guild);
+      await notificationChannel?.send({ embeds: [embed] });
+    }
   },
 });

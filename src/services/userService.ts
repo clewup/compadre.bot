@@ -24,6 +24,7 @@ class UserService implements IUserService {
   public async createUser(user: DiscordUser): Promise<User> {
     return await this.database.user.create({
       data: {
+        // Properties
         id: user.id,
         bot: user.bot,
         username: user.username,

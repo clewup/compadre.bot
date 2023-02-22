@@ -17,23 +17,6 @@ class WelcomeConfigService {
     });
   }
 
-  public async createWelcomeConfig(
-    guild: DiscordGuild,
-    channel: string,
-    role: string,
-    message: string
-  ): Promise<WelcomeConfig> {
-    return this.database.welcomeConfig.create({
-      data: {
-        guildId: guild.id,
-        channel: channel,
-        role: role,
-        message: message,
-        enabled: true,
-      },
-    });
-  }
-
   public async updateWelcomeConfig(
     guild: DiscordGuild,
     channel: string | null,

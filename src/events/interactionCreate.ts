@@ -12,6 +12,15 @@ export default new Event({
     if (!interaction.isCommand()) return;
     if (!interaction.inCachedGuild()) return;
 
+    // [Logging]
+    interaction.client.logger.logInfo(
+      `${interaction.client.functions.getUserString(
+        interaction.user
+      )} has issued the interaction "${
+        interaction.commandName
+      }" in ${interaction.client.functions.getGuildString(interaction.guild)}.`
+    );
+
     const command = interaction.client.commands.get(interaction.commandName);
 
     if (!command?.data) {

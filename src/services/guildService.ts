@@ -20,7 +20,6 @@ class GuildService {
     let generalChannel = guild.channels.cache
       .filter((x) => (x as TextChannel).name === "general")
       .first();
-
     if (!generalChannel) {
       generalChannel = guild.channels.cache
         .filter((x) => x.isTextBased)
@@ -29,6 +28,7 @@ class GuildService {
 
     return this.database.guild.create({
       data: {
+        // Properties
         id: guild.id,
         name: guild.name,
         ownerId: guild.ownerId,
@@ -36,6 +36,21 @@ class GuildService {
         joinedTimestamp: guild.joinedTimestamp,
         maximumMembers: guild.maximumMembers,
         preferredLocale: guild.preferredLocale,
+
+        // Relations
+        notificationConfig: {
+          create: {
+            channel: generalChannel.id,
+            enabled: true,
+          },
+        },
+        welcomeConfig: {
+          create: {
+            channel: null,
+            role: null,
+            enabled: false,
+          },
+        },
       },
     });
   }

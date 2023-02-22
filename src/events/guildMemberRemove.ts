@@ -6,7 +6,6 @@ import NotificationConfigService from "../services/notificationConfigService";
 
 /*
  *    Emitted whenever a user leaves a guild or is kicked.
- *    Deletes the user from the database.
  */
 export default new Event({
   name: Events.GuildMemberRemove,
@@ -19,10 +18,25 @@ export default new Event({
       .setTitle(`${member.displayName} has left the server.`)
       .setThumbnail(member.avatar);
 
+    // [Logging]
+    member.client.logger.logInfo(
+      `${member.client.functions.getUserString(
+        member.user
+      )} has left/been kicked from ${member.client.functions.getGuildString(
+        member.guild
+      )}.`
+    );
+
+    // [Database]: Update the database.
     await userService.deleteUser(member.user);
 
-    const notificationChannel =
-      await notificationConfigService.getNotificationChannel(member.guild);
-    await notificationChannel?.send({ embeds: [embed] });
+    // [Notification]: Send the notification.
+    const notificationConfig =
+      await notificationConfigService.getNotificationConfig(member.guild);
+    if (notificationConfig?.enabled === true) {
+      const notificationChannel =
+        await notificationConfigService.getNotificationChannel(member.guild);
+      await notificationChannel?.send({ embeds: [embed] });
+    }
   },
 });

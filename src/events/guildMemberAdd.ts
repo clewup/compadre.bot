@@ -6,7 +6,6 @@ import NotificationConfigService from "../services/notificationConfigService";
 
 /*
  *    Emitted whenever a user joins a guild.
- *    Creates the user in the database.
  */
 export default new Event({
   name: Events.GuildMemberAdd,
@@ -19,10 +18,23 @@ export default new Event({
       .setTitle(`${member.displayName} has joined the server.`)
       .setThumbnail(member.avatar);
 
+    // [Logging]
+    member.client.logger.logInfo(
+      `${member.client.functions.getUserString(
+        member.user
+      )} has joined ${member.client.functions.getGuildString(member.guild)}.`
+    );
+
+    // [Database]: Update the database.
     await userService.createUser(member.user);
 
-    const notificationChannel =
-      await notificationConfigService.getNotificationChannel(member.guild);
-    await notificationChannel?.send({ embeds: [embed] });
+    // [Notification]: Send the notification.
+    const notificationConfig =
+      await notificationConfigService.getNotificationConfig(member.guild);
+    if (notificationConfig?.enabled === true) {
+      const notificationChannel =
+        await notificationConfigService.getNotificationChannel(member.guild);
+      await notificationChannel?.send({ embeds: [embed] });
+    }
   },
 });

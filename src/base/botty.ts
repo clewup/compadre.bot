@@ -2,6 +2,7 @@ import {
   Client,
   Collection,
   IntentsBitField as Intents,
+  Partials,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   RESTPostAPIContextMenuApplicationCommandsJSONBody,
 } from "discord.js";
@@ -27,6 +28,7 @@ class Botty<Ready extends boolean = boolean> extends Client {
         Intents.Flags.GuildVoiceStates,
         Intents.Flags.DirectMessages,
       ],
+      partials: [Partials.Message, Partials.Channel, Partials.Reaction],
       allowedMentions: {
         parse: ["users"],
       },

@@ -17,27 +17,6 @@ class NotificationConfigService {
     });
   }
 
-  public async createNotificationConfig(
-    guild: DiscordGuild
-  ): Promise<NotificationConfig> {
-    let generalChannel = guild.channels.cache
-      .filter((x) => (x as TextChannel).name === "general")
-      .first();
-    if (!generalChannel) {
-      generalChannel = guild.channels.cache
-        .filter((x) => x.isTextBased)
-        .first()!;
-    }
-
-    return this.database.notificationConfig.create({
-      data: {
-        guildId: guild.id,
-        channel: generalChannel?.id,
-        enabled: true,
-      },
-    });
-  }
-
   public async updateNotificationConfig(
     guild: DiscordGuild,
     channel: string | null,

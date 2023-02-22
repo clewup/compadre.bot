@@ -9,5 +9,14 @@ export default new Event({
   async execute(message) {
     if (message.author?.bot) return;
     if (message.content?.startsWith("/")) return;
+
+    // [Logging]
+    message.client.logger.logInfo(
+      `The message "${
+        message.content
+      }" has been deleted in ${message.client.functions.getGuildString(
+        message.guild
+      )}.`
+    );
   },
 });

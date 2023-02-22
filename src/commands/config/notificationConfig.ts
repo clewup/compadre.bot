@@ -16,13 +16,19 @@ import NotificationConfigService from "../../services/notificationConfigService"
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("set-notification-channel")
-    .setDescription("Set the channel for all botty notifications.")
+    .setName("notification-config")
+    .setDescription("Configure the botty notifications.")
     .addChannelOption((option) =>
       option
         .setName("channel")
-        .setDescription("The chosen notification channel.")
+        .setDescription("The notification channel.")
         .setRequired(true)
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName("enabled")
+        .setDescription("Whether notifications are enabled.")
+        .setRequired(false)
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
@@ -30,16 +36,17 @@ export default new Command({
     const notificationConfigService = new NotificationConfigService();
 
     const notificationChannel = interaction.options.getChannel("channel");
+    const enabled = interaction.options.getBoolean("enabled");
 
     await notificationConfigService.updateNotificationConfig(
       interaction.guild,
       notificationChannel?.id!,
-      true
+      enabled ?? true
     );
 
     await interaction.reply({
       ephemeral: true,
-      content: "Notification channel successfully updated.",
+      content: "Successfully configured the botty notifications.",
     });
   },
 });

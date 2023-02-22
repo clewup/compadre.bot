@@ -6,5 +6,14 @@ import { Events } from "discord.js";
  */
 export default new Event({
   name: Events.GuildRoleUpdate,
-  async execute(role) {},
+  async execute(role) {
+    // [Logging]
+    role.client.logger.logInfo(
+      `Role "${
+        role.name
+      }" has been updated in ${role.client.functions.getGuildString(
+        role.guild
+      )}.`
+    );
+  },
 });

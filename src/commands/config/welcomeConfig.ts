@@ -5,6 +5,7 @@ import {
   EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
+  TextChannel,
 } from "discord.js";
 import GuildService from "../../services/guildService";
 import WelcomeConfigService from "../../services/welcomeConfigService";
@@ -15,18 +16,18 @@ import WelcomeConfigService from "../../services/welcomeConfigService";
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("enable-welcome")
-    .setDescription("Enable the welcome channel for new users.")
+    .setName("welcome-config")
+    .setDescription("Configure the botty welcome.")
     .addChannelOption((option) =>
       option
         .setName("channel")
-        .setDescription("The chosen welcome channel.")
+        .setDescription("The welcome channel.")
         .setRequired(true)
     )
     .addRoleOption((option) =>
       option
         .setName("role")
-        .setDescription("The default role for new users.")
+        .setDescription("The default role verified users.")
         .setRequired(true)
     )
     .addStringOption((option) =>
@@ -35,26 +36,58 @@ export default new Command({
         .setDescription("The welcome message.")
         .setRequired(true)
     )
+    .addStringOption((option) =>
+      option
+        .setName("instruction")
+        .setDescription("The instructional message.")
+        .setRequired(false)
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName("enabled")
+        .setDescription("Whether the welcome is enabled.")
+        .setRequired(false)
+    )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const welcomeConfigService = new WelcomeConfigService();
 
-    const welcomeChannel = interaction.options.getChannel("channel");
+    const welcomeChannel = interaction.options.getChannel(
+      "channel"
+    ) as TextChannel;
     const welcomeRole = interaction.options.getRole("role");
     const welcomeMessage = interaction.options.getString("message");
+    const instructionMessage = interaction.options.getString("instruction");
+    const enabled = interaction.options.getBoolean("enabled");
 
+    // Update the database entry
     await welcomeConfigService.updateWelcomeConfig(
       interaction.guild,
       welcomeChannel?.id!,
       welcomeRole?.id!,
       welcomeMessage!,
-      true
+      enabled ?? true
     );
 
+    // Reply to the command
     await interaction.reply({
+      content: "Successfully configured the botty welcome.",
       ephemeral: true,
-      content: "Welcome channel successfully updated.",
+    });
+
+    // Clear the channel's messages
+    await welcomeChannel.bulkDelete(10);
+
+    const embed = new EmbedBuilder()
+      .setTitle(welcomeMessage)
+      .setDescription(
+        instructionMessage ?? "`To get started react to this message!`"
+      );
+
+    // Send the welcome message and react with the join emoji
+    await welcomeChannel.send({
+      embeds: [embed],
     });
   },
 });
