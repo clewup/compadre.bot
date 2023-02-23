@@ -17,15 +17,6 @@ class GuildService {
   }
 
   public async createGuild(guild: DiscordGuild): Promise<Guild> {
-    let generalChannel = guild.channels.cache
-      .filter((x) => (x as TextChannel).name === "general")
-      .first();
-    if (!generalChannel) {
-      generalChannel = guild.channels.cache
-        .filter((x) => x.isTextBased)
-        .first()!;
-    }
-
     return this.database.guild.create({
       data: {
         // Properties
@@ -40,8 +31,8 @@ class GuildService {
         // Relations
         notificationConfig: {
           create: {
-            channel: generalChannel.id,
-            enabled: true,
+            channel: null,
+            enabled: false,
           },
         },
         welcomeConfig: {

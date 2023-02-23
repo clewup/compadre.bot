@@ -3,14 +3,7 @@ import { User } from "@prisma/client";
 import { User as DiscordUser } from "discord.js";
 import config from "../config";
 
-interface IUserService {
-  getUser: (id: string) => Promise<User | null>;
-  createUser: (user: DiscordUser) => Promise<User>;
-  updateUser: (user: DiscordUser) => Promise<User>;
-  deleteUser: (user: DiscordUser) => Promise<void>;
-}
-
-class UserService implements IUserService {
+class UserService {
   private database;
 
   constructor() {

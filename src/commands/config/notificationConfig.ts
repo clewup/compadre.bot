@@ -85,11 +85,12 @@ const handleEnable = async (
 ) => {
   let notificationChannel = interaction.options.getChannel("channel");
 
-  if (notificationChannel && !(notificationChannel instanceof TextChannel))
+  if (notificationChannel && !(notificationChannel instanceof TextChannel)) {
     return interaction.reply({
       content: "Invalid channel. You must provide a text channel.",
       ephemeral: true,
     });
+  }
 
   // Create the notification channel with necessary permissions if one is not provided and does not already exist.
   if (!notificationChannel) {
