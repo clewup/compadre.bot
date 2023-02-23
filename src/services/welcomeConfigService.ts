@@ -21,7 +21,7 @@ class WelcomeConfigService {
     guild: DiscordGuild,
     channel: string | null,
     role: string | null,
-    message: string,
+    message: string | null,
     enabled: boolean
   ): Promise<WelcomeConfig> {
     return this.database.welcomeConfig.update({
@@ -33,22 +33,6 @@ class WelcomeConfigService {
         enabled: enabled,
       },
     });
-  }
-
-  public async deleteWelcomeConfig(guild: DiscordGuild): Promise<void> {
-    await this.database.welcomeConfig.delete({ where: { guildId: guild.id } });
-  }
-
-  public async getWelcomeChannel(
-    guild: DiscordGuild
-  ): Promise<TextChannel | null> {
-    const config = await this.getWelcomeConfig(guild);
-
-    if (config?.channel) {
-      return (await guild.channels.fetch(config?.channel!)) as TextChannel;
-    } else {
-      return null;
-    }
   }
 }
 export default WelcomeConfigService;

@@ -29,16 +29,15 @@ export default new Event({
     );
     if (
       welcomeConfig &&
-      welcomeConfig.channel &&
       welcomeConfig.role &&
-      welcomeConfig.channel == reaction.message.channel.id
+      welcomeConfig.channel === reaction.message.channel.id &&
+      welcomeConfig.enabled === true
     ) {
       const role = await reaction.message.guild.roles.fetch(welcomeConfig.role);
       const guildUser = await reaction.message.guild.members.fetch(user.id);
 
       if (role && guildUser) {
-        guildUser.roles.add(role);
-        await reaction.remove();
+        await guildUser.roles.add(role);
       }
     }
   },

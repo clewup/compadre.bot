@@ -31,12 +31,6 @@ class NotificationConfigService {
     });
   }
 
-  public async deleteNotificationConfig(guild: DiscordGuild): Promise<void> {
-    await this.database.notificationConfig.delete({
-      where: { guildId: guild.id },
-    });
-  }
-
   public async getNotificationChannel(
     guild: DiscordGuild
   ): Promise<TextChannel | null> {
