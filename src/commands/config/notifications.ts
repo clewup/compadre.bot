@@ -17,8 +17,8 @@ import NotificationConfigService from "../../services/notificationConfigService"
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("notification-config")
-    .setDescription("Configure the botty notifications.")
+    .setName("notifications")
+    .setDescription("Configure notifications.")
     .addBooleanOption((option) =>
       option
         .setName("enabled")
@@ -48,7 +48,7 @@ export default new Command({
 
     await interaction.reply({
       ephemeral: true,
-      content: "Successfully configured the botty notifications.",
+      content: "Successfully configured notifications.",
     });
   },
 });

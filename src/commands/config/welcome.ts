@@ -16,8 +16,8 @@ import WelcomeConfigService from "../../services/welcomeConfigService";
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("welcome-config")
-    .setDescription("Configure the botty welcome.")
+    .setName("welcome")
+    .setDescription("Configure the welcome.")
     .addBooleanOption((option) =>
       option
         .setName("enabled")
@@ -58,7 +58,7 @@ export default new Command({
     }
 
     await interaction.reply({
-      content: "Successfully configured the botty welcome.",
+      content: "Successfully configured the welcome.",
       ephemeral: true,
     });
   },
