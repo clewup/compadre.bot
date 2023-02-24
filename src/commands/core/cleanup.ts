@@ -13,7 +13,7 @@ import {
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("clear")
+    .setName("cleanup")
     .setDescription("Clear a specified amount of messages.")
     .addIntegerOption((option) =>
       option

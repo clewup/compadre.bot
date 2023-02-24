@@ -1,19 +1,20 @@
 import { Command } from "../../base/command";
 import {
   ChatInputCommandInteraction,
+  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
   VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import { Player, PlayerError, QueryType, Track } from "discord-player";
 
 /*
- *    Stops and deletes the queue.
+ *    Fetches the song queue.
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("stop")
-    .setDescription("Stop a song in the channel.")
+    .setName("queue")
+    .setDescription("Pause a song in the channel.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
@@ -27,17 +28,39 @@ export default new Command({
         ephemeral: true,
       });
 
-    await interaction.deferReply();
     const queue = interaction.client.player.getQueue(interaction.guild);
     if (!queue || !queue.playing)
       return await interaction.reply({
         content: "No music is being played!",
       });
+    if (!queue.tracks[0]) {
+      return await interaction.reply({
+        content: "No music is queued up!",
+      });
+    }
 
-    queue.destroy();
+    const totalTracks = queue.tracks.length;
+    const tracks: string[] = [];
+    queue.tracks.forEach((track: Track, index: number) => {
+      tracks.push(
+        `${index + 1}. ${track.title} - ${track.author} (requested by ${
+          track.requestedBy.username
+        }).`
+      );
+    });
+
+    const embed = new EmbedBuilder()
+      .setTitle(
+        `There ${
+          totalTracks === 1
+            ? `is ${totalTracks} song`
+            : `are ${totalTracks} songs`
+        } in the queue.`
+      )
+      .setDescription(`${tracks.join("\n")}`);
 
     return await interaction.reply({
-      content: "Stopped playing music.",
+      embeds: [embed],
     });
   },
 });

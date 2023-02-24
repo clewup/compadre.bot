@@ -8,12 +8,12 @@ import {
 import { Player, PlayerError, QueryType } from "discord-player";
 
 /*
- *    Stops and deletes the queue.
+ *    Pauses a song in the channel.
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("stop")
-    .setDescription("Stop a song in the channel.")
+    .setName("skip")
+    .setDescription("Skip the current song in the channel.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
@@ -27,17 +27,19 @@ export default new Command({
         ephemeral: true,
       });
 
-    await interaction.deferReply();
     const queue = interaction.client.player.getQueue(interaction.guild);
     if (!queue || !queue.playing)
       return await interaction.reply({
         content: "No music is being played!",
       });
 
-    queue.destroy();
+    queue.skip();
 
-    return await interaction.reply({
-      content: "Stopped playing music.",
+    await interaction.reply({
+      content: "Skipped the current song.",
+    });
+    return interaction.followUp({
+      content: `Now playing ${queue.current.title}.`,
     });
   },
 });

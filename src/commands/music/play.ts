@@ -3,9 +3,8 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import { Player, QueryType, QueueRepeatMode } from "discord-player";
 
 /*
  *    Plays a song in the channel.
@@ -24,6 +23,8 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
+    await interaction.deferReply();
+
     const song = interaction.options.getString("song");
 
     if (!interaction.member.voice.channelId)
@@ -56,15 +57,19 @@ export default new Command({
       interaction.client.logger.logError(message);
     });
 
-    const queue = await player.createQueue(interaction.guild, {
-      ytdlOptions: {
-        filter: "audioonly",
-        highWaterMark: 1 << 30,
-        dlChunkSize: 0,
-      },
-      metadata: interaction.channel,
-      autoSelfDeaf: false,
-    });
+    let queue = await player.getQueue(interaction.guild);
+    if (!queue) {
+      queue = player.createQueue(interaction.guild, {
+        ytdlOptions: {
+          filter: "audioonly",
+          highWaterMark: 1 << 30,
+          dlChunkSize: 0,
+        },
+        metadata: interaction.channel,
+        autoSelfDeaf: false,
+      });
+      queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
+    }
 
     try {
       if (!queue.connection)
@@ -77,7 +82,6 @@ export default new Command({
       });
     }
 
-    await interaction.deferReply();
     const track = await player
       .search(song, {
         requestedBy: interaction.user,
@@ -86,13 +90,21 @@ export default new Command({
       .then((x) => x.tracks[0]);
     if (!track)
       return await interaction.followUp({
-        content: `${track} not found.`,
+        content: `${song} not found.`,
       });
 
-    queue.play(track);
+    queue.addTrack(track);
+
+    if (!queue.playing) {
+      await queue.play();
+
+      return await interaction.followUp({
+        content: `Now playing ${track.title}.`,
+      });
+    }
 
     return await interaction.followUp({
-      content: `Now playing ${track.title}.`,
+      content: `${track.title} has been added to the queue.`,
     });
   },
 });
