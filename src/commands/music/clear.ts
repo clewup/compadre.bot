@@ -28,7 +28,7 @@ export default new Command({
       });
 
     const queue = interaction.client.player.getQueue(interaction.guild.id);
-    if (!queue || !queue.playing)
+    if (!queue)
       return await interaction.reply({
         content: "No music is being played!",
       });

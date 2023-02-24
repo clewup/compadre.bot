@@ -28,10 +28,6 @@ export default new Command({
       });
 
     const queue = interaction.client.player.getQueue(interaction.guild.id);
-    if (!queue || !queue.playing)
-      return await interaction.reply({
-        content: "No music is being played!",
-      });
 
     queue.setPaused(false);
 

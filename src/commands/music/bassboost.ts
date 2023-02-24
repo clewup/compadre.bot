@@ -8,15 +8,23 @@ import {
 import { Player, PlayerError, QueryType } from "discord-player";
 
 /*
- *    Stops and deletes the queue.
+ *    Enables/disables bassboost on the queue.
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("stop")
-    .setDescription("Stop playing a song or playlist in the channel.")
+    .setName("bassboost")
+    .setDescription("Любишь пить квас и слушать хардбасс?")
+    .addBooleanOption((option) =>
+      option
+        .setName("enabled")
+        .setDescription("Whether bassboost is enabled on the queue.")
+        .setRequired(true)
+    )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
+    const enabled = interaction.options.getBoolean("enabled");
+
     if (
       interaction.guild.members.me?.voice.channelId &&
       interaction.member.voice.channelId !==
@@ -29,10 +37,21 @@ export default new Command({
 
     const queue = interaction.client.player.getQueue(interaction.guild.id);
 
-    queue.destroy();
+    if (enabled === true) {
+      await queue.setFilters({
+        bassboost: true,
+        normalizer2: true,
+      });
+    }
+    if (enabled === false) {
+      await queue.setFilters({
+        bassboost: false,
+        normalizer2: false,
+      });
+    }
 
     return await interaction.reply({
-      content: "Stopped playing music.",
+      content: "Enabled bassboost.",
     });
   },
 });
