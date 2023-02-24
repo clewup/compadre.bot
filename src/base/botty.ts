@@ -12,11 +12,13 @@ import { Command } from "./command";
 import fs from "node:fs";
 import path from "node:path";
 import config from "../config";
+import { Player } from "discord-player";
 
 class Botty<Ready extends boolean = boolean> extends Client {
   public logger;
   public functions;
   public commands;
+  public player;
 
   constructor() {
     super({
@@ -36,6 +38,7 @@ class Botty<Ready extends boolean = boolean> extends Client {
     this.logger = new Logger();
     this.functions = new Functions();
     this.commands = new Collection<string, Command>();
+    this.player = new Player(this);
   }
 
   private async setCommands() {

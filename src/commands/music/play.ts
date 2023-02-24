@@ -8,7 +8,7 @@ import {
 import { Player, PlayerError, QueryType } from "discord-player";
 
 /*
- *    Clears messages from a channel.
+ *    Plays a song in the channel.
  *    <params="song (string)"/>
  */
 export default new Command({
@@ -42,12 +42,12 @@ export default new Command({
       });
 
     if (!song)
-      return void interaction.reply({
+      return await interaction.reply({
         ephemeral: true,
         content: "Please provide a song.",
       });
 
-    const player = new Player(interaction.client, {});
+    const player: Player = interaction.client.player;
 
     player.on("error", (queue, message) => {
       interaction.client.logger.logError(message);
@@ -86,13 +86,13 @@ export default new Command({
       .then((x) => x.tracks[0]);
     if (!track)
       return await interaction.followUp({
-        content: `❌ | Track **${track}** not found!`,
+        content: `${track} not found.`,
       });
 
     queue.play(track);
 
     return await interaction.followUp({
-      content: `⏱️ | Loading track **${track.title}**!`,
+      content: `Now playing ${track.title}.`,
     });
   },
 });
