@@ -20,6 +20,8 @@ export default new Command({
         .setName("amount")
         .setDescription("The amount of messages to be cleared.")
         .setRequired(true)
+        .setMinValue(1)
+        .setMaxValue(100)
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages),
 

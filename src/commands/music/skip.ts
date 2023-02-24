@@ -8,7 +8,7 @@ import {
 import { Player, PlayerError, QueryType } from "discord-player";
 
 /*
- *    Pauses a song in the channel.
+ *    Skips the current song in the channel.
  */
 export default new Command({
   data: new SlashCommandBuilder()
@@ -27,7 +27,7 @@ export default new Command({
         ephemeral: true,
       });
 
-    const queue = interaction.client.player.getQueue(interaction.guild);
+    const queue = interaction.client.player.getQueue(interaction.guild.id);
     if (!queue || !queue.playing)
       return await interaction.reply({
         content: "No music is being played!",
@@ -35,11 +35,10 @@ export default new Command({
 
     queue.skip();
 
-    await interaction.reply({
-      content: "Skipped the current song.",
-    });
-    return interaction.followUp({
-      content: `Now playing ${queue.current.title}.`,
+    const nowPlayingIndex = queue.tracks.indexOf(queue.current) + 1;
+
+    return await interaction.reply({
+      content: `Now playing ${queue.tracks[nowPlayingIndex].title}.`,
     });
   },
 });

@@ -28,12 +28,8 @@ export default new Command({
         ephemeral: true,
       });
 
-    const queue = interaction.client.player.getQueue(interaction.guild);
-    if (!queue || !queue.playing)
-      return await interaction.reply({
-        content: "No music is being played!",
-      });
-    if (!queue.tracks[0]) {
+    const queue = interaction.client.player.getQueue(interaction.guild.id);
+    if (!queue || !queue.tracks[0]) {
       return await interaction.reply({
         content: "No music is queued up!",
       });

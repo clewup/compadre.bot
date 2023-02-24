@@ -27,8 +27,7 @@ export default new Command({
         ephemeral: true,
       });
 
-    await interaction.deferReply();
-    const queue = interaction.client.player.getQueue(interaction.guild);
+    const queue = interaction.client.player.getQueue(interaction.guild.id);
     if (!queue || !queue.playing)
       return await interaction.reply({
         content: "No music is being played!",
