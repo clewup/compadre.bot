@@ -17,21 +17,25 @@ export default new Command({
     .setDescription("View available commands.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
-  async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const fields: EmbedField[] = [];
+  details: {
+    category: "Core",
+  },
 
-    interaction.client.commands.forEach((command: Command, key: string) =>
-      fields.push({
-        name: `/${key}`,
-        value: (command.data as SlashCommandBuilder).description,
-        inline: false,
-      })
-    );
+  async execute(interaction: ChatInputCommandInteraction<"cached">) {
+    const data: string[] = [];
+
+    interaction.client.commands.forEach((command: Command, key: string) => {
+      const category = `\n**${command.details.category}**`;
+
+      if (!data.includes(category)) {
+        data.push(category);
+      }
+      data.push(`/${key} - ${command.data.description}`);
+    });
 
     const embed = new EmbedBuilder()
       .setTitle("Help")
-      .setDescription("View available commands.")
-      .setFields(fields);
+      .setDescription(`View available commands. \n${data.join("\n")}`);
 
     await interaction.reply({
       ephemeral: true,

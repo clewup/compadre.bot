@@ -8,22 +8,31 @@ import {
 } from "discord.js";
 
 /*
- *    Greet the bot.
+ *    Shows the bot uptime.
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("hello")
-    .setDescription("Say hello!")
+    .setName("uptime")
+    .setDescription("View the bot's uptime.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: "Core",
+    category: "Utils",
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
+    let seconds = Math.floor(interaction.client.uptime! / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+
+    seconds %= 60;
+    minutes %= 60;
+    hours %= 24;
+
     await interaction.reply({
       ephemeral: true,
-      content: `Hello, ${interaction.user.username}`,
+      content: `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`,
     });
   },
 });

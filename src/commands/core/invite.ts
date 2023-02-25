@@ -19,6 +19,10 @@ export default new Command({
     .setDescription("Generate a bot invite.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
+  details: {
+    category: "Core",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=1075167615602933760&permissions=8&scope=bot%20applications.commands`;
     const button = new ButtonBuilder()

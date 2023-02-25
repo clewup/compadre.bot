@@ -22,6 +22,11 @@ export default new Command({
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
+
+  details: {
+    category: "Moderation",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const enabled = interaction.options.getBoolean("enabled");
 

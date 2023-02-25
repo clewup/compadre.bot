@@ -25,6 +25,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages),
 
+  details: {
+    category: "Core",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const amount = interaction.options.getInteger("amount");
 

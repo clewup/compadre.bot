@@ -22,6 +22,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Music",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const enabled = interaction.options.getBoolean("enabled");
 

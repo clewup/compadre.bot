@@ -35,6 +35,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Moderation",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const user = interaction.options.getUser("user");
     const duration = interaction.options.getNumber("duration");

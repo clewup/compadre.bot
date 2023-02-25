@@ -8,13 +8,13 @@ import {
 } from "discord.js";
 
 /*
- *    Unbans a user from the guild.
+ *    Bans a user from the guild.
  *    <params="user (user), reason (string)"/>
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("unban")
-    .setDescription("Unban a user from the server.")
+    .setName("ban")
+    .setDescription("Ban a user from the server.")
     .addUserOption((option) =>
       option
         .setName("user")
@@ -29,6 +29,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Moderation",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const user = interaction.options.getUser("user");
     const reason = interaction.options.getString("reason");
@@ -36,38 +40,37 @@ export default new Command({
     if (!user) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a user to be unbanned.",
+        content: "Please provide a user to be banned.",
       });
     }
 
-    const memberToBeUnbanned = await interaction.guild.members.fetch(user.id);
-    const memberUnbanning = interaction.member;
+    const memberToBeBanned = await interaction.guild.members.fetch(user.id);
+    const memberBanning = interaction.member;
 
-    if (memberToBeUnbanned.id === memberUnbanning.id) {
+    if (memberToBeBanned.id === memberBanning.id) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot unban yourself.",
+        content: "You cannot ban yourself.",
       });
     }
     if (
-      memberUnbanning.roles.highest.comparePositionTo(
-        memberToBeUnbanned.roles.highest
+      memberBanning.roles.highest.comparePositionTo(
+        memberToBeBanned.roles.highest
       ) < 1
     ) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot unban someone with a higher role than yourself.",
+        content: "You cannot ban someone with a higher role than yourself.",
       });
     }
 
-    await interaction.guild.bans.remove(
-      memberToBeUnbanned,
-      reason ?? "No reason was provided."
-    );
+    await memberToBeBanned.ban({
+      reason: reason ?? "No reason was provided.",
+    });
 
     await interaction.reply({
       ephemeral: true,
-      content: `${user.username} has been unbanned.`,
+      content: `${user.username} has been banned.`,
     });
   },
 });

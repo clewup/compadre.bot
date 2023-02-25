@@ -16,6 +16,10 @@ export default new Command({
     .setDescription("View your ping.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
+  details: {
+    category: "Utils",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     await interaction.reply({
       ephemeral: true,

@@ -16,6 +16,10 @@ export default new Command({
     .setDescription("Skip the current song in the channel.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Music",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     if (
       interaction.guild.members.me?.voice.channelId &&

@@ -17,6 +17,10 @@ export default new Command({
     .setDescription("Lock the channel.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
 
+  details: {
+    category: "Moderation",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     let channel = interaction.channel;
 

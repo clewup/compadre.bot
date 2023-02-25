@@ -29,6 +29,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Music",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     await interaction.deferReply();
 

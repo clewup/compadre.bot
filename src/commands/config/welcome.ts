@@ -45,6 +45,10 @@ export default new Command({
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
+  details: {
+    category: "Config",
+  },
+
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const welcomeConfigService = new WelcomeConfigService();
 
