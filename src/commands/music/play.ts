@@ -110,7 +110,6 @@ const createQueue = async (
         dlChunkSize: 0,
       },
       metadata: interaction.channel,
-      autoSelfDeaf: false,
     }
   );
   queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
