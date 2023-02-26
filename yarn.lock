@@ -842,6 +842,13 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+discord-anti-spam@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/discord-anti-spam/-/discord-anti-spam-2.8.1.tgz#59eead7846039dbae66624f04cadfd5d3e804da8"
+  integrity sha512-OZs7y1+vU6pjadyuMNet7NyQ4Ql1KgxRth6MAvASZX5rtRmYqYF481fMAd4FsDsmuLQ828/UCwgPD+41ohjOog==
+  dependencies:
+    discord.js "^14.0.3"
+
 discord-api-types@^0.36.2:
   version "0.36.3"
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.36.3.tgz#a931b7e57473a5c971d6937fa5f392eb30047579"
@@ -863,7 +870,7 @@ discord-player@^5.4.0:
     tiny-typed-emitter "^2.1.0"
     tslib "^2.4.0"
 
-discord.js@^14.7.1:
+discord.js@^14.0.3, discord.js@^14.7.1:
   version "14.7.1"
   resolved "https://registry.yarnpkg.com/discord.js/-/discord.js-14.7.1.tgz#26079d0ff4d27daf02480a403c456121f0682bd9"
   integrity sha512-1FECvqJJjjeYcjSm0IGMnPxLqja/pmG1B0W2l3lUY2Gi4KXiyTeQmU1IxWcbXHn2k+ytP587mMWqva2IA87EbA==

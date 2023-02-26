@@ -31,6 +31,7 @@ class Botty<Ready extends boolean = boolean> extends Client {
         Intents.Flags.GuildMessageReactions,
         Intents.Flags.GuildVoiceStates,
         Intents.Flags.DirectMessages,
+        Intents.Flags.MessageContent,
       ],
       partials: [Partials.Message, Partials.Channel, Partials.Reaction],
       allowedMentions: {

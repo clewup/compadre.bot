@@ -39,6 +39,16 @@ class GuildService {
           create: {
             channel: null,
             role: null,
+            message: null,
+            enabled: false,
+          },
+        },
+        preventConfig: {
+          create: {
+            role: null,
+            links: false,
+            spam: false,
+            ads: false,
             enabled: false,
           },
         },

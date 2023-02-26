@@ -17,6 +17,7 @@ model Guild {
   preferredLocale       String?     @db.VarChar(255)
   notificationConfig    NotificationConfig?
   welcomeConfig         WelcomeConfig?
+  preventConfig         PreventConfig?
 }
 
 model User {
@@ -29,16 +30,26 @@ model User {
 
 model NotificationConfig {
   guildId               String      @db.VarChar(255)    @unique
-  guild                 Guild       @relation(fields: [guildId], references: [id])
+  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
   channel               String?     @db.VarChar(255)
   enabled               Boolean     @default(false)
 }
 
 model WelcomeConfig {
   guildId               String      @db.VarChar(255)    @unique
-  guild                 Guild       @relation(fields: [guildId], references: [id])
+  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
   role                  String?     @db.VarChar(255)
   channel               String?     @db.VarChar(255)
   message               String?     @db.VarChar(255)
+  enabled               Boolean     @default(false)
+}
+
+model PreventConfig {
+  guildId               String      @db.VarChar(255)    @unique
+  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  role                  String?     @db.VarChar(255)
+  links                 Boolean     @default(false)
+  spam                  Boolean     @default(false)
+  ads                   Boolean     @default(false)
   enabled               Boolean     @default(false)
 }
