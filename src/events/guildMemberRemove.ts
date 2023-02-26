@@ -3,6 +3,7 @@ import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
 import UserService from "../services/userService";
 import NotificationConfigService from "../services/notificationConfigService";
+import MemberService from "../services/memberService";
 
 /*
  *    Emitted whenever a user leaves a guild or is kicked.
@@ -10,7 +11,7 @@ import NotificationConfigService from "../services/notificationConfigService";
 export default new Event({
   name: Events.GuildMemberRemove,
   async execute(member) {
-    const userService = new UserService();
+    const memberService = new MemberService();
     const notificationConfigService = new NotificationConfigService();
 
     const embed = new EmbedBuilder()
@@ -28,7 +29,7 @@ export default new Event({
     );
 
     // [Database]: Update the database.
-    await userService.deleteUser(member.user);
+    await memberService.deleteMember(member);
 
     // [Notification]: Send the notification.
     const notificationConfig =

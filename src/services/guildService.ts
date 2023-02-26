@@ -1,15 +1,18 @@
 import Database from "../base/database";
 import { Guild } from "@prisma/client";
-import { TextChannel, Guild as DiscordGuild } from "discord.js";
-import NotificationConfigService from "./notificationConfigService";
+import { Guild as DiscordGuild } from "discord.js";
+import RoleService from "./roleService";
+import MemberService from "./memberService";
 
 class GuildService {
   private database;
-  private notificationConfigService;
+  private roleService;
+  private memberService;
 
   constructor() {
     this.database = new Database();
-    this.notificationConfigService = new NotificationConfigService();
+    this.roleService = new RoleService();
+    this.memberService = new MemberService();
   }
 
   public async getGuild(id: string): Promise<Guild | null> {
@@ -17,9 +20,8 @@ class GuildService {
   }
 
   public async createGuild(guild: DiscordGuild): Promise<Guild> {
-    return this.database.guild.create({
+    await this.database.guild.create({
       data: {
-        // Properties
         id: guild.id,
         name: guild.name,
         ownerId: guild.ownerId,
@@ -28,7 +30,7 @@ class GuildService {
         maximumMembers: guild.maximumMembers,
         preferredLocale: guild.preferredLocale,
 
-        // Relations
+        // Default Configuration
         notificationConfig: {
           create: {
             channel: null,
@@ -54,10 +56,22 @@ class GuildService {
         },
       },
     });
+
+    const members = await guild.members.list();
+    members.forEach(async (member) => {
+      await this.memberService.createMember(member);
+    });
+
+    const roles = await guild.roles.valueOf();
+    roles.forEach(async (role) => {
+      await this.roleService.createRole(role);
+    });
+
+    return (await this.getGuild(guild.id))!;
   }
 
   public async updateGuild(guild: DiscordGuild): Promise<Guild> {
-    return this.database.guild.update({
+    return await this.database.guild.update({
       where: { id: guild.id },
       data: {
         name: guild.name,

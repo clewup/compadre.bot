@@ -1,5 +1,6 @@
 import { Event } from "../base/event";
 import { Events } from "discord.js";
+import RoleService from "../services/roleService";
 
 /*
  *    Emitted whenever a role is deleted.
@@ -7,6 +8,8 @@ import { Events } from "discord.js";
 export default new Event({
   name: Events.GuildRoleDelete,
   async execute(role) {
+    const roleService = new RoleService();
+
     // [Logging]
     role.client.logger.logInfo(
       `Role "${
@@ -15,5 +18,8 @@ export default new Event({
         role.guild
       )}.`
     );
+
+    // [Database]
+    await roleService.deleteRole(role);
   },
 });

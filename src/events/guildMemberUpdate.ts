@@ -1,6 +1,6 @@
 import { Event } from "../base/event";
 import { Events } from "discord.js";
-import UserService from "../services/userService";
+import MemberService from "../services/memberService";
 
 /*
  *    Emitted whenever a user is updated (eg. new nickname/role change).
@@ -8,7 +8,7 @@ import UserService from "../services/userService";
 export default new Event({
   name: Events.GuildMemberUpdate,
   async execute(oldMember, newMember) {
-    const userService = new UserService();
+    const memberService = new MemberService();
 
     // [Logging]
     newMember.client.logger.logInfo(
@@ -20,6 +20,6 @@ export default new Event({
     );
 
     // [Database]: Update the database.
-    await userService.updateUser(newMember.user);
+    await memberService.updateMember(newMember);
   },
 });

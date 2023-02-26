@@ -8,48 +8,66 @@ datasource db {
 }
 
 model Guild {
-  id                    String      @db.VarChar(255)    @id
-  name                  String?     @db.VarChar(255)
-  ownerId               String?     @db.VarChar(255)
-  memberCount           Int?
-  joinedTimestamp       BigInt?
-  maximumMembers        Int?
-  preferredLocale       String?     @db.VarChar(255)
-  notificationConfig    NotificationConfig?
-  welcomeConfig         WelcomeConfig?
-  preventConfig         PreventConfig?
+  id                 String              @id @db.VarChar(255)
+  name               String?             @db.VarChar(255)
+  ownerId            String?             @db.VarChar(255)
+  memberCount        Int?
+  joinedTimestamp    BigInt?
+  maximumMembers     Int?
+  preferredLocale    String?             @db.VarChar(255)
+  members            Member[]
+  roles              Role[]
+  notificationConfig NotificationConfig?
+  welcomeConfig      WelcomeConfig?
+  preventConfig      PreventConfig?
+}
+
+model Member {
+  id             String       @id @db.VarChar(255)
+  username       String       @db.VarChar(255)
+  stickyUsername String       @db.VarChar(255)
+  discriminator  String       @db.VarChar(255)
+  guildId        String       @db.VarChar(255)
+  guild          Guild        @relation(fields: [guildId], references: [id], onDelete: Cascade)
+}
+
+model Role {
+  id      String       @id @db.VarChar(255)
+  name    String       @db.VarChar(255)
+  guildId String       @db.VarChar(255)
+  guild   Guild        @relation(fields: [guildId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id                    String      @db.VarChar(255)    @id
-  bot                   Boolean     @default(false)
-  username              String?     @db.VarChar(255)
-  discriminator         String?     @db.VarChar(255)
-  clientAdmin           Boolean?    @default(false)
+  id            String   @id @db.VarChar(255)
+  bot           Boolean  @default(false)
+  username      String?  @db.VarChar(255)
+  discriminator String?  @db.VarChar(255)
+  clientAdmin   Boolean? @default(false)
 }
 
 model NotificationConfig {
-  guildId               String      @db.VarChar(255)    @unique
-  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  channel               String?     @db.VarChar(255)
-  enabled               Boolean     @default(false)
+  guildId String  @unique @db.VarChar(255)
+  guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  channel String? @db.VarChar(255)
+  enabled Boolean @default(false)
 }
 
 model WelcomeConfig {
-  guildId               String      @db.VarChar(255)    @unique
-  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  role                  String?     @db.VarChar(255)
-  channel               String?     @db.VarChar(255)
-  message               String?     @db.VarChar(255)
-  enabled               Boolean     @default(false)
+  guildId String  @unique @db.VarChar(255)
+  guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  role    String? @db.VarChar(255)
+  channel String? @db.VarChar(255)
+  message String? @db.VarChar(255)
+  enabled Boolean @default(false)
 }
 
 model PreventConfig {
-  guildId               String      @db.VarChar(255)    @unique
-  guild                 Guild       @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  role                  String?     @db.VarChar(255)
-  links                 Boolean     @default(false)
-  spam                  Boolean     @default(false)
-  ads                   Boolean     @default(false)
-  enabled               Boolean     @default(false)
+  guildId String  @unique @db.VarChar(255)
+  guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  role    String? @db.VarChar(255)
+  links   Boolean @default(false)
+  spam    Boolean @default(false)
+  ads     Boolean @default(false)
+  enabled Boolean @default(false)
 }

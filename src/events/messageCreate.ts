@@ -1,8 +1,7 @@
 import { Event } from "../base/event";
-import { Events } from "discord.js";
-import UserService from "../services/userService";
+import { Events, Message } from "discord.js";
 import PreventConfigService from "../services/preventConfigService";
-import { antiSpam } from "../base/antispam";
+import { antiSpam } from "../lib/antispam/antispam";
 
 /*
  *    Emitted whenever a message is created.
@@ -23,50 +22,61 @@ export default new Event({
     );
 
     // [Prevent]
-    if (message.guild) {
-      const preventConfigService = new PreventConfigService();
-      const preventConfig = await preventConfigService.getPreventConfig(
-        message.guild
-      );
+    await handlePrevent(message);
+  },
+});
 
-      if (preventConfig && preventConfig.enabled) {
-        const memberAuthor = await message.guild.members.fetch(
-          message.author.id
-        );
-        const role = preventConfig.role
-          ? await message.guild.roles.fetch(preventConfig.role)
-          : null;
+const handlePrevent = async (message: Message<boolean>) => {
+  if (message.guild) {
+    const preventConfigService = new PreventConfigService();
+    const preventConfig = await preventConfigService.getPreventConfig(
+      message.guild
+    );
 
+    if (preventConfig && preventConfig.enabled) {
+      const memberAuthor = await message.guild.members.fetch(message.author.id);
+      const role = preventConfig.role
+        ? await message.guild.roles.fetch(preventConfig.role)
+        : null;
+
+      if (
+        !role ||
+        (role && memberAuthor.roles.highest.comparePositionTo(role) < 1)
+      ) {
+        const linkExpression =
+          /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+        const adExpression = /\b(?:.?)ad(?:.?)\b/;
+
+        // Links
         if (
-          !role ||
-          (role && memberAuthor.roles.highest.comparePositionTo(role) < 1)
+          preventConfig.links &&
+          message.content.match(new RegExp(linkExpression))
         ) {
-          const linkExpression =
-            /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-          const adExpression = /\b(?:.?)ad(?:.?)\b/;
+          await message.delete();
+          message.client.logger.logInfo(
+            `"${message.content}" has been detected as containing a link and has been deleted.`
+          );
+        }
 
-          // Links
-          if (
-            preventConfig.links &&
-            message.content.match(new RegExp(linkExpression))
-          ) {
-            await message.delete();
-          }
+        // Spam
+        if (preventConfig.spam) {
+          await antiSpam.message(message);
+          message.client.logger.logInfo(
+            `"${message.content}" has been detected as spam and has been deleted.`
+          );
+        }
 
-          // Spam
-          if (preventConfig.spam) {
-            await antiSpam.message(message);
-          }
-
-          // Ads
-          if (
-            preventConfig.ads &&
-            message.content.match(new RegExp(adExpression))
-          ) {
-            await message.delete();
-          }
+        // Ads
+        if (
+          preventConfig.ads &&
+          message.content.match(new RegExp(adExpression))
+        ) {
+          await message.delete();
+          message.client.logger.logInfo(
+            `"${message.content}" has been detected as containing an advertisement and has been deleted.`
+          );
         }
       }
     }
-  },
-});
+  }
+};
