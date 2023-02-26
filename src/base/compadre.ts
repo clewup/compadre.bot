@@ -1,5 +1,5 @@
 import {
-  Client,
+  Client as DiscordClient,
   Collection,
   IntentsBitField as Intents,
   Partials,
@@ -15,7 +15,7 @@ import config from "../config";
 import { Player } from "discord-player";
 import Soundboard from "./soundboard";
 
-class Botty<Ready extends boolean = boolean> extends Client {
+class Compadre<Ready extends boolean = boolean> extends DiscordClient {
   public logger;
   public functions;
   public commands;
@@ -105,4 +105,4 @@ class Botty<Ready extends boolean = boolean> extends Client {
   }
 }
 
-export default Botty;
+export default Compadre;

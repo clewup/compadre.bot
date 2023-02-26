@@ -81,7 +81,7 @@ const handleDisable = async (
   if (defaultWelcomeChannel) {
     await interaction.guild.channels.delete(
       defaultWelcomeChannel,
-      "Deleted as part of the welcome configuration from botty."
+      "Deleted as part of the welcome configuration."
     );
   }
 
@@ -166,7 +166,7 @@ const handleEnable = async (
       welcomeRole = await interaction.guild.roles.create({
         name: "conformist",
         color: Colors.Orange,
-        reason: "Created by botty.",
+        reason: "Created by compadre.",
         permissions: [
           PermissionsBitField.Flags.ViewChannel,
           PermissionsBitField.Flags.SendMessages,

@@ -1,8 +1,8 @@
 import { ClientEvents } from "discord.js";
-import Botty from "./botty";
+import Compadre from "./compadre";
 
 interface OverriddenClientEvents extends Omit<ClientEvents, "ready"> {
-  ready: [client: Botty<true>];
+  ready: [client: Compadre<true>];
 }
 
 interface EventOptions<Key extends keyof ClientEvents> {

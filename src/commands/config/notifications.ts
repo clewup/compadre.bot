@@ -71,7 +71,7 @@ const handleDisable = async (
   if (defaultNotificationChannel) {
     await interaction.guild.channels.delete(
       defaultNotificationChannel,
-      "Deleted as part of the notification configuration from botty."
+      "Deleted as part of the notification configuration."
     );
   }
 

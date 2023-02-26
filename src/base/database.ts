@@ -37,28 +37,14 @@ class Database extends PrismaClient<
     this.logger = new Logger();
   }
 
-  private async updateClientAdmins(): Promise<void> {
-    for (const clientAdmin in config.clientAdmins) {
-      this.user.update({
-        where: { id: clientAdmin },
-        data: { clientAdmin: true },
-      });
-    }
-  }
-
   public async start() {
     try {
       this.logger.logInfo("Initializing database connection.");
       await this.$connect();
-      await this.updateClientAdmins();
       await this.$disconnect();
     } catch (error) {
       this.logger.logError(`Could not initialize the database (${error}).`);
     }
-  }
-
-  public disconnect() {
-    super.$disconnect();
   }
 }
 

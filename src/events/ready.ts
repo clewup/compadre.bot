@@ -10,7 +10,7 @@ export default new Event({
   once: true,
   async execute(client) {
     client.logger.logInfo(
-      `${client.user?.username} is online and serving ${client.users.cache.size} user(s).`
+      `compadre is online and serving ${client.users.cache.size} user(s).`
     );
   },
 });
