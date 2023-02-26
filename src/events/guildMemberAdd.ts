@@ -1,4 +1,4 @@
-import { Event } from "../base/event";
+import { Event } from "../structures/event";
 import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
 import NotificationConfigService from "../services/notificationConfigService";
 import MemberService from "../services/memberService";

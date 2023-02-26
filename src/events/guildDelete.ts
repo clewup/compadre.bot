@@ -1,4 +1,4 @@
-import { Event } from "../base/event";
+import { Event } from "../structures/event";
 import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
 

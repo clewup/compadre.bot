@@ -1,4 +1,4 @@
-import Database from "../base/database";
+import Database from "../structures/database";
 import { Member } from "@prisma/client";
 import {
   GuildMember as DiscordMember,

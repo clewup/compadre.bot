@@ -1,6 +1,6 @@
 import { Collection, Events, bold, inlineCode } from "discord.js";
 
-import { Event } from "../base/event";
+import { Event } from "../structures/event";
 
 /*
  *    Emitted whenever an interaction is created (eg. slash command).

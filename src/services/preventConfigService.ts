@@ -1,4 +1,4 @@
-import Database from "../base/database";
+import Database from "../structures/database";
 import { PreventConfig } from "@prisma/client";
 import { TextChannel, Guild as DiscordGuild } from "discord.js";
 

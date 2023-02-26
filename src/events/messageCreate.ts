@@ -1,7 +1,7 @@
-import { Event } from "../base/event";
+import { Event } from "../structures/event";
 import { Events, Message } from "discord.js";
 import PreventConfigService from "../services/preventConfigService";
-import { antiSpam } from "../lib/antispam/antispam";
+import AntiSpam from "../structures/antispam";
 
 /*
  *    Emitted whenever a message is created.
@@ -60,6 +60,7 @@ const handlePrevent = async (message: Message<boolean>) => {
 
         // Spam
         if (preventConfig.spam) {
+          const antiSpam = new AntiSpam();
           await antiSpam.message(message);
           message.client.logger.logInfo(
             `"${message.content}" has been detected as spam and has been deleted.`

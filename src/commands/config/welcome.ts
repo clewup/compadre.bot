@@ -1,4 +1,4 @@
-import { Command } from "../../base/command";
+import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
   Colors,
@@ -9,6 +9,7 @@ import {
   ChannelType,
 } from "discord.js";
 import WelcomeConfigService from "../../services/welcomeConfigService";
+import { Reasons } from "../../data/enums/reasons";
 
 /*
  *    Configures the welcome.
@@ -158,15 +159,14 @@ const handleEnable = async (
   // Create the conformist role with basic permissions if one is not provided and does not already exist.
   if (!welcomeRole) {
     welcomeRole =
-      interaction.guild.roles.cache.find(
-        (role) => role.name === "conformist"
-      ) || null;
+      interaction.guild.roles.cache.find((role) => role.name === "verified") ||
+      null;
 
     if (!welcomeRole) {
       welcomeRole = await interaction.guild.roles.create({
         name: "conformist",
         color: Colors.Orange,
-        reason: "Created by compadre.",
+        reason: Reasons.ADDED,
         permissions: [
           PermissionsBitField.Flags.ViewChannel,
           PermissionsBitField.Flags.SendMessages,

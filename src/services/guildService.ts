@@ -1,4 +1,4 @@
-import Database from "../base/database";
+import Database from "../structures/database";
 import { Guild } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 import RoleService from "./roleService";

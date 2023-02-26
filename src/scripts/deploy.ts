@@ -1,15 +1,15 @@
 import { REST, Routes } from "discord.js";
-import { Command } from "./base/command.js";
+import { Command } from "../structures/command";
 
 import fs from "node:fs";
 import path from "node:path";
-import config from "./config";
-import Logger from "./helpers/logger";
+import config from "../config";
+import Logger from "../helpers/logger";
 
 const logger = new Logger();
 const commands: any[] = [];
 
-const commandsPath = path.join(__dirname, "commands");
+const commandsPath = path.join(__dirname, "..", "commands");
 const commandFolders = fs.readdirSync(commandsPath);
 
 const refreshCommands = async () => {

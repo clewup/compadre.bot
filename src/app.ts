@@ -1,8 +1,8 @@
 import express from "express";
-import Compadre from "./base/compadre";
+import Compadre from "./structures/compadre";
 import { Events } from "discord.js";
 import config from "./config";
-import Database from "./base/database";
+import Database from "./structures/database";
 import Logger from "./helpers/logger";
 
 const port = config.port;

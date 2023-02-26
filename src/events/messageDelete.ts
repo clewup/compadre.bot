@@ -1,4 +1,4 @@
-import { Event } from "../base/event";
+import { Event } from "../structures/event";
 import { Events } from "discord.js";
 
 /*

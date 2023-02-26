@@ -1,4 +1,4 @@
-import { Command } from "../../base/command";
+import { Command } from "../../structures/command";
 import {
   ActionRowBuilder,
   ButtonBuilder,
