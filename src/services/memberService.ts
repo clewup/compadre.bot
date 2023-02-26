@@ -3,7 +3,9 @@ import { Member } from "@prisma/client";
 import {
   GuildMember as DiscordMember,
   PartialGuildMember as PartialDiscordMember,
+  PermissionsBitField,
 } from "discord.js";
+import config from "../config";
 
 class MemberService {
   private database;
@@ -21,8 +23,11 @@ class MemberService {
       data: {
         id: member.id,
         username: member.user.username,
-        stickyUsername: member.user.username,
         discriminator: member.user.discriminator,
+        guildAdmin: member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        ),
+        clientAdmin: config.clientAdmins.includes(member.id),
         guild: {
           connect: {
             id: member.guild.id,
@@ -37,8 +42,11 @@ class MemberService {
       where: { id: member.id },
       data: {
         username: member.user.username,
-        stickyUsername: member.user.username,
         discriminator: member.user.discriminator,
+        guildAdmin: member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        ),
+        clientAdmin: config.clientAdmins.includes(member.id),
       },
     });
   }

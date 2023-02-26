@@ -1,7 +1,5 @@
 import { Event } from "../base/event";
 import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
-import GuildService from "../services/guildService";
-import UserService from "../services/userService";
 import NotificationConfigService from "../services/notificationConfigService";
 import MemberService from "../services/memberService";
 
@@ -11,7 +9,6 @@ import MemberService from "../services/memberService";
 export default new Event({
   name: Events.GuildMemberAdd,
   async execute(member) {
-    const userService = new UserService();
     const notificationConfigService = new NotificationConfigService();
     const memberService = new MemberService();
 
@@ -22,28 +19,16 @@ export default new Event({
       )} has joined ${member.client.functions.getGuildString(member.guild)}.`
     );
 
-    // [Database]: Update the database.
-    const existingUser = await userService.getUser(member.user.id);
-    if (!existingUser) {
-      await userService.createUser(member.user);
-    } else {
-      await userService.updateUser(member.user);
-    }
-
-    let existingMember = await memberService.getMember(member.id);
+    const existingMember = await memberService.getMember(member.id);
     if (!existingMember) {
-      existingMember = await memberService.createMember(member);
-    } else {
-      existingMember = await memberService.updateMember(member);
+      await memberService.createMember(member);
     }
 
     // [Notification]: Send the notification.
     const embed = new EmbedBuilder()
       .setColor(Colors.Green)
-      .setTitle(`${existingMember.username} has joined the server.`)
-      .setDescription(
-        `${existingMember.username} had previously joined the server as ${existingMember.stickyUsername}.`
-      )
+      .setTitle(`${member.displayName} has joined the server.`)
+      .setDescription(`${member.displayName} has joined the server.`)
       .setThumbnail(member.avatar);
 
     const notificationConfig =
