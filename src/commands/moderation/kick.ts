@@ -56,7 +56,7 @@ export default new Command({
     if (
       memberKicking.roles.highest.comparePositionTo(
         memberToBeKicked.roles.highest
-      ) < 1
+      ) > 1
     ) {
       return await interaction.reply({
         ephemeral: true,

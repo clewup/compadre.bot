@@ -32,7 +32,7 @@ export default new Command({
 
     await interaction.reply({
       ephemeral: true,
-      content: `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`,
+      content: `I have been awake for ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds.`,
     });
   },
 });

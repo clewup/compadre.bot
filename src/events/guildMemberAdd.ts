@@ -28,7 +28,6 @@ export default new Event({
     const embed = new EmbedBuilder()
       .setColor(Colors.Green)
       .setTitle(`${member.displayName} has joined the server.`)
-      .setDescription(`${member.displayName} has joined the server.`)
       .setThumbnail(member.avatar);
 
     const notificationConfig =

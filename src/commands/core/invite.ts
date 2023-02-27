@@ -9,6 +9,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
+import config from "../../config";
 
 /*
  *    Generates an invite link for the bot.
@@ -24,11 +25,11 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const inviteLink = `https://discord.com/api/oauth2/authorize?client_id=1075167615602933760&permissions=8&scope=bot%20applications.commands`;
+    const inviteLink = config.clientInviteUrl;
     const button = new ButtonBuilder()
       .setLabel("Click here!")
       .setStyle(ButtonStyle.Link)
-      .setURL(inviteLink);
+      .setURL(inviteLink || "");
 
     const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       button

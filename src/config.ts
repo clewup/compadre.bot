@@ -10,6 +10,7 @@ const config = {
   discordPublicKey: process.env.DISCORD_PUBLIC_KEY,
   databaseUrl: process.env.DATABASE_URL,
   clientName: process.env.CLIENT_NAME,
+  clientInviteUrl: process.env.CLIENT_INVITE_URL,
 
   // Configuration
   clientAdmins: clientAdmins,
