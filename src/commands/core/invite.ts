@@ -4,20 +4,20 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 import config from "../../config";
 
-/*
- *    Generates an invite link for the bot.
+/**
+ *    @name invite
+ *    @description Generates an invitation link for the bot.
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("invite")
-    .setDescription("Generate a bot invite.")
+    .setDescription("Generate an invitation link for the bot.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

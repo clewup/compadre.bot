@@ -1,7 +1,6 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
   EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
@@ -10,13 +9,15 @@ import {
 import { readFileSync } from "fs";
 import path from "node:path";
 
-/*
- *    Shows the bot information.
+/**
+ *    @name about
+ *    @description Returns information about the bot such as versions.
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("about")
-    .setDescription("View the bot's information.")
+    .setDescription("View information about compadre.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

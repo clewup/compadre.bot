@@ -1,9 +1,10 @@
 import { Event } from "../structures/event";
-import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
+import {  Events } from "discord.js";
 import GuildService from "../services/guildService";
 
-/*
- *    Emitted whenever a guild is updated (eg. name change).
+/**
+ *    @name guildUpdate
+ *    @description Emitted whenever a guild is updated (eg. name change).
  */
 export default new Event({
   name: Events.GuildUpdate,

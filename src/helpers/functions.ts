@@ -1,5 +1,9 @@
 import { Guild, User } from "discord.js";
 
+/**
+ *    @class
+ *    Creates a new instance of Functions.
+ */
 class Functions {
   public randomNumber(min: number, max: number) {
     return Math.floor(Math.random() * (max - min)) + min;

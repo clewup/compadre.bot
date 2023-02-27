@@ -1,3 +1,7 @@
+/**
+ *    @class
+ *    Creates a new instance of Functions.
+ */
 class Logger {
   public log(message: unknown) {
     const dateTime = new Date().toISOString();

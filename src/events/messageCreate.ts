@@ -1,10 +1,10 @@
 import { Event } from "../structures/event";
 import { Events, Message } from "discord.js";
-import PreventConfigService from "../services/preventConfigService";
-import AntiSpam from "../structures/antispam";
+import PreventService from "../services/preventService";
 
-/*
- *    Emitted whenever a message is created.
+/**
+ *    @name messageCreate
+ *    @description Emitted whenever a message is created.
  */
 export default new Event({
   name: Events.MessageCreate,
@@ -28,8 +28,8 @@ export default new Event({
 
 const handlePrevent = async (message: Message<boolean>) => {
   if (message.guild) {
-    const preventConfigService = new PreventConfigService();
-    const preventConfig = await preventConfigService.getPreventConfig(
+    const preventService = new PreventService();
+    const preventConfig = await preventService.getPreventConfig(
       message.guild
     );
 
@@ -55,26 +55,6 @@ const handlePrevent = async (message: Message<boolean>) => {
           await message.delete();
           message.client.logger.logInfo(
             `"${message.content}" has been detected as containing a link and has been deleted.`
-          );
-        }
-
-        // Spam
-        if (preventConfig.spam) {
-          const antiSpam = new AntiSpam();
-          await antiSpam.message(message);
-          message.client.logger.logInfo(
-            `"${message.content}" has been detected as spam and has been deleted.`
-          );
-        }
-
-        // Ads
-        if (
-          preventConfig.ads &&
-          message.content.match(new RegExp(adExpression))
-        ) {
-          await message.delete();
-          message.client.logger.logInfo(
-            `"${message.content}" has been detected as containing an advertisement and has been deleted.`
           );
         }
       }

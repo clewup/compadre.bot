@@ -1,15 +1,15 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
 } from "discord.js";
 
-/*
- *    Enables slowmode in the channel.
+/**
+ *    @name slowmode
+ *    @description Enables/disables slowmode (message rate limit) in the channel that the command is executed.
+ *    The command requires a permission of ManageChannels.
+ *    @param {boolean} enabled - Whether slowmode is enabled in the channel.
  */
 export default new Command({
   data: new SlashCommandBuilder()

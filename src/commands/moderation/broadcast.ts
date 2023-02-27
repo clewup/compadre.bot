@@ -6,10 +6,12 @@ import {
   TextChannel,
   VoiceChannel,
 } from "discord.js";
-import NotificationConfigService from "../../services/notificationConfigService";
+import NotificationService from "../../services/notificationService";
 
-/*
- *    Broadcasts a message to the entire server.
+/**
+ *    @name broadcast
+ *    @description Broadcasts a message to the entire guild.
+ *    @param message string
  */
 export default new Command({
   data: new SlashCommandBuilder()
@@ -28,7 +30,7 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
 
     const message = interaction.options.getString("message");
 
@@ -40,7 +42,7 @@ export default new Command({
     }
 
     const notificationChannel =
-      await notificationConfigService.getNotificationChannel(interaction.guild);
+      await notificationService.getNotificationChannel(interaction.guild);
     if (!notificationChannel) {
       return await interaction.reply({
         ephemeral: true,

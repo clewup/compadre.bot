@@ -3,18 +3,19 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Pauses a song in the channel.
+/**
+ *    @name pause
+ *    @description Pauses the current song being played.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("pause")
-    .setDescription("Pause a song in the channel.")
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDescription("Pause the current song.")
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

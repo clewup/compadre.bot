@@ -2,6 +2,11 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import Logger from "../helpers/logger";
 import config from "../config";
 
+/**
+ *    @extends PrismaClient
+ *    @class
+ *    Creates a new instance of Database.
+ */
 class Database extends PrismaClient<
   Prisma.PrismaClientOptions,
   "query" | "error" | "warn"

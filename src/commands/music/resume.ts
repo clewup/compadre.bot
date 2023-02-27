@@ -3,18 +3,19 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Resumes a song in the channel.
+/**
+ *    @name resume
+ *    @description Resumes the currently paused song.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("resume")
-    .setDescription("Resume a song in the channel.")
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDescription("Resume the currently paused song.")
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

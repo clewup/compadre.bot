@@ -1,20 +1,16 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
-  PermissionOverwrites,
-  PrivateThreadChannel,
   PermissionsBitField,
   SlashCommandBuilder,
   TextChannel,
-  ThreadChannel,
   VoiceChannel,
 } from "discord.js";
 
-/*
- *    Clears messages from a channel.
- *    <params="amount (number)"/>
+/**
+ *    @name unlock
+ *    @description Unlocks the channel in which the command was executed.
+ *    The command requires a permission of ManageChannels.
  */
 export default new Command({
   data: new SlashCommandBuilder()

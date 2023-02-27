@@ -8,40 +8,45 @@ import {
   TextChannel,
   ChannelType,
 } from "discord.js";
-import WelcomeConfigService from "../../services/welcomeConfigService";
+import WelcomeService from "../../services/welcomeService";
 import { Reasons } from "../../data/enums/reasons";
 
-/*
- *    Configures the welcome.
- *    <params="channel? (text channel), role? (role), message? (string), enabled (boolean)"/>
+/**
+ *    @name welcome
+ *    @description Configures guild welcome message settings.
+ *    The command requires a permission of Administrator.
+ *    @param {boolean} enabled - Whether the welcome message is enabled.
+ *    @param {Channel} [channel=general] - The specified welcome channel.
+ *    @param {Role} [role=false] - The specified role for verified/welcomed users.
+ *    @param {string} [message=Welcome to the Server!] - The specified welcome message.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("welcome")
-    .setDescription("Configure the welcome.")
+    .setDescription("Configure server welcome message settings.")
     .addBooleanOption((option) =>
       option
         .setName("enabled")
-        .setDescription("Whether the welcome is enabled.")
+        .setDescription("Whether the welcome message is enabled.")
         .setRequired(true)
     )
     .addChannelOption((option) =>
       option
         .setName("channel")
-        .setDescription("Optional: The selected welcome channel.")
+        .setDescription("The specified welcome channel.")
         .setRequired(false)
         .addChannelTypes(ChannelType.GuildText)
     )
     .addRoleOption((option) =>
       option
         .setName("role")
-        .setDescription("Optional: The role given to verified users.")
+        .setDescription("The specified role for verified/welcomed users.")
         .setRequired(false)
     )
     .addStringOption((option) =>
       option
         .setName("message")
-        .setDescription("Optional: The welcome message.")
+        .setDescription("The specified welcome message.")
         .setRequired(false)
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
@@ -51,15 +56,15 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const welcomeConfigService = new WelcomeConfigService();
+    const welcomeService = new WelcomeService();
 
     const enabled = interaction.options.getBoolean("enabled");
 
     if (enabled === false) {
-      await handleDisable(interaction, welcomeConfigService);
+      await handleDisable(interaction, welcomeService);
     }
     if (enabled === true) {
-      await handleEnable(interaction, welcomeConfigService);
+      await handleEnable(interaction, welcomeService);
     }
 
     await interaction.reply({
@@ -71,7 +76,7 @@ export default new Command({
 
 const handleDisable = async (
   interaction: ChatInputCommandInteraction<"cached">,
-  welcomeConfigService: WelcomeConfigService
+  welcomeService: WelcomeService
 ) => {
   // Looks for and deletes the default welcome channel (#welcome).
   const defaultWelcomeChannel =
@@ -87,7 +92,7 @@ const handleDisable = async (
   }
 
   // [Database]: Update the database.
-  await welcomeConfigService.updateWelcomeConfig(
+  await welcomeService.updateWelcomeConfig(
     interaction.guild,
     null,
     null,
@@ -98,7 +103,7 @@ const handleDisable = async (
 
 const handleEnable = async (
   interaction: ChatInputCommandInteraction<"cached">,
-  welcomeConfigService: WelcomeConfigService
+  welcomeService: WelcomeService
 ) => {
   let welcomeChannel = interaction.options.getChannel("channel");
   let welcomeRole = interaction.options.getRole("role");
@@ -183,7 +188,7 @@ const handleEnable = async (
   }
 
   // [Database]: Update the database.
-  await welcomeConfigService.updateWelcomeConfig(
+  await welcomeService.updateWelcomeConfig(
     interaction.guild,
     welcomeChannel.id,
     welcomeRole.id,

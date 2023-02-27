@@ -34,17 +34,20 @@ const soundEffects = [
   },
 ];
 
-/*
- *    Plays a sound effect.
+/**
+ *    @name sb
+ *    @description Plays a sound effect in the channel the command is executed.
+ *    The command requires a permission of SendMessages.
+ *    @param {string} effect - A specified sound effect listed in the soundEffects array.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("sb")
-    .setDescription("Play a sound effect.")
+    .setDescription("Play a sound effect in the channel.")
     .addStringOption((option) =>
       option
         .setName("effect")
-        .setDescription("The sound effect.")
+        .setDescription("The specified sound effect.")
         .addChoices(...soundEffects)
         .setRequired(true)
     )

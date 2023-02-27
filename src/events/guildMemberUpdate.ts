@@ -2,8 +2,9 @@ import { Event } from "../structures/event";
 import { Events } from "discord.js";
 import MemberService from "../services/memberService";
 
-/*
- *    Emitted whenever a user is updated (eg. new nickname/role change).
+/**
+ *    @name guildMemberUpdate
+ *    @description Emitted whenever a user is updated (eg. new nickname/role change).
  */
 export default new Event({
   name: Events.GuildMemberUpdate,

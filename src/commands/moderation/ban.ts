@@ -3,13 +3,14 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
-  VoiceChannel,
 } from "discord.js";
 
-/*
- *    Bans a user from the guild.
- *    <params="user (user), reason (string)"/>
+/**
+ *    @name ban
+ *    @description Bans a user from the guild.
+ *    The command requires a permission of Administrator.
+ *    @param {User} user - The user to be banned.
+ *    @param {string} [reason] - The reason for the user's ban.
  */
 export default new Command({
   data: new SlashCommandBuilder()

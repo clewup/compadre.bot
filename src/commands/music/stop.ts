@@ -3,18 +3,19 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Stops and deletes the queue.
+/**
+ *    @name stop
+ *    @description Stops the current song being played, clears the queue and disconnects the bot from the channel.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("stop")
-    .setDescription("Stop playing a song or playlist in the channel.")
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDescription("Stop playing music and clear the queue.")
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

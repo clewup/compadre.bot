@@ -4,6 +4,10 @@ import { Guild as DiscordGuild } from "discord.js";
 import RoleService from "./roleService";
 import MemberService from "./memberService";
 
+/**
+ *    @class
+ *    Creates a new instance of the GuildService.
+ */
 class GuildService {
   private database;
   private roleService;
@@ -49,8 +53,6 @@ class GuildService {
           create: {
             role: null,
             links: false,
-            spam: false,
-            ads: false,
             enabled: false,
           },
         },

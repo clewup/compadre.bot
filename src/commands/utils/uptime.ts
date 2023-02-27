@@ -1,19 +1,19 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 
-/*
- *    Shows the bot uptime.
+/**
+ *    @name uptime
+ *    @description Returns the bot's uptime.
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("uptime")
-    .setDescription("View the bot's uptime.")
+    .setDescription("View compadre's uptime.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

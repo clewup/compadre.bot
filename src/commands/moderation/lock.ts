@@ -7,9 +7,10 @@ import {
   VoiceChannel,
 } from "discord.js";
 
-/*
- *    Clears messages from a channel.
- *    <params="amount (number)"/>
+/**
+ *    @name lock
+ *    @description Locks the channel in which the command was executed.
+ *    The command requires a permission of ManageChannels.
  */
 export default new Command({
   data: new SlashCommandBuilder()

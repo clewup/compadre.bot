@@ -2,8 +2,9 @@ import { Event } from "../structures/event";
 import { Events } from "discord.js";
 import RoleService from "../services/roleService";
 
-/*
- *    Emitted whenever a role is deleted.
+/**
+ *    @name roleDelete
+ *    @description Emitted whenever a role is deleted.
  */
 export default new Event({
   name: Events.GuildRoleDelete,

@@ -3,13 +3,15 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
-  VoiceChannel,
 } from "discord.js";
 
-/*
- *    Mute a user in the guild.
- *    <params="user (user), reason (string)"/>
+/**
+ *    @name mute
+ *    @description Mutes a user in the guild for a specified duration.
+ *    The command requires a permission of Administrator.
+ *    @param {User} user - The user to be muted.
+ *    @param {number} duration - The duration of the mute.
+ *    @param {string} [reason] - The reason for the user's mute.
  */
 export default new Command({
   data: new SlashCommandBuilder()

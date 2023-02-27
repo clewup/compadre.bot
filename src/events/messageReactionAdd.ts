@@ -1,16 +1,17 @@
 import { Event } from "../structures/event";
-import { Events, MessageReaction } from "discord.js";
-import WelcomeConfigService from "../services/welcomeConfigService";
+import { Events } from "discord.js";
+import WelcomeService from "../services/welcomeService";
 
-/*
- *    Emitted whenever a role is created.
+/**
+ *    @name messageReactionAdd
+ *    @description Emitted whenever a reaction is added to a message.
  */
 export default new Event({
   name: Events.MessageReactionAdd,
   async execute(reaction, user) {
     if (!reaction.message.guild) return;
 
-    const welcomeConfigService = new WelcomeConfigService();
+    const welcomeService = new WelcomeService();
 
     // [Logging]
     reaction.client.logger.logInfo(
@@ -24,7 +25,7 @@ export default new Event({
     );
 
     // [Welcome]: Update the user's role.
-    const welcomeConfig = await welcomeConfigService.getWelcomeConfig(
+    const welcomeConfig = await welcomeService.getWelcomeConfig(
       reaction.message.guild
     );
     if (

@@ -1,9 +1,10 @@
-import { Collection, Events, bold, inlineCode } from "discord.js";
+import { Events, inlineCode } from "discord.js";
 
 import { Event } from "../structures/event";
 
-/*
- *    Emitted whenever an interaction is created (eg. slash command).
+/**
+ *    @name interactionCreate
+ *    @description Emitted whenever an interaction is created (eg. slash command).
  *    Executes a matching command.
  */
 export default new Event({

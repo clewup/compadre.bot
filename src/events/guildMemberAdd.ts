@@ -1,15 +1,16 @@
 import { Event } from "../structures/event";
 import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
-import NotificationConfigService from "../services/notificationConfigService";
+import NotificationService from "../services/notificationService";
 import MemberService from "../services/memberService";
 
-/*
- *    Emitted whenever a user joins a guild.
+/**
+ *    @name guildMemberAdd
+ *    @description Emitted whenever a user joins a guild.
  */
 export default new Event({
   name: Events.GuildMemberAdd,
   async execute(member) {
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
     const memberService = new MemberService();
 
     // [Logging]
@@ -31,10 +32,10 @@ export default new Event({
       .setThumbnail(member.avatar);
 
     const notificationConfig =
-      await notificationConfigService.getNotificationConfig(member.guild);
+      await notificationService.getNotificationConfig(member.guild);
     if (notificationConfig?.enabled === true) {
       const notificationChannel =
-        await notificationConfigService.getNotificationChannel(member.guild);
+        await notificationService.getNotificationChannel(member.guild);
       await notificationChannel?.send({ embeds: [embed] });
     }
   },

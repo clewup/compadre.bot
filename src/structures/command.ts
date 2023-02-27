@@ -10,6 +10,10 @@ interface CommandOptions {
   execute: (...args: any) => any;
 }
 
+/**
+ *    @class
+ *    Creates a new instance of Command.
+ */
 export class Command {
   data: CommandOptions["data"];
   details: CommandOptions["details"];

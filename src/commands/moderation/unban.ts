@@ -3,13 +3,14 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
-  VoiceChannel,
 } from "discord.js";
 
-/*
- *    Unbans a user from the guild.
- *    <params="user (user), reason (string)"/>
+/**
+ *    @name unban
+ *    @description Unbans a user from the guild.
+ *    The command requires a permission of Administrator.
+ *    @param {User} user - The user to be unbanned.
+ *    @param {string} [reason] - The reason for the user's ban.
  */
 export default new Command({
   data: new SlashCommandBuilder()

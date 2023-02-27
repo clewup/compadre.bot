@@ -1,19 +1,19 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 
-/*
- *    Greet the bot.
+/**
+ *    @name hello
+ *    @description A simple greeting.
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("hello")
-    .setDescription("Say hello!")
+    .setDescription("A simple greeting.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

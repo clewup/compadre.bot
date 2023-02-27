@@ -2,6 +2,10 @@ import Database from "../structures/database";
 import { Role } from "@prisma/client";
 import { Role as DiscordRole } from "discord.js";
 
+/**
+ *    @class
+ *    Creates a new instance of the RoleService.
+ */
 class RoleService {
   private database;
 

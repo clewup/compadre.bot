@@ -15,6 +15,11 @@ import config from "../config";
 import { Player } from "discord-player";
 import Soundboard from "./soundboard";
 
+/**
+ *    @extends DiscordClient
+ *    @class
+ *    Creates a new instance of Compadre.
+ */
 class Compadre<Ready extends boolean = boolean> extends DiscordClient {
   public logger;
   public functions;

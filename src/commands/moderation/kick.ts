@@ -3,13 +3,14 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
-  VoiceChannel,
 } from "discord.js";
 
-/*
- *    Kick a user from the guild.
- *    <params="user (user), reason (string)"/>
+/**
+ *    @name kick
+ *    @description Kicks a user from the guild.
+ *    The command requires a permission of Administrator.
+ *    @param {User} user - The user to be kicked.
+ *    @param {string} [reason] - The reason for the user's kick.
  */
 export default new Command({
   data: new SlashCommandBuilder()

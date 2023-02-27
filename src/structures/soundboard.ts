@@ -10,6 +10,10 @@ import {
 } from "@discordjs/voice";
 import { ChatInputCommandInteraction, VoiceBasedChannel } from "discord.js";
 
+/**
+ *    @class
+ *    Creates a new instance of Soundboard.
+ */
 class Soundboard {
   constructor() {}
 

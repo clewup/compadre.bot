@@ -4,18 +4,20 @@ import {
   EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType, Track } from "discord-player";
+import {Track } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Fetches the song queue.
+/**
+ *    @name queue
+ *    @description Returns the song queue.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("queue")
-    .setDescription("Pause a song in the channel.")
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDescription("View the music queue.")
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

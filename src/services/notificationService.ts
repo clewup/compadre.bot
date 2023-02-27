@@ -2,7 +2,11 @@ import Database from "../structures/database";
 import { NotificationConfig } from "@prisma/client";
 import { TextChannel, Guild as DiscordGuild } from "discord.js";
 
-class NotificationConfigService {
+/**
+ *    @class
+ *    Creates a new instance of the NotificationService.
+ */
+class NotificationService {
   private database;
 
   constructor() {
@@ -33,14 +37,16 @@ class NotificationConfigService {
 
   public async getNotificationChannel(
     guild: DiscordGuild
-  ): Promise<TextChannel | null> {
+  ): Promise<TextChannel | undefined> {
     const config = await this.getNotificationConfig(guild);
 
-    if (config?.channel) {
-      return (await guild.channels.fetch(config?.channel!)) as TextChannel;
-    } else {
-      return null;
+    if (config && config.channel) {
+      const channel = await guild.channels.fetch(config.channel);
+
+      if (channel instanceof TextChannel) {
+        return channel;
+      }
     }
   }
 }
-export default NotificationConfigService;
+export default NotificationService;

@@ -7,6 +7,10 @@ import {
 } from "discord.js";
 import config from "../config";
 
+/**
+ *    @class
+ *    Creates a new instance of the MemberService.
+ */
 class MemberService {
   private database;
 

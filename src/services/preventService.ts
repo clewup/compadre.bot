@@ -1,8 +1,12 @@
 import Database from "../structures/database";
 import { PreventConfig } from "@prisma/client";
-import { TextChannel, Guild as DiscordGuild } from "discord.js";
+import {  Guild as DiscordGuild } from "discord.js";
 
-class PreventConfigService {
+/**
+ *    @class
+ *    Creates a new instance of the PreventService.
+ */
+class PreventService {
   private database;
 
   constructor() {
@@ -21,8 +25,6 @@ class PreventConfigService {
     guild: DiscordGuild,
     role: string | null,
     links: boolean,
-    spam: boolean,
-    ads: boolean,
     enabled: boolean
   ): Promise<PreventConfig> {
     return this.database.preventConfig.update({
@@ -30,11 +32,9 @@ class PreventConfigService {
       data: {
         role: role,
         links: links,
-        spam: spam,
-        ads: ads,
         enabled: enabled,
       },
     });
   }
 }
-export default PreventConfigService;
+export default PreventService;

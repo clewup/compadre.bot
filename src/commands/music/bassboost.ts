@@ -3,12 +3,14 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Enables/disables bassboost on the queue.
+/**
+ *    @name bassboost
+ *    @description Enables/disables bassboost in the channel that the command is executed.
+ *    The command requires a permission of Administrator.
+ *    @param {boolean} enabled - Whether bassboost is enabled in the channel.
  */
 export default new Command({
   data: new SlashCommandBuilder()
@@ -20,7 +22,7 @@ export default new Command({
         .setDescription("Whether bassboost is enabled on the queue.")
         .setRequired(true)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

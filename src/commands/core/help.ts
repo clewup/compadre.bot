@@ -3,18 +3,19 @@ import {
   ButtonStyle,
   ChatInputCommandInteraction,
   EmbedBuilder,
-  EmbedField,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 
-/*
- *    Shows a list of all available commands and their descriptions.
+/**
+ *    @name help
+ *    @description Returns a list of all compadre commands (even those the user does not have permission to use).
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("help")
-    .setDescription("View available commands.")
+    .setDescription("View all compadre commands.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

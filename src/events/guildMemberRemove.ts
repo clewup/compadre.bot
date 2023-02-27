@@ -1,16 +1,17 @@
 import { Event } from "../structures/event";
 import { Colors, Embed, EmbedBuilder, Events, TextChannel } from "discord.js";
-import NotificationConfigService from "../services/notificationConfigService";
+import NotificationService from "../services/notificationService";
 import MemberService from "../services/memberService";
 
-/*
- *    Emitted whenever a user leaves a guild or is kicked.
+/**
+ *    @name guildMemberRemove
+ *    @description Emitted whenever a user leaves a guild or is kicked.
  */
 export default new Event({
   name: Events.GuildMemberRemove,
   async execute(member) {
     const memberService = new MemberService();
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Red)
@@ -31,10 +32,10 @@ export default new Event({
 
     // [Notification]: Send the notification.
     const notificationConfig =
-      await notificationConfigService.getNotificationConfig(member.guild);
+      await notificationService.getNotificationConfig(member.guild);
     if (notificationConfig?.enabled === true) {
       const notificationChannel =
-        await notificationConfigService.getNotificationChannel(member.guild);
+        await notificationService.getNotificationChannel(member.guild);
       await notificationChannel?.send({ embeds: [embed] });
     }
   },

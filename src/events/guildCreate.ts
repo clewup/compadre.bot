@@ -1,16 +1,17 @@
 import { Event } from "../structures/event";
 import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
-import NotificationConfigService from "../services/notificationConfigService";
+import NotificationService from "../services/notificationService";
 
-/*
- *    Emitted whenever the bot is added to a guild.
+/**
+ *    @name guildCreate
+ *    @description Emitted whenever the bot is added to a guild.
  */
 export default new Event({
   name: Events.GuildCreate,
   async execute(guild) {
     const guildService = new GuildService();
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Red)
@@ -40,10 +41,10 @@ export default new Event({
 
     // [Notification]: Send the notification.
     const notificationConfig =
-      await notificationConfigService.getNotificationConfig(guild);
+      await notificationService.getNotificationConfig(guild);
     if (notificationConfig?.enabled === true) {
       const notificationChannel =
-        await notificationConfigService.getNotificationChannel(guild);
+        await notificationService.getNotificationChannel(guild);
       await notificationChannel?.send({ embeds: [embed] });
     }
   },

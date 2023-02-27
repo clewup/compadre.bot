@@ -61,7 +61,5 @@ model PreventConfig {
   guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
   role    String? @db.VarChar(255)
   links   Boolean @default(false)
-  spam    Boolean @default(false)
-  ads     Boolean @default(false)
   enabled Boolean @default(false)
 }

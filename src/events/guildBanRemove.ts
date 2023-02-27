@@ -1,15 +1,16 @@
 import { Event } from "../structures/event";
 import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
 import GuildService from "../services/guildService";
-import NotificationConfigService from "../services/notificationConfigService";
+import NotificationService from "../services/notificationService";
 
-/*
- *    Emitted whenever a user is unbanned from a guild.
+/**
+ *    @name guildBanRemove
+ *    @description Emitted whenever a user is unbanned from a guild.
  */
 export default new Event({
   name: Events.GuildBanRemove,
   async execute(guildBan) {
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
 
     const embed = new EmbedBuilder()
       .setColor(Colors.Green)
@@ -27,10 +28,10 @@ export default new Event({
 
     // [Notification]: Send the notification.
     const notificationConfig =
-      await notificationConfigService.getNotificationConfig(guildBan.guild);
+      await notificationService.getNotificationConfig(guildBan.guild);
     if (notificationConfig?.enabled === true) {
       const notificationChannel =
-        await notificationConfigService.getNotificationChannel(guildBan.guild);
+        await notificationService.getNotificationChannel(guildBan.guild);
       await notificationChannel?.send({ embeds: [embed] });
     }
   },

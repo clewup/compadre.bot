@@ -1,24 +1,24 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 
-/*
- *    Clears messages from a channel.
- *    <params="amount (number)"/>
+/**
+ *    @name cleanup
+ *    @description Deletes a specified amount of messages from the channel that the command is executed.
+ *    The command requires a permission of ManageMessages.
+ *    @param {number} amount - The amount of messages to be deleted.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("cleanup")
-    .setDescription("Clear a specified amount of messages.")
+    .setDescription("Deletes a specified amount of messages from the channel.")
     .addIntegerOption((option) =>
       option
         .setName("amount")
-        .setDescription("The amount of messages to be cleared.")
+        .setDescription("The amount of messages to be deleted.")
         .setRequired(true)
         .setMinValue(1)
         .setMaxValue(100)

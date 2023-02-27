@@ -1,8 +1,12 @@
 import Database from "../structures/database";
 import { WelcomeConfig } from "@prisma/client";
-import { TextChannel, Guild as DiscordGuild } from "discord.js";
+import { Guild as DiscordGuild } from "discord.js";
 
-class WelcomeConfigService {
+/**
+ *    @class
+ *    Creates a new instance of the WelcomeService.
+ */
+class WelcomeService {
   private database;
 
   constructor() {
@@ -35,4 +39,4 @@ class WelcomeConfigService {
     });
   }
 }
-export default WelcomeConfigService;
+export default WelcomeService;

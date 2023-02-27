@@ -1,19 +1,19 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
 
-/*
- *    Shows the user's latency to the bot and the server.
+/**
+ *    @name ping
+ *    @description Returns the user's latency to the bot and the API.
+ *    The command requires a permission of SendMessages.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("ping")
-    .setDescription("View your ping.")
+    .setDescription("Pong.")
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {

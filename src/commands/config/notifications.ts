@@ -2,33 +2,33 @@ import { Command } from "../../structures/command";
 import {
   ChannelType,
   ChatInputCommandInteraction,
-  Colors,
-  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
   TextChannel,
 } from "discord.js";
-import GuildService from "../../services/guildService";
-import NotificationConfigService from "../../services/notificationConfigService";
+import NotificationService from "../../services/notificationService";
 
-/*
- *    Configures notifications.
- *    <params="channel? (text channel), enabled (boolean)"/>
+/**
+ *    @name notifications
+ *    @description Configure guild notification settings.
+ *    The command requires a permission of Administrator.
+ *    @param {boolean} enabled - Whether the notification system is enabled.
+ *    @param {Channel} [channel] - The specified notification channel.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("notifications")
-    .setDescription("Configure notifications.")
+    .setDescription("Configure server notification settings.")
     .addBooleanOption((option) =>
       option
         .setName("enabled")
-        .setDescription("Whether notifications are enabled.")
+        .setDescription("Whether the notification system is enabled.")
         .setRequired(true)
     )
     .addChannelOption((option) =>
       option
         .setName("channel")
-        .setDescription("Optional: The selected notification channel.")
+        .setDescription("The specified notification channel.")
         .setRequired(false)
         .addChannelTypes(ChannelType.GuildText)
     )
@@ -39,15 +39,15 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const notificationConfigService = new NotificationConfigService();
+    const notificationService = new NotificationService();
 
     const enabled = interaction.options.getBoolean("enabled");
 
     if (enabled === false) {
-      await handleDisable(interaction, notificationConfigService);
+      await handleDisable(interaction, notificationService);
     }
     if (enabled === true) {
-      await handleEnable(interaction, notificationConfigService);
+      await handleEnable(interaction, notificationService);
     }
 
     await interaction.reply({
@@ -59,7 +59,7 @@ export default new Command({
 
 const handleDisable = async (
   interaction: ChatInputCommandInteraction<"cached">,
-  notificationConfigService: NotificationConfigService
+  notificationService: NotificationService
 ) => {
   // Looks for and deletes the default notification channel (#notifications).
   const defaultNotificationChannel =
@@ -76,7 +76,7 @@ const handleDisable = async (
   }
 
   // [Database]: Update the database.
-  await notificationConfigService.updateNotificationConfig(
+  await notificationService.updateNotificationConfig(
     interaction.guild,
     null,
     false
@@ -85,7 +85,7 @@ const handleDisable = async (
 
 const handleEnable = async (
   interaction: ChatInputCommandInteraction<"cached">,
-  notificationConfigService: NotificationConfigService
+  notificationService: NotificationService
 ) => {
   let notificationChannel = interaction.options.getChannel("channel");
 
@@ -140,7 +140,7 @@ const handleEnable = async (
     });
 
   // [Database]: Update the database.
-  await notificationConfigService.updateNotificationConfig(
+  await notificationService.updateNotificationConfig(
     interaction.guild,
     notificationChannel.id,
     true

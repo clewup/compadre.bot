@@ -5,17 +5,19 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import {
-  Player,
   PlayerSearchResult,
   QueryType,
   Queue,
   QueueRepeatMode,
   Track,
 } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Plays a song in the channel.
- *    <params="song (string)"/>
+/**
+ *    @name play
+ *    @description Plays a song or playlist in the channel where the command was executed.
+ *    @param {string} search - Queries various sources for the user's input. Also accepts a spotify playlist link.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
@@ -27,7 +29,7 @@ export default new Command({
         .setDescription("The chosen song or playlist.")
         .setRequired(true)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",

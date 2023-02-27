@@ -1,8 +1,9 @@
 import { Event } from "../structures/event";
-import { Events, User } from "discord.js";
+import { Events } from "discord.js";
 
-/*
- *    Emitted whenever a user is updated (eg. username).
+/**
+ *    @name userUpdate
+ *    @description Emitted whenever a user is updated (eg. username).
  */
 export default new Event({
   name: Events.UserUpdate,

@@ -11,6 +11,10 @@ interface EventOptions<Key extends keyof ClientEvents> {
   execute: (...args: OverriddenClientEvents[Key]) => any;
 }
 
+/**
+ *    @class
+ *    Creates a new instance of Event.
+ */
 export class Event<Key extends keyof ClientEvents>
   implements EventOptions<Key>
 {

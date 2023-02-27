@@ -3,18 +3,19 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
-  VoiceChannel,
 } from "discord.js";
-import { Player, PlayerError, QueryType } from "discord-player";
+import {Permissions} from "../../data/enums/permissions";
 
-/*
- *    Pauses a song in the channel.
+/**
+ *    @name clear
+ *    @description Clears the song queue.
+ *    The command requires a permission of Administrator.
  */
 export default new Command({
   data: new SlashCommandBuilder()
     .setName("clear")
-    .setDescription("Clear the song queue in the current channel.")
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDescription("Clear the song queue.")
+    .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
     category: "Music",
