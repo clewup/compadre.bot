@@ -8,7 +8,7 @@ import {
 /**
  *    @name mute
  *    @description Mutes a user in the guild for a specified duration.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of MuteMembers.
  *    @param {User} user - The user to be muted.
  *    @param {number} duration - The duration of the mute.
  *    @param {string} [reason] - The reason for the user's mute.
@@ -35,7 +35,7 @@ export default new Command({
         .setDescription("The reason for the mute.")
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.MuteMembers),
 
   details: {
     category: "Moderation",

@@ -11,7 +11,7 @@ import NotificationService from "../../services/notificationService";
 /**
  *    @name notifications
  *    @description Configure guild notification settings.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of ManageGuild.
  *    @param {boolean} enabled - Whether the notification system is enabled.
  *    @param {Channel} [channel] - The specified notification channel.
  */
@@ -32,7 +32,7 @@ export default new Command({
         .setRequired(false)
         .addChannelTypes(ChannelType.GuildText)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
     category: "Config",

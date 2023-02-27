@@ -5,34 +5,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-
-const soundEffects = [
-  {
-    name: "wow",
-    value: "https://www.myinstants.com/media/sounds/anime-wow-sound-effect.mp3",
-  },
-  {
-    name: "what da dog doin",
-    value: "https://www.myinstants.com/media/sounds/yt1s_wU4BGgD.mp3",
-  },
-  {
-    name: "phub",
-    value: "https://www.myinstants.com/media/sounds/p-hub-intro.mp3",
-  },
-  {
-    name: "fbi",
-    value: "https://www.myinstants.com/media/sounds/fbi-open-up-sfx.mp3",
-  },
-  {
-    name: "we got him",
-    value:
-      "https://www.myinstants.com/media/sounds/ladies-and-gentlemen-we-got-him-song.mp3",
-  },
-  {
-    name: "avengers",
-    value: "https://www.myinstants.com/media/sounds/avengers_.mp3",
-  },
-];
+import {SoundEffects} from "../../data/enums/soundEffects";
 
 /**
  *    @name sb
@@ -48,7 +21,7 @@ export default new Command({
       option
         .setName("effect")
         .setDescription("The specified sound effect.")
-        .addChoices(...soundEffects)
+        .addChoices(...SoundEffects)
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
@@ -70,7 +43,7 @@ export default new Command({
     await interaction.reply({
       ephemeral: true,
       content: `${
-        soundEffects.find((soundEffect) => soundEffect.value === effect)?.name
+        SoundEffects.find((soundEffect) => soundEffect.value === effect)?.name
       }`,
     });
   },

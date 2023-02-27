@@ -10,7 +10,7 @@ import PreventService from "../../services/preventService";
 /**
  *    @name prevent
  *    @description Configures guild message prevention/blocker settings.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of ManageGuild.
  *    @param {boolean} enabled - Whether the prevention system is enabled.
  *    @param {boolean} [links=false] - Whether links are prevented.
  *    @param {Role} [role=false] - The highest role that the prevention system takes effect.
@@ -41,7 +41,7 @@ export default new Command({
         )
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
     category: "Config",

@@ -14,7 +14,7 @@ import { Reasons } from "../../data/enums/reasons";
 /**
  *    @name welcome
  *    @description Configures guild welcome message settings.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of ManageGuild.
  *    @param {boolean} enabled - Whether the welcome message is enabled.
  *    @param {Channel} [channel=general] - The specified welcome channel.
  *    @param {Role} [role=false] - The specified role for verified/welcomed users.
@@ -49,7 +49,7 @@ export default new Command({
         .setDescription("The specified welcome message.")
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
     category: "Config",

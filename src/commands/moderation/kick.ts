@@ -8,7 +8,7 @@ import {
 /**
  *    @name kick
  *    @description Kicks a user from the guild.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of KickMembers.
  *    @param {User} user - The user to be kicked.
  *    @param {string} [reason] - The reason for the user's kick.
  */
@@ -28,7 +28,7 @@ export default new Command({
         .setDescription("The reason for the kick.")
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers),
 
   details: {
     category: "Moderation",

@@ -8,7 +8,7 @@ import {
 /**
  *    @name unban
  *    @description Unbans a user from the guild.
- *    The command requires a permission of Administrator.
+ *    The command requires a permission of BanMembers.
  *    @param {User} user - The user to be unbanned.
  *    @param {string} [reason] - The reason for the user's ban.
  */
@@ -28,7 +28,7 @@ export default new Command({
         .setDescription("The reason for the ban.")
         .setRequired(false)
     )
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers),
 
   details: {
     category: "Moderation",
