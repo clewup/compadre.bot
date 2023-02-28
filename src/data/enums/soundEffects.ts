@@ -22,6 +22,26 @@ export const SoundEffects = [
     },
     {
         name: "avengers",
-        value: "https://www.myinstants.com/media/sounds/avengers_.mp3",
+        value: "https://www.myinstants.com/media/sounds/avengers.mp3",
+    },
+    {
+        name: "hello there",
+        value: "https://www.myinstants.com/media/sounds/obi-wan-hello-there.mp3",
+    },
+    {
+        name: "sax",
+        value: "https://www.myinstants.com/media/sounds/george-micael-wham-careless-whisper-1.mp3",
+    },
+    {
+        name: "sus",
+        value: "https://www.myinstants.com/media/sounds/among-us-roundstart.mp3",
+    },
+    {
+        name: "keyboard mash",
+        value: "https://www.myinstants.com/media/sounds/keyboard-meme.mp3",
+    },
+    {
+        name: "erika",
+        value: "https://www.myinstants.com/media/sounds/heli-erika.mp3",
     },
 ];
