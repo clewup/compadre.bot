@@ -11,6 +11,7 @@ const config = {
   databaseUrl: process.env.DATABASE_URL,
   clientName: process.env.CLIENT_NAME,
   clientInviteUrl: process.env.CLIENT_INVITE_URL,
+  openAiKey: process.env.OPENAI_KEY,
 
   // Configuration
   clientAdmins: clientAdmins,

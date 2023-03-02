@@ -20,7 +20,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: Categories.CORE,
+    category: Categories.UTILITIES,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

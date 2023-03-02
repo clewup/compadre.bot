@@ -12,7 +12,6 @@ import { Command } from "./command";
 import fs from "node:fs";
 import path from "node:path";
 import config from "../config";
-import { Player } from "discord-player";
 import Soundboard from "./soundboard";
 
 /**
@@ -24,7 +23,6 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
   public logger;
   public functions;
   public commands;
-  public player;
   public soundboard;
 
   constructor() {
@@ -46,7 +44,6 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
     this.logger = new Logger();
     this.functions = new Functions();
     this.commands = new Collection<string, Command>();
-    this.player = new Player(this);
     this.soundboard = new Soundboard();
   }
 
