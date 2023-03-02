@@ -7,6 +7,7 @@ import {
   VoiceChannel,
 } from "discord.js";
 import NotificationService from "../../services/notificationService";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name broadcast
@@ -26,7 +27,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
   details: {
-    category: "Moderation",
+    category: Categories.MODERATION,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

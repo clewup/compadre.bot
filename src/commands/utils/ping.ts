@@ -4,6 +4,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name ping
@@ -17,7 +18,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: "Utils",
+    category: Categories.UTILITIES,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

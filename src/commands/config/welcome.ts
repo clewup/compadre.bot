@@ -10,6 +10,7 @@ import {
 } from "discord.js";
 import WelcomeService from "../../services/welcomeService";
 import { Reasons } from "../../data/enums/reasons";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name welcome
@@ -52,7 +53,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
-    category: "Config",
+    category: Categories.CONFIG,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

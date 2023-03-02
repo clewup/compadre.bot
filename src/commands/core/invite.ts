@@ -8,6 +8,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import config from "../../config";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name invite
@@ -21,7 +22,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: "Core",
+    category: Categories.CORE,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

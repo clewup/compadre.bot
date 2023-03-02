@@ -6,6 +6,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import PreventService from "../../services/preventService";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name prevent
@@ -44,7 +45,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
-    category: "Config",
+    category: Categories.CONFIG,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

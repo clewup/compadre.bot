@@ -4,6 +4,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name slowmode
@@ -24,7 +25,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels),
 
   details: {
-    category: "Moderation",
+    category: Categories.MODERATION,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

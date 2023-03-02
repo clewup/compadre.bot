@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import { readFileSync } from "fs";
 import path from "node:path";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name about
@@ -21,7 +22,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: "Utils",
+    category: Categories.UTILITIES,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

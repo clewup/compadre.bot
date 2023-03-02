@@ -4,6 +4,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name cleanup
@@ -26,7 +27,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages),
 
   details: {
-    category: "Core",
+    category: Categories.CORE,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

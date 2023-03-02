@@ -5,6 +5,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import {Permissions} from "../../data/enums/permissions";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name bassboost
@@ -25,7 +26,7 @@ export default new Command({
     .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
-    category: "Music",
+    category: Categories.MUSIC,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

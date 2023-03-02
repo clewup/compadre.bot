@@ -7,6 +7,7 @@ import {
   TextChannel,
 } from "discord.js";
 import NotificationService from "../../services/notificationService";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name notifications
@@ -35,7 +36,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild),
 
   details: {
-    category: "Config",
+    category: Categories.CONFIG,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

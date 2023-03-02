@@ -4,6 +4,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name mute
@@ -38,7 +39,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.MuteMembers),
 
   details: {
-    category: "Moderation",
+    category: Categories.MODERATION,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

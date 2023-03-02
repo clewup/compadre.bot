@@ -6,6 +6,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import {SoundEffects} from "../../data/enums/soundEffects";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name sb
@@ -27,7 +28,7 @@ export default new Command({
     .setDefaultMemberPermissions(PermissionsBitField.Flags.SendMessages),
 
   details: {
-    category: "Core",
+    category: Categories.CORE,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

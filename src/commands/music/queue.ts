@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import {Track } from "discord-player";
 import {Permissions} from "../../data/enums/permissions";
+import {Categories} from "../../data/enums/categories";
 
 /**
  *    @name queue
@@ -20,7 +21,7 @@ export default new Command({
     .setDefaultMemberPermissions(Permissions.MUSIC),
 
   details: {
-    category: "Music",
+    category: Categories.MUSIC,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
