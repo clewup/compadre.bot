@@ -22,5 +22,14 @@ class GptService {
         const gptResponse = response.data.choices[0];
         return gptResponse.text;
     }
+
+    public async createImage(query: string) {
+        const response = await this.openAi.createImage({
+            prompt: query,
+            size: "1024x1024",
+        })
+        const gptResponse = response.data.data[0];
+        return gptResponse.url;
+    }
 }
 export default GptService;
