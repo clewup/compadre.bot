@@ -41,6 +41,13 @@ class GuildService {
             enabled: false,
           },
         },
+        loggingConfig: {
+          create: {
+            channel: null,
+            role: null,
+            enabled: false,
+          },
+        },
         welcomeConfig: {
           create: {
             channel: null,

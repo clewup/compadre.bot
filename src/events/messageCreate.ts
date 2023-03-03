@@ -56,6 +56,9 @@ const handlePrevent = async (message: Message<boolean>) => {
           message.client.logger.logInfo(
             `"${message.content}" has been detected as containing a link and has been deleted.`
           );
+          await message.channel.send({
+            content: `${message.author} you do not have permission to send links.`
+          });
         }
       }
     }

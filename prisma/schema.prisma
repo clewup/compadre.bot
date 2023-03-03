@@ -18,19 +18,20 @@ model Guild {
   members            Member[]
   roles              Role[]
   notificationConfig NotificationConfig?
+  loggingConfig      LoggingConfig?
   welcomeConfig      WelcomeConfig?
   preventConfig      PreventConfig?
 }
 
 model Member {
-  id             String   @id @db.VarChar(255)
-  bot            Boolean  @default(false)
-  username       String   @db.VarChar(255)
-  discriminator  String   @db.VarChar(255)
-  guildAdmin     Boolean @default(false)
-  clientAdmin    Boolean @default(false)
-  guildId        String   @db.VarChar(255)
-  guild          Guild    @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  id            String  @id @db.VarChar(255)
+  bot           Boolean @default(false)
+  username      String  @db.VarChar(255)
+  discriminator String  @db.VarChar(255)
+  guildAdmin    Boolean @default(false)
+  clientAdmin   Boolean @default(false)
+  guildId       String  @db.VarChar(255)
+  guild         Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
 }
 
 model Role {
@@ -43,6 +44,14 @@ model Role {
 model NotificationConfig {
   guildId String  @unique @db.VarChar(255)
   guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  channel String? @db.VarChar(255)
+  enabled Boolean @default(false)
+}
+
+model LoggingConfig {
+  guildId String  @unique @db.VarChar(255)
+  guild   Guild   @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  role    String?  @db.VarChar(255)
   channel String? @db.VarChar(255)
   enabled Boolean @default(false)
 }

@@ -7,14 +7,14 @@ import {
 import {Categories} from "../../data/enums/categories";
 
 /**
- *    @name cleanup
+ *    @name clear
  *    @description Deletes a specified amount of messages from the channel that the command is executed.
  *    The command requires a permission of ManageMessages.
  *    @param {number} amount - The amount of messages to be deleted.
  */
 export default new Command({
   data: new SlashCommandBuilder()
-    .setName("cleanup")
+    .setName("clear")
     .setDescription("Deletes a specified amount of messages from the channel.")
     .addIntegerOption((option) =>
       option
@@ -33,7 +33,7 @@ export default new Command({
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const amount = interaction.options.getInteger("amount");
 
-    interaction.channel?.bulkDelete(amount!, true);
+    await interaction.channel?.bulkDelete(amount!, true);
     await interaction.reply({
       ephemeral: true,
       content: `${amount} messages cleared.`,
