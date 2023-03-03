@@ -1,6 +1,15 @@
-import { Events, inlineCode } from "discord.js";
+import {
+  CacheType,
+  CommandInteraction,
+  EmbedBuilder,
+  Events,
+  GuildMember,
+  inlineCode,
+  Interaction,
+} from "discord.js";
 
 import { Event } from "../structures/event";
+import LoggingService from "../services/loggingService";
 
 /**
  *    @name interactionCreate
@@ -21,6 +30,9 @@ export default new Event({
         interaction.commandName
       }" in ${interaction.client.functions.getGuildString(interaction.guild)}.`
     );
+
+    // [GuildLogging]
+    await handleGuildLogging(interaction);
 
     const command = interaction.client.commands.get(interaction.commandName);
 
@@ -50,3 +62,36 @@ export default new Event({
     }
   },
 });
+
+const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
+  // Create the embed
+  const loggingEmbed = new EmbedBuilder()
+    .setTitle("**Command Executed**")
+    .addFields([
+      {
+        name: "User",
+        value: `${interaction.client.functions.getUserString(
+          interaction.user
+        )}`,
+      },
+      {
+        name: "Command",
+        value: `${(interaction as CommandInteraction).commandName}`,
+      },
+    ])
+    .setFooter({ text: `${new Date().toISOString()}` });
+
+  // Send the logs
+  const loggingService = new LoggingService();
+  const loggingConfig = await loggingService.getLoggingConfig(
+    interaction.guild!
+  );
+  if (loggingConfig?.enabled === true) {
+    const loggingChannel = await loggingService.getLoggingChannel(
+      interaction.guild!
+    );
+    await loggingChannel?.send({
+      embeds: [loggingEmbed],
+    });
+  }
+};

@@ -1,7 +1,15 @@
 import { Event } from "../structures/event";
-import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
+import {
+  AuditLogEvent,
+  Colors,
+  EmbedBuilder,
+  Events,
+  GuildBan,
+  TextChannel,
+} from "discord.js";
 import GuildService from "../services/guildService";
 import NotificationService from "../services/notificationService";
+import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildBanRemove
@@ -26,9 +34,13 @@ export default new Event({
       )}.`
     );
 
+    // [GuildLogging]
+    await handleGuildLogging(guildBan);
+
     // [Notification]: Send the notification.
-    const notificationConfig =
-      await notificationService.getNotificationConfig(guildBan.guild);
+    const notificationConfig = await notificationService.getNotificationConfig(
+      guildBan.guild
+    );
     if (notificationConfig?.enabled === true) {
       const notificationChannel =
         await notificationService.getNotificationChannel(guildBan.guild);
@@ -36,3 +48,51 @@ export default new Event({
     }
   },
 });
+
+const handleGuildLogging = async (guildBan: GuildBan) => {
+  // Fetch the user who unbanned the user
+  const fetchedLogs = await guildBan.guild!.fetchAuditLogs({
+    limit: 1,
+    type: AuditLogEvent.MemberBanRemove,
+  });
+  const banLog = fetchedLogs.entries.first();
+  let unbannedBy = null;
+  if (banLog && banLog.target?.id === guildBan.user?.id && banLog.executor) {
+    unbannedBy = banLog.executor;
+  }
+
+  // Create the embed
+  const loggingEmbed = new EmbedBuilder()
+    .setTitle("**User Unbanned**")
+    .addFields([
+      {
+        name: "Unbanned User",
+        value: `${guildBan.client.functions.getUserString(guildBan.user)}`,
+      },
+      {
+        name: "Unbanned By",
+        value: `${
+          unbannedBy
+            ? guildBan.client.functions.getUserString(unbannedBy)
+            : "Unknown"
+        }`,
+      },
+      {
+        name: "Reason",
+        value: `${guildBan.reason}`,
+      },
+    ])
+    .setFooter({ text: `${new Date().toISOString()}` });
+
+  // Send the logs
+  const loggingService = new LoggingService();
+  const loggingConfig = await loggingService.getLoggingConfig(guildBan.guild);
+  if (loggingConfig?.enabled === true) {
+    const loggingChannel = await loggingService.getLoggingChannel(
+      guildBan.guild
+    );
+    await loggingChannel?.send({
+      embeds: [loggingEmbed],
+    });
+  }
+};

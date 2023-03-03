@@ -1,6 +1,12 @@
 import { Event } from "../structures/event";
-import { Events } from "discord.js";
+import {
+  EmbedBuilder,
+  Events,
+  GuildMember,
+  PartialGuildMember,
+} from "discord.js";
 import MemberService from "../services/memberService";
+import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildMemberUpdate
@@ -20,7 +26,38 @@ export default new Event({
       )}.`
     );
 
+    // [GuildLogging]
+    await handleGuildLogging(oldMember, newMember);
+
     // [Database]: Update the database.
     await memberService.updateMember(newMember);
   },
 });
+
+const handleGuildLogging = async (
+  oldMember: GuildMember | PartialGuildMember,
+  newMember: GuildMember
+) => {
+  // Create the embed
+  const loggingEmbed = new EmbedBuilder()
+    .setTitle("**User Updated**")
+    .addFields([
+      {
+        name: "User",
+        value: `${newMember.client.functions.getUserString(newMember.user)}`,
+      },
+    ])
+    .setFooter({ text: `${new Date().toISOString()}` });
+
+  // Send the logs
+  const loggingService = new LoggingService();
+  const loggingConfig = await loggingService.getLoggingConfig(newMember.guild);
+  if (loggingConfig?.enabled === true) {
+    const loggingChannel = await loggingService.getLoggingChannel(
+      newMember.guild
+    );
+    await loggingChannel?.send({
+      embeds: [loggingEmbed],
+    });
+  }
+};

@@ -1,4 +1,4 @@
-import { Guild, User } from "discord.js";
+import { Guild, PartialUser, User } from "discord.js";
 
 /**
  *    @class
@@ -13,7 +13,7 @@ class Functions {
     return `${guild.name} (${guild.id})`;
   }
 
-  public getUserString(user: User) {
+  public getUserString(user: User | PartialUser) {
     return `${user.username} (${user.id})`;
   }
 }

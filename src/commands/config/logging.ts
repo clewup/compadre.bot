@@ -97,7 +97,7 @@ const handleEnable = async (
   loggingService: LoggingService
 ) => {
   let loggingChannel = interaction.options.getChannel("channel");
-  let minimumRole = interaction.options.getChannel("role");
+  let minimumRole = interaction.options.getRole("role");
 
   if (loggingChannel && !(loggingChannel instanceof TextChannel)) {
     return interaction.reply({

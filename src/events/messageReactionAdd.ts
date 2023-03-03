@@ -1,6 +1,15 @@
 import { Event } from "../structures/event";
-import { Events } from "discord.js";
+import {
+  EmbedBuilder,
+  Events,
+  GuildMember,
+  MessageReaction,
+  PartialMessageReaction,
+  PartialUser,
+  User,
+} from "discord.js";
 import WelcomeService from "../services/welcomeService";
+import LoggingService from "../services/loggingService";
 
 /**
  *    @name messageReactionAdd
@@ -24,6 +33,9 @@ export default new Event({
       )}.`
     );
 
+    // [GuildLogging]
+    await handleGuildLogging(reaction, user);
+
     // [Welcome]: Update the user's role.
     const welcomeConfig = await welcomeService.getWelcomeConfig(
       reaction.message.guild
@@ -43,3 +55,33 @@ export default new Event({
     }
   },
 });
+
+const handleGuildLogging = async (
+  reaction: MessageReaction | PartialMessageReaction,
+  user: User | PartialUser
+) => {
+  // Create the embed
+  const loggingEmbed = new EmbedBuilder()
+    .setTitle("**User Reaction**")
+    .addFields([
+      {
+        name: "User",
+        value: `${reaction.client.functions.getUserString(user)}`,
+      },
+    ])
+    .setFooter({ text: `${new Date().toISOString()}` });
+
+  // Send the logs
+  const loggingService = new LoggingService();
+  const loggingConfig = await loggingService.getLoggingConfig(
+    reaction.message.guild!
+  );
+  if (loggingConfig?.enabled === true) {
+    const loggingChannel = await loggingService.getLoggingChannel(
+      reaction.message.guild!
+    );
+    await loggingChannel?.send({
+      embeds: [loggingEmbed],
+    });
+  }
+};
