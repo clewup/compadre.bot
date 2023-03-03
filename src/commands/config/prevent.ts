@@ -6,7 +6,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import PreventService from "../../services/preventService";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name prevent
@@ -29,9 +29,7 @@ export default new Command({
     .addBooleanOption((option) =>
       option
         .setName("links")
-        .setDescription(
-          "Whether links are prevented."
-        )
+        .setDescription("Whether links are prevented.")
         .setRequired(false)
     )
     .addRoleOption((option) =>
@@ -61,7 +59,7 @@ export default new Command({
         interaction.guild,
         null,
         false,
-        false,
+        false
       );
     }
     if (enabled === true) {
@@ -76,7 +74,7 @@ export default new Command({
 
     await interaction.reply({
       ephemeral: true,
-      content: "Successfully configured message blockers.",
+      content: "Successfully configured message prevention.",
     });
   },
 });

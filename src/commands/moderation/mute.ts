@@ -4,7 +4,8 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name mute
@@ -50,13 +51,13 @@ export default new Command({
     if (!user) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a user to be muted.",
+        content: ErrorReasons.INVALID_USER,
       });
     }
     if (!duration) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a duration.",
+        content: ErrorReasons.INVALID_PARAMETER("duration"),
       });
     }
 
@@ -66,7 +67,7 @@ export default new Command({
     if (memberToBeMuted.id === memberMuting.id) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot mute yourself.",
+        content: ErrorReasons.INVALID_USER_SELF,
       });
     }
     if (
@@ -76,7 +77,7 @@ export default new Command({
     ) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot mute someone with a higher role than yourself.",
+        content: ErrorReasons.INVALID_ROLE_HIERARCHY,
       });
     }
 

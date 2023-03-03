@@ -5,8 +5,9 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import {SoundEffects} from "../../data/enums/soundEffects";
-import {Categories} from "../../data/enums/categories";
+import { SoundEffects } from "../../data/enums/soundEffects";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name sb
@@ -37,7 +38,7 @@ export default new Command({
     if (!effect)
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a sound effect.",
+        content: ErrorReasons.INVALID_PARAMETER("sound effect"),
       });
 
     await interaction.client.soundboard.playSoundEffect(interaction, effect);

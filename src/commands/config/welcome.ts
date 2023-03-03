@@ -9,8 +9,8 @@ import {
   ChannelType,
 } from "discord.js";
 import WelcomeService from "../../services/welcomeService";
-import { Reasons } from "../../data/enums/reasons";
-import {Categories} from "../../data/enums/categories";
+import { ErrorReasons, CrudReasons } from "../../data/enums/reasons";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name welcome
@@ -69,7 +69,7 @@ export default new Command({
     }
 
     await interaction.reply({
-      content: "Successfully configured the welcome.",
+      content: "Successfully configured welcome.",
       ephemeral: true,
     });
   },
@@ -88,7 +88,7 @@ const handleDisable = async (
   if (defaultWelcomeChannel) {
     await interaction.guild.channels.delete(
       defaultWelcomeChannel,
-      "Deleted as part of the welcome configuration."
+      CrudReasons.REMOVED
     );
   }
 
@@ -112,7 +112,7 @@ const handleEnable = async (
 
   if (welcomeChannel && !(welcomeChannel instanceof TextChannel))
     return interaction.reply({
-      content: "Invalid channel. You must provide a text channel.",
+      content: ErrorReasons.INVALID_TEXT_CHANNEL,
       ephemeral: true,
     });
 
@@ -156,7 +156,7 @@ const handleEnable = async (
 
   if (!(welcomeChannel instanceof TextChannel))
     return interaction.reply({
-      content: "There was a problem creating the welcome channel.",
+      content: ErrorReasons.CHANNEL_PROBLEM("welcome"),
       ephemeral: true,
     });
 
@@ -172,7 +172,7 @@ const handleEnable = async (
       welcomeRole = await interaction.guild.roles.create({
         name: "conformist",
         color: Colors.Orange,
-        reason: Reasons.ADDED,
+        reason: CrudReasons.ADDED,
         permissions: [
           PermissionsBitField.Flags.ViewChannel,
           PermissionsBitField.Flags.SendMessages,

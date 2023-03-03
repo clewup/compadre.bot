@@ -4,7 +4,8 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name kick
@@ -42,7 +43,7 @@ export default new Command({
     if (!user) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a user to be kicked.",
+        content: ErrorReasons.INVALID_USER,
       });
     }
 
@@ -52,7 +53,7 @@ export default new Command({
     if (memberToBeKicked.id === memberKicking.id) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot kick yourself.",
+        content: ErrorReasons.INVALID_USER_SELF,
       });
     }
     if (
@@ -62,7 +63,7 @@ export default new Command({
     ) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot kick someone with a higher role than yourself.",
+        content: ErrorReasons.INVALID_ROLE_HIERARCHY,
       });
     }
 

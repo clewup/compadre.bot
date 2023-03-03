@@ -6,7 +6,7 @@ import {
   TextChannel,
   VoiceChannel,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name lock

@@ -7,7 +7,8 @@ import {
   VoiceChannel,
 } from "discord.js";
 import NotificationService from "../../services/notificationService";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name broadcast
@@ -38,7 +39,7 @@ export default new Command({
     if (!message) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a message to be broadcasted.",
+        content: ErrorReasons.INVALID_PARAMETER("message"),
       });
     }
 
@@ -47,7 +48,8 @@ export default new Command({
     if (!notificationChannel) {
       return await interaction.reply({
         ephemeral: true,
-        content: "A notification channel has not been setup.",
+        content:
+          ErrorReasons.INVALID_CHANNEL_NONEXISTENT("notification"),
       });
     }
 

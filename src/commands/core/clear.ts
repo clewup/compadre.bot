@@ -3,8 +3,10 @@ import {
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,
+  TextChannel,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name clear
@@ -33,7 +35,17 @@ export default new Command({
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const amount = interaction.options.getInteger("amount");
 
-    await interaction.channel?.bulkDelete(amount!, true);
+    if (
+      !interaction.channel ||
+      (interaction.channel && !(interaction.channel instanceof TextChannel))
+    ) {
+      return await interaction.reply({
+        ephemeral: true,
+        content: ErrorReasons.INVALID_TEXT_CHANNEL,
+      });
+    }
+
+    await interaction.channel.bulkDelete(amount!, true);
     await interaction.reply({
       ephemeral: true,
       content: `${amount} messages cleared.`,

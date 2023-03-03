@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import { Categories } from "../../data/enums/categories";
 import LoggingService from "../../services/loggingService";
+import { ErrorReasons, CrudReasons } from "../../data/enums/reasons";
 
 /**
  *    @name logging
@@ -78,7 +79,7 @@ const handleDisable = async (
   if (defaultLoggingChannel) {
     await interaction.guild.channels.delete(
       defaultLoggingChannel,
-      "Deleted as part of the logging configuration."
+      CrudReasons.REMOVED
     );
   }
 
@@ -100,13 +101,13 @@ const handleEnable = async (
 
   if (loggingChannel && !(loggingChannel instanceof TextChannel)) {
     return interaction.reply({
-      content: "Invalid channel. You must provide a text channel.",
+      content: ErrorReasons.INVALID_TEXT_CHANNEL,
       ephemeral: true,
     });
   }
   if (!minimumRole) {
     return interaction.reply({
-      content: "Invalid role. You must provide a role channel.",
+      content: ErrorReasons.INVALID_ROLE,
       ephemeral: true,
     });
   }
@@ -158,7 +159,7 @@ const handleEnable = async (
 
   if (!(loggingChannel instanceof TextChannel))
     return interaction.reply({
-      content: "There was a problem creating the logging channel.",
+      content: ErrorReasons.CHANNEL_PROBLEM("logs"),
       ephemeral: true,
     });
 

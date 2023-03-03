@@ -7,7 +7,8 @@ import {
   TextChannel,
 } from "discord.js";
 import NotificationService from "../../services/notificationService";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons, CrudReasons } from "../../data/enums/reasons";
 
 /**
  *    @name notifications
@@ -72,7 +73,7 @@ const handleDisable = async (
   if (defaultNotificationChannel) {
     await interaction.guild.channels.delete(
       defaultNotificationChannel,
-      "Deleted as part of the notification configuration."
+      CrudReasons.REMOVED
     );
   }
 
@@ -92,7 +93,7 @@ const handleEnable = async (
 
   if (notificationChannel && !(notificationChannel instanceof TextChannel)) {
     return interaction.reply({
-      content: "Invalid channel. You must provide a text channel.",
+      content: ErrorReasons.INVALID_TEXT_CHANNEL,
       ephemeral: true,
     });
   }
@@ -136,7 +137,7 @@ const handleEnable = async (
 
   if (!(notificationChannel instanceof TextChannel))
     return interaction.reply({
-      content: "There was a problem creating the notification channel.",
+      content: ErrorReasons.CHANNEL_PROBLEM("notification"),
       ephemeral: true,
     });
 

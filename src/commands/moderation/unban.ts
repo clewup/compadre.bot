@@ -4,7 +4,8 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
+import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
  *    @name unban
@@ -42,7 +43,7 @@ export default new Command({
     if (!user) {
       return await interaction.reply({
         ephemeral: true,
-        content: "Please provide a user to be unbanned.",
+        content: ErrorReasons.INVALID_USER,
       });
     }
 
@@ -52,7 +53,7 @@ export default new Command({
     if (memberToBeUnbanned.id === memberUnbanning.id) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot unban yourself.",
+        content: ErrorReasons.INVALID_USER_SELF,
       });
     }
     if (
@@ -62,7 +63,7 @@ export default new Command({
     ) {
       return await interaction.reply({
         ephemeral: true,
-        content: "You cannot unban someone with a higher role than yourself.",
+        content: ErrorReasons.INVALID_ROLE_HIERARCHY,
       });
     }
 
