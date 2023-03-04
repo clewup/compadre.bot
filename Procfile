@@ -1,1 +1,1 @@
-worker: node ./dist/shard.js
+worker: yarn deploy && node ./dist/shard.js
