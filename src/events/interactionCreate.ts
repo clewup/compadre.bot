@@ -81,7 +81,7 @@ const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
       },
       {
         name: "Parameters",
-        value: `${parameters.join("\n")}`,
+        value: `${parameters.length ? parameters.join("\n") : "None"}`,
       },
       {
         name: "Channel",
