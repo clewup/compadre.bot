@@ -36,24 +36,28 @@ class Soundboard {
         ephemeral: true,
       });
 
-    const connection = await this.connectToChannel(channel);
+    try {
+      const connection = await this.connectToChannel(channel);
 
-    if (!connection)
-      return await interaction.reply({
-        content: "There was a problem connecting to your channel!",
-        ephemeral: true,
+      if (!connection)
+        return await interaction.reply({
+          content: "There was a problem connecting to your channel!",
+          ephemeral: true,
+        });
+
+      connection.subscribe(player);
+
+      const resource = createAudioResource(url, {
+        inputType: StreamType.Arbitrary,
       });
+      player.play(resource);
 
-    connection.subscribe(player);
-
-    const resource = createAudioResource(url, {
-      inputType: StreamType.Arbitrary,
-    });
-    player.play(resource);
-
-    player.on(AudioPlayerStatus.Idle, () => {
-      connection.destroy();
-    });
+      player.on(AudioPlayerStatus.Idle, () => {
+        connection.destroy();
+      });
+    } catch (error) {
+      interaction.client.logger.logError(error);
+    }
   }
 
   public async connectToChannel(
