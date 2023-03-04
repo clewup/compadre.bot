@@ -27,36 +27,6 @@ class GuildService {
         joinedTimestamp: guild.joinedTimestamp,
         maximumMembers: guild.maximumMembers,
         preferredLocale: guild.preferredLocale,
-
-        // Default Configuration
-        notificationConfig: {
-          create: {
-            channel: null,
-            enabled: false,
-          },
-        },
-        loggingConfig: {
-          create: {
-            channel: null,
-            role: null,
-            enabled: false,
-          },
-        },
-        welcomeConfig: {
-          create: {
-            channel: null,
-            role: null,
-            message: null,
-            enabled: false,
-          },
-        },
-        preventConfig: {
-          create: {
-            role: null,
-            links: false,
-            enabled: false,
-          },
-        },
       },
     });
 

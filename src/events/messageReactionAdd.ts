@@ -42,7 +42,19 @@ const handleGuildLogging = async (
     [
       {
         name: "User",
-        value: `${reaction.client.functions.getUserString(user)}`,
+        value: `${reaction.client.functions.getUserMentionString(user)}`,
+      },
+      {
+        name: "Emoji",
+        value: `${reaction.emoji}`,
+      },
+      {
+        name: "Message",
+        value: `${
+          reaction.message.content ||
+          reaction.message.embeds[0]?.title ||
+          "Unknown"
+        }`,
       },
     ]
   );

@@ -92,13 +92,27 @@ const handleDisable = async (
     );
   }
 
-  await welcomeService.updateWelcomeConfig(
-    interaction.guild,
-    null,
-    null,
-    null,
-    false
+  const welcomeConfig = await welcomeService.getWelcomeConfig(
+    interaction.guild
   );
+
+  if (!welcomeConfig) {
+    await welcomeService.createWelcomeConfig(
+      interaction.guild,
+      null,
+      null,
+      null,
+      false
+    );
+  } else {
+    await welcomeService.updateWelcomeConfig(
+      interaction.guild,
+      null,
+      null,
+      null,
+      false
+    );
+  }
 };
 
 const handleEnable = async (
@@ -161,7 +175,7 @@ const handleEnable = async (
 
   await welcomeChannel.bulkDelete(100);
 
-  // Create the conformist role with basic permissions if one is not provided and does not already exist.
+  // Create the verified role with basic permissions if one is not provided and does not already exist.
   if (!welcomeRole) {
     welcomeRole =
       interaction.guild.roles.cache.find((role) => role.name === "verified") ||
@@ -169,8 +183,8 @@ const handleEnable = async (
 
     if (!welcomeRole) {
       welcomeRole = await interaction.guild.roles.create({
-        name: "conformist",
-        color: Colors.Orange,
+        name: "verified",
+        color: Colors.Green,
         reason: CrudReasons.ADDED,
         permissions: [
           PermissionsBitField.Flags.ViewChannel,
@@ -187,13 +201,27 @@ const handleEnable = async (
     }
   }
 
-  await welcomeService.updateWelcomeConfig(
-    interaction.guild,
-    welcomeChannel.id,
-    welcomeRole.id,
-    welcomeMessage,
-    true
+  const welcomeConfig = await welcomeService.getWelcomeConfig(
+    interaction.guild
   );
+
+  if (!welcomeConfig) {
+    await welcomeService.createWelcomeConfig(
+      interaction.guild,
+      welcomeChannel.id,
+      welcomeRole.id,
+      welcomeMessage,
+      true
+    );
+  } else {
+    await welcomeService.updateWelcomeConfig(
+      interaction.guild,
+      welcomeChannel.id,
+      welcomeRole.id,
+      welcomeMessage,
+      true
+    );
+  }
 
   // Update the default permissions for new users (@everyone).
   await interaction.guild.roles.everyone.setPermissions([

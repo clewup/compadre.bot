@@ -31,8 +31,10 @@ const handleGuildLogging = async (role: Role) => {
   });
   const roleLog = fetchedLogs.entries.first();
   let deletedBy = null;
+  let reason = null;
   if (roleLog && roleLog.target?.id === role.id && roleLog.executor) {
     deletedBy = roleLog.executor;
+    reason = roleLog.reason;
   }
 
   const loggingService = role.client.services.loggingService;
@@ -44,8 +46,14 @@ const handleGuildLogging = async (role: Role) => {
     {
       name: "Deleted By",
       value: `${
-        deletedBy ? role.client.functions.getUserString(deletedBy) : "Unknown"
+        deletedBy
+          ? role.client.functions.getUserMentionString(deletedBy)
+          : "Unknown"
       }`,
+    },
+    {
+      name: "Reason",
+      value: `${reason ? reason : "Unknown"}`,
     },
   ]);
   await loggingService.sendLoggingMessage(role.guild, embed);

@@ -31,8 +31,10 @@ const handleGuildLogging = async (role: Role) => {
   });
   const roleLog = fetchedLogs.entries.first();
   let createdBy = null;
+  let reason = null;
   if (roleLog && roleLog.target?.id === role.id && roleLog.executor) {
     createdBy = roleLog.executor;
+    reason = roleLog.reason;
   }
 
   const loggingService = role.client.services.loggingService;
@@ -44,12 +46,18 @@ const handleGuildLogging = async (role: Role) => {
     {
       name: "Created By",
       value: `${
-        createdBy ? role.client.functions.getUserString(createdBy) : "Unknown"
+        createdBy
+          ? role.client.functions.getUserMentionString(createdBy)
+          : "Unknown"
       }`,
     },
     {
       name: "Permissions",
       value: `${role.permissions.toJSON()}`,
+    },
+    {
+      name: "Reason",
+      value: `${reason ? reason : "Unknown"}`,
     },
   ]);
   await loggingService.sendLoggingMessage(role.guild, embed);

@@ -1,5 +1,5 @@
 import Database from "../structures/database";
-import { WelcomeConfig } from "@prisma/client";
+import { PreventConfig, WelcomeConfig } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 
 /**
@@ -18,6 +18,28 @@ class WelcomeService {
   ): Promise<WelcomeConfig | null> {
     return await this.database.welcomeConfig.findFirst({
       where: { guildId: guild.id },
+    });
+  }
+
+  public async createWelcomeConfig(
+    guild: DiscordGuild,
+    channel: string | null,
+    role: string | null,
+    message: string | null,
+    enabled: boolean
+  ): Promise<WelcomeConfig> {
+    return await this.database.welcomeConfig.create({
+      data: {
+        channel: channel,
+        role: role,
+        message: message,
+        enabled: enabled,
+        guild: {
+          connect: {
+            id: guild.id,
+          },
+        },
+      },
     });
   }
 

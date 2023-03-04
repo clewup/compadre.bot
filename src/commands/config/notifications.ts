@@ -77,11 +77,23 @@ const handleDisable = async (
     );
   }
 
-  await notificationService.updateNotificationConfig(
-    interaction.guild,
-    null,
-    false
+  const notificationConfig = await notificationService.getNotificationConfig(
+    interaction.guild
   );
+
+  if (!notificationConfig) {
+    await notificationService.createNotificationConfig(
+      interaction.guild,
+      null,
+      false
+    );
+  } else {
+    await notificationService.updateNotificationConfig(
+      interaction.guild,
+      null,
+      false
+    );
+  }
 };
 
 const handleEnable = async (
@@ -140,9 +152,21 @@ const handleEnable = async (
       ephemeral: true,
     });
 
-  await notificationService.updateNotificationConfig(
-    interaction.guild,
-    notificationChannel.id,
-    true
+  const notificationConfig = await notificationService.getNotificationConfig(
+    interaction.guild
   );
+
+  if (!notificationConfig) {
+    await notificationService.createNotificationConfig(
+      interaction.guild,
+      notificationChannel.id,
+      true
+    );
+  } else {
+    await notificationService.updateNotificationConfig(
+      interaction.guild,
+      notificationChannel.id,
+      true
+    );
+  }
 };

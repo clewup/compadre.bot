@@ -1,5 +1,5 @@
 import Database from "../structures/database";
-import { NotificationConfig } from "@prisma/client";
+import { LoggingConfig, NotificationConfig } from "@prisma/client";
 import { TextChannel, Guild as DiscordGuild, EmbedBuilder } from "discord.js";
 import { ErrorReasons } from "../data/enums/reasons";
 
@@ -19,6 +19,24 @@ class NotificationService {
   ): Promise<NotificationConfig | null> {
     return await this.database.notificationConfig.findFirst({
       where: { guildId: guild.id },
+    });
+  }
+
+  public async createNotificationConfig(
+    guild: DiscordGuild,
+    channel: string | null,
+    enabled: boolean
+  ): Promise<NotificationConfig> {
+    return await this.database.notificationConfig.create({
+      data: {
+        channel: channel,
+        enabled: enabled,
+        guild: {
+          connect: {
+            id: guild.id,
+          },
+        },
+      },
     });
   }
 

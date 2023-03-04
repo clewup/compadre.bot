@@ -50,12 +50,14 @@ const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
     const embed = await loggingService.createLoggingEmbed("**User Kicked**", [
       {
         name: "User",
-        value: `${member.client.functions.getUserString(member.user)}`,
+        value: `${member.client.functions.getUserMentionString(member.user)}`,
       },
       {
         name: "Kicked By",
         value: `${
-          kickedBy ? member.client.functions.getUserString(kickedBy) : "Unknown"
+          kickedBy
+            ? member.client.functions.getUserMentionString(kickedBy)
+            : "Unknown"
         }`,
       },
     ]);
@@ -64,7 +66,7 @@ const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
     const embed = await loggingService.createLoggingEmbed("**User Left**", [
       {
         name: "User",
-        value: `${member.client.functions.getUserString(member.user)}`,
+        value: `${member.client.functions.getUserMentionString(member.user)}`,
       },
     ]);
     await loggingService.sendLoggingMessage(member.guild, embed);

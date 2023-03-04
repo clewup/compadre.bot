@@ -83,12 +83,25 @@ const handleDisable = async (
     );
   }
 
-  await loggingService.updateLoggingConfig(
-    interaction.guild,
-    null,
-    null,
-    false
+  const loggingConfig = await loggingService.getLoggingConfig(
+    interaction.guild
   );
+
+  if (!loggingConfig) {
+    await loggingService.createLoggingConfig(
+      interaction.guild,
+      null,
+      null,
+      false
+    );
+  } else {
+    await loggingService.updateLoggingConfig(
+      interaction.guild,
+      null,
+      null,
+      false
+    );
+  }
 };
 
 const handleEnable = async (
@@ -162,10 +175,23 @@ const handleEnable = async (
       ephemeral: true,
     });
 
-  await loggingService.updateLoggingConfig(
-    interaction.guild,
-    minimumRole.id,
-    loggingChannel.id,
-    true
+  const loggingConfig = await loggingService.getLoggingConfig(
+    interaction.guild
   );
+
+  if (!loggingConfig) {
+    await loggingService.createLoggingConfig(
+      interaction.guild,
+      minimumRole.id,
+      loggingChannel.id,
+      true
+    );
+  } else {
+    await loggingService.updateLoggingConfig(
+      interaction.guild,
+      minimumRole.id,
+      loggingChannel.id,
+      true
+    );
+  }
 };

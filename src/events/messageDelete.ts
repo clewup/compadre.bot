@@ -21,7 +21,7 @@ export default new Event({
 
     message.client.logger.logInfo(
       `The message "${
-        message.content
+        message.content || message.embeds[0].title
       }" has been deleted in ${message.client.functions.getGuildString(
         message.guild
       )}.`
@@ -53,7 +53,7 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
       name: "Author",
       value: `${
         message.author
-          ? message.client.functions.getUserString(message.author)
+          ? message.client.functions.getUserMentionString(message.author)
           : "Unknown"
       }`,
     },
@@ -63,12 +63,12 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
     },
     {
       name: "Message",
-      value: `${message.content}`,
+      value: `${message.content || message.embeds[0]?.title || "Unknown"}`,
     },
     {
       name: "Deleted By",
       value: deletedBy
-        ? message.client.functions.getUserString(deletedBy)
+        ? message.client.functions.getUserMentionString(deletedBy)
         : "Unknown",
     },
   ]);

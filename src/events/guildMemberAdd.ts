@@ -37,7 +37,7 @@ const handleGuildLogging = async (member: GuildMember) => {
   const embed = await loggingService.createLoggingEmbed("**User Joined**", [
     {
       name: "User",
-      value: `${member.client.functions.getUserString(member.user)}`,
+      value: `${member.client.functions.getUserMentionString(member.user)}`,
     },
   ]);
   await loggingService.sendLoggingMessage(member.guild, embed);

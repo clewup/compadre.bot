@@ -26,6 +26,26 @@ class LoggingService {
     });
   }
 
+  public async createLoggingConfig(
+    guild: DiscordGuild,
+    role: string | null,
+    channel: string | null,
+    enabled: boolean
+  ): Promise<LoggingConfig> {
+    return await this.database.loggingConfig.create({
+      data: {
+        role: role,
+        channel: channel,
+        enabled: enabled,
+        guild: {
+          connect: {
+            id: guild.id,
+          },
+        },
+      },
+    });
+  }
+
   public async updateLoggingConfig(
     guild: DiscordGuild,
     role: string | null,

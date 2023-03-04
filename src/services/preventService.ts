@@ -1,5 +1,5 @@
 import Database from "../structures/database";
-import { PreventConfig } from "@prisma/client";
+import { NotificationConfig, PreventConfig } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 
 /**
@@ -18,6 +18,26 @@ class PreventService {
   ): Promise<PreventConfig | null> {
     return await this.database.preventConfig.findFirst({
       where: { guildId: guild.id },
+    });
+  }
+
+  public async createPreventConfig(
+    guild: DiscordGuild,
+    role: string,
+    links: boolean,
+    enabled: boolean
+  ): Promise<PreventConfig> {
+    return await this.database.preventConfig.create({
+      data: {
+        role: role,
+        links: links,
+        enabled: enabled,
+        guild: {
+          connect: {
+            id: guild.id,
+          },
+        },
+      },
     });
   }
 

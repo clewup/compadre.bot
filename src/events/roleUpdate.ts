@@ -31,8 +31,10 @@ const handleGuildLogging = async (role: Role) => {
   });
   const roleLog = fetchedLogs.entries.first();
   let updatedBy = null;
+  let reason = null;
   if (roleLog && roleLog.target?.id === role.id && roleLog.executor) {
     updatedBy = roleLog.executor;
+    reason = roleLog.reason;
   }
 
   const loggingService = role.client.services.loggingService;
@@ -44,8 +46,14 @@ const handleGuildLogging = async (role: Role) => {
     {
       name: "Updated By",
       value: `${
-        updatedBy ? role.client.functions.getUserString(updatedBy) : "Unknown"
+        updatedBy
+          ? role.client.functions.getUserMentionString(updatedBy)
+          : "Unknown"
       }`,
+    },
+    {
+      name: "Reason",
+      value: `${reason ? reason : "Unknown"}`,
     },
   ]);
   await loggingService.sendLoggingMessage(role.guild, embed);

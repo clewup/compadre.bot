@@ -43,13 +43,13 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
   const embed = await loggingService.createLoggingEmbed("**User Unbanned**", [
     {
       name: "Unbanned User",
-      value: `${guildBan.client.functions.getUserString(guildBan.user)}`,
+      value: `${guildBan.client.functions.getUserMentionString(guildBan.user)}`,
     },
     {
       name: "Unbanned By",
       value: `${
         unbannedBy
-          ? guildBan.client.functions.getUserString(unbannedBy)
+          ? guildBan.client.functions.getUserMentionString(unbannedBy)
           : "Unknown"
       }`,
     },

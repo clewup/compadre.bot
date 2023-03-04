@@ -16,5 +16,9 @@ class Functions {
   public getUserString(user: User | PartialUser) {
     return `${user.username} (${user.id})`;
   }
+
+  public getUserMentionString(user: User | PartialUser) {
+    return `${user} (${user.id})`;
+  }
 }
 export default Functions;

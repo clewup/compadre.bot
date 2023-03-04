@@ -61,18 +61,31 @@ export default new Event({
 
 const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
   const loggingService = interaction.client.services.loggingService;
+  const parameters: unknown[] = [];
+  (interaction as CommandInteraction).options.data.forEach((param) =>
+    parameters.push(param.value)
+  );
+
   const embed = await loggingService.createLoggingEmbed(
     "**Command Executed**",
     [
       {
         name: "User",
-        value: `${interaction.client.functions.getUserString(
+        value: `${interaction.client.functions.getUserMentionString(
           interaction.user
         )}`,
       },
       {
         name: "Command",
         value: `${(interaction as CommandInteraction).commandName}`,
+      },
+      {
+        name: "Parameters",
+        value: `${parameters.join("\n")}`,
+      },
+      {
+        name: "Channel",
+        value: `${interaction.channel}`,
       },
     ]
   );

@@ -52,21 +52,38 @@ export default new Command({
     const links = interaction.options.getBoolean("links");
     const role = interaction.options.getRole("role");
 
-    if (enabled === false) {
-      await preventService.updatePreventConfig(
-        interaction.guild,
-        null,
-        false,
-        false
-      );
-    }
-    if (enabled === true) {
-      await preventService.updatePreventConfig(
-        interaction.guild,
-        role ? role.id : null,
-        !!links,
-        true
-      );
+    const preventConfig = await preventService.getPreventConfig(
+      interaction.guild
+    );
+
+    if (!preventConfig) {
+      enabled === true
+        ? await preventService.createPreventConfig(
+            interaction.guild,
+            role ? role.id : null,
+            !!links,
+            true
+          )
+        : await preventService.createPreventConfig(
+            interaction.guild,
+            null,
+            false,
+            false
+          );
+    } else {
+      enabled === true
+        ? await preventService.updatePreventConfig(
+            interaction.guild,
+            role ? role.id : null,
+            !!links,
+            true
+          )
+        : await preventService.updatePreventConfig(
+            interaction.guild,
+            null,
+            false,
+            false
+          );
     }
 
     await interaction.reply({
