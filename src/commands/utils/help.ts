@@ -6,7 +6,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name help
@@ -21,6 +21,7 @@ export default new Command({
 
   details: {
     category: Categories.UTILITIES,
+    enabled: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

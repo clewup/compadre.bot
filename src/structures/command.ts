@@ -2,6 +2,7 @@ import { SlashCommandBuilder, ContextMenuCommandBuilder } from "discord.js";
 
 interface CommandDetails {
   category: string;
+  enabled: boolean;
 }
 
 interface CommandOptions {

@@ -30,6 +30,7 @@ export default new Command({
 
   details: {
     category: Categories.CORE,
+    enabled: false,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

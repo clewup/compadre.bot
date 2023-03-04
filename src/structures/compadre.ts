@@ -95,7 +95,12 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
         let command = await import(filePath);
         command = command.default;
 
-        if ("data" in command && "execute" in command) {
+        if (
+          command.data &&
+          command.details &&
+          command.execute &&
+          command.details.enabled === true
+        ) {
           this.commands.set(command.data.name, command);
         } else {
           this.logger.logWarning(
@@ -118,7 +123,7 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
       let event = await import(filePath);
       event = event.default;
 
-      if ("name" in event && "execute" in event) {
+      if (event.name && event.execute) {
         if (event.once) {
           this.once(event.name, (...args) => event.execute(...args));
         } else {

@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { readFileSync } from "fs";
 import path from "node:path";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name about
@@ -23,6 +23,7 @@ export default new Command({
 
   details: {
     category: Categories.UTILITIES,
+    enabled: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

@@ -8,7 +8,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import config from "../../config";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name invite
@@ -23,6 +23,7 @@ export default new Command({
 
   details: {
     category: Categories.CORE,
+    enabled: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

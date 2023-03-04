@@ -23,7 +23,14 @@ const refreshCommands = async () => {
       let command = await import(filePath);
       command = command.default;
 
-      commands.push(command.data.toJSON());
+      if (
+        command.data &&
+        command.details &&
+        command.execute &&
+        command.details.enabled === true
+      ) {
+        commands.push(command.data.toJSON());
+      }
     }
   }
 

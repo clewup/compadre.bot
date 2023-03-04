@@ -6,7 +6,7 @@ import {
   TextChannel,
   VoiceChannel,
 } from "discord.js";
-import {Categories} from "../../data/enums/categories";
+import { Categories } from "../../data/enums/categories";
 
 /**
  *    @name unlock
@@ -21,6 +21,7 @@ export default new Command({
 
   details: {
     category: Categories.MODERATION,
+    enabled: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {

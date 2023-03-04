@@ -34,6 +34,7 @@ export default new Command({
 
   details: {
     category: Categories.MODERATION,
+    enabled: true,
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
