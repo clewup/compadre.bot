@@ -43,7 +43,7 @@
     "dev": "ts-node ./src/shard.ts",
     "deploy": "yarn build && node dist/scripts/deploy.js",
     "postinstall": "yarn prisma generate && patch-package",
-    "heroku-postbuild": "yarn prisma generate && patch-package"
+    "heroku-cleanup": "yarn prisma generate && patch-package"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.52.0",
