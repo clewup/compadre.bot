@@ -1,7 +1,7 @@
 {
   "name": "compadre.bot",
   "version": "1.0.0",
-  "main": "src/app.ts",
+  "main": "src/shard.ts",
   "repository": "git@github.com:clewup/compadre.bot.git",
   "author": "clewup",
   "license": "MIT",
@@ -39,8 +39,8 @@
   "scripts": {
     "clean": "node -e \"require('fs-extra').emptyDir('dist');\"",
     "build": "yarn clean && tsc",
-    "start": "yarn build && node ./dist/app.js",
-    "dev": "ts-node ./src/app.ts",
+    "start": "yarn build && node ./dist/shard.js",
+    "dev": "ts-node ./src/shard.ts",
     "deploy": "yarn build && node dist/scripts/deploy.js",
     "postinstall": "yarn prisma generate && patch-package"
   },
