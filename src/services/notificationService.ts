@@ -76,7 +76,7 @@ class NotificationService {
     if (notificationConfig?.enabled === true) {
       const notificationChannel = await this.getNotificationChannel(guild);
 
-      await notificationChannel?.send({ embeds: [embed] });
+      await notificationChannel!.send({ embeds: [embed] });
     }
   }
 }

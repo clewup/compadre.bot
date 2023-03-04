@@ -1,6 +1,7 @@
 import {
   Client as DiscordClient,
   Collection,
+  Events,
   IntentsBitField as Intents,
   Partials,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
@@ -77,6 +78,16 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
       roleService: new RoleService(),
       welcomeService: new WelcomeService(),
     };
+
+    this.on(Events.ShardDisconnect, () =>
+      this.logger.logInfo("Bot Disconnected")
+    )
+      .on(Events.ShardReconnecting, () =>
+        this.logger.logInfo("Bot Reconnecting")
+      )
+      .on(Events.ShardError, (e) => this.logger.logError(e))
+      .on(Events.Error, (e) => this.logger.logError(e))
+      .on(Events.Warn, (info) => this.logger.logWarning(info));
   }
 
   private async setCommands() {
@@ -102,9 +113,11 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
           command.details.enabled === true
         ) {
           this.commands.set(command.data.name, command);
+        } else if (command.details.enabled === false) {
+          this.logger.logWarning(`The command at ${filePath} is disabled.`);
         } else {
           this.logger.logWarning(
-            `The command at ${filePath} is missing a required "data" or "execute" property.`
+            `The command at ${filePath} is missing a required "data", "details" or "execute" property.`
           );
         }
       }

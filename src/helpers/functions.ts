@@ -9,6 +9,11 @@ class Functions {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  public randomArrayItem(array: any[]) {
+    const randomIndex = this.randomNumber(0, array.length);
+    return array[randomIndex];
+  }
+
   public getGuildString(guild: Guild) {
     return `${guild.name} (${guild.id})`;
   }
