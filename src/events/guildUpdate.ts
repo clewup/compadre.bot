@@ -1,6 +1,5 @@
 import { Event } from "../structures/event";
-import {  Events } from "discord.js";
-import GuildService from "../services/guildService";
+import { Events } from "discord.js";
 
 /**
  *    @name guildUpdate
@@ -9,14 +8,11 @@ import GuildService from "../services/guildService";
 export default new Event({
   name: Events.GuildUpdate,
   async execute(guild) {
-    const guildService = new GuildService();
-
-    // [Logging]
     guild.client.logger.logInfo(
       `${guild.client.functions.getGuildString(guild)} has been updated.`
     );
 
-    // [Database]: Update the database.
+    const guildService = guild.client.services.guildService;
     await guildService.updateGuild(guild);
   },
 });

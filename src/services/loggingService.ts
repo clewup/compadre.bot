@@ -1,13 +1,18 @@
 import Database from "../structures/database";
 import { LoggingConfig } from "@prisma/client";
-import { TextChannel, Guild as DiscordGuild } from "discord.js";
+import {
+  TextChannel,
+  Guild as DiscordGuild,
+  EmbedField,
+  EmbedBuilder,
+} from "discord.js";
 
 /**
  *    @class
  *    Creates a new instance of the LoggingService.
  */
 class LoggingService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();
@@ -48,6 +53,23 @@ class LoggingService {
       if (channel instanceof TextChannel) {
         return channel;
       }
+    }
+  }
+
+  public createLoggingEmbed(title: string, fields: EmbedField[]): EmbedBuilder {
+    return new EmbedBuilder()
+      .setTitle(title)
+      .setFields(fields)
+      .setFooter({ text: `${new Date().toISOString()}` });
+  }
+
+  public async sendLoggingMessage(guild: DiscordGuild, embed: EmbedBuilder) {
+    const loggingConfig = await this.getLoggingConfig(guild);
+    if (loggingConfig?.enabled === true) {
+      const loggingChannel = await this.getLoggingChannel(guild);
+      await loggingChannel?.send({
+        embeds: [embed],
+      });
     }
   }
 }

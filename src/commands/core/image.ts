@@ -5,7 +5,6 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import { Categories } from "../../data/enums/categories";
-import GptService from "../../services/gptService";
 import { ErrorReasons } from "../../data/enums/reasons";
 
 /**
@@ -41,7 +40,7 @@ export default new Command({
     }
 
     await interaction.deferReply();
-    const gptService = new GptService();
+    const gptService = interaction.client.services.gptService;
     const gptResponse = await gptService.createImage(prompt);
 
     await interaction.followUp({

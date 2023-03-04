@@ -3,14 +3,12 @@ import Compadre from "./structures/compadre";
 import { Events } from "discord.js";
 import config from "./config";
 import Database from "./structures/database";
-import Logger from "./helpers/logger";
 
 const port = config.port;
 
 const app = express();
 const database = new Database();
 const compadre = new Compadre();
-const logger = new Logger();
 
 const init = async () => {
   await database.start();
@@ -29,5 +27,7 @@ compadre
   .on(Events.Warn, (info) => compadre.logger.logWarning(info));
 
 app.listen(port, () => {
-  return logger.logInfo(`Server is listening at http://localhost:${port}.`);
+  return compadre.logger.logInfo(
+    `Server is listening at http://localhost:${port}.`
+  );
 });

@@ -8,7 +8,6 @@ import { Events } from "discord.js";
 export default new Event({
   name: Events.UserUpdate,
   async execute(user) {
-    // [Logging]
     user.client.logger.logInfo(
       `${user.client.functions.getUserString(
         user

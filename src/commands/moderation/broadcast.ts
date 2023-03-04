@@ -1,12 +1,11 @@
 import { Command } from "../../structures/command";
 import {
   ChatInputCommandInteraction,
+  Colors,
+  EmbedBuilder,
   PermissionsBitField,
   SlashCommandBuilder,
-  TextChannel,
-  VoiceChannel,
 } from "discord.js";
-import NotificationService from "../../services/notificationService";
 import { Categories } from "../../data/enums/categories";
 import { ErrorReasons } from "../../data/enums/reasons";
 
@@ -32,8 +31,6 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const notificationService = new NotificationService();
-
     const message = interaction.options.getString("message");
 
     if (!message) {
@@ -43,19 +40,22 @@ export default new Command({
       });
     }
 
+    const embed = new EmbedBuilder()
+      .setColor(Colors.Yellow)
+      .setTitle("Attention!")
+      .setDescription(`${message} ${interaction.guild.roles.everyone}`);
+
+    const notificationService =
+      interaction.guild.client.services.notificationService;
     const notificationChannel =
       await notificationService.getNotificationChannel(interaction.guild);
     if (!notificationChannel) {
       return await interaction.reply({
         ephemeral: true,
-        content:
-          ErrorReasons.INVALID_CHANNEL_NONEXISTENT("notification"),
+        content: ErrorReasons.INVALID_CHANNEL_NONEXISTENT("notification"),
       });
     }
-
-    await notificationChannel.send(
-      `${message} ${interaction.guild.roles.everyone}`
-    );
+    await notificationService.sendNotificationMessage(interaction.guild, embed);
 
     await interaction.reply({
       ephemeral: true,

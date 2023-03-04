@@ -5,11 +5,7 @@ import {
   EmbedBuilder,
   Events,
   GuildBan,
-  TextChannel,
 } from "discord.js";
-import GuildService from "../services/guildService";
-import NotificationService from "../services/notificationService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildBanRemove
@@ -18,14 +14,6 @@ import LoggingService from "../services/loggingService";
 export default new Event({
   name: Events.GuildBanRemove,
   async execute(guildBan) {
-    const notificationService = new NotificationService();
-
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Green)
-      .setTitle(`${guildBan.user.username} has been unbanned from the server.`)
-      .setThumbnail(guildBan.user.avatar);
-
-    // [Logging]
     guildBan.client.logger.logInfo(
       `${guildBan.client.functions.getUserString(
         guildBan.user
@@ -34,18 +22,8 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
     await handleGuildLogging(guildBan);
-
-    // [Notification]: Send the notification.
-    const notificationConfig = await notificationService.getNotificationConfig(
-      guildBan.guild
-    );
-    if (notificationConfig?.enabled === true) {
-      const notificationChannel =
-        await notificationService.getNotificationChannel(guildBan.guild);
-      await notificationChannel?.send({ embeds: [embed] });
-    }
+    await handleGuildNotification(guildBan);
   },
 });
 
@@ -61,38 +39,34 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
     unbannedBy = banLog.executor;
   }
 
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**User Unbanned**")
-    .addFields([
-      {
-        name: "Unbanned User",
-        value: `${guildBan.client.functions.getUserString(guildBan.user)}`,
-      },
-      {
-        name: "Unbanned By",
-        value: `${
-          unbannedBy
-            ? guildBan.client.functions.getUserString(unbannedBy)
-            : "Unknown"
-        }`,
-      },
-      {
-        name: "Reason",
-        value: `${guildBan.reason}`,
-      },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
+  const loggingService = guildBan.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed("**User Unbanned**", [
+    {
+      name: "Unbanned User",
+      value: `${guildBan.client.functions.getUserString(guildBan.user)}`,
+    },
+    {
+      name: "Unbanned By",
+      value: `${
+        unbannedBy
+          ? guildBan.client.functions.getUserString(unbannedBy)
+          : "Unknown"
+      }`,
+    },
+    {
+      name: "Reason",
+      value: `${guildBan.reason}`,
+    },
+  ]);
+  await loggingService.sendLoggingMessage(guildBan.guild, embed);
+};
 
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(guildBan.guild);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(
-      guildBan.guild
-    );
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+const handleGuildNotification = async (guildBan: GuildBan) => {
+  const embed = new EmbedBuilder()
+    .setColor(Colors.Green)
+    .setTitle(`${guildBan.user.username} has been unbanned from the server.`)
+    .setThumbnail(guildBan.user.avatar);
+
+  const notificationService = guildBan.client.services.notificationService;
+  await notificationService.sendNotificationMessage(guildBan.guild, embed);
 };

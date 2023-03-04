@@ -41,7 +41,7 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const notificationService = new NotificationService();
+    const notificationService = interaction.client.services.notificationService;
 
     const enabled = interaction.options.getBoolean("enabled");
 
@@ -77,7 +77,6 @@ const handleDisable = async (
     );
   }
 
-  // [Database]: Update the database.
   await notificationService.updateNotificationConfig(
     interaction.guild,
     null,
@@ -141,7 +140,6 @@ const handleEnable = async (
       ephemeral: true,
     });
 
-  // [Database]: Update the database.
   await notificationService.updateNotificationConfig(
     interaction.guild,
     notificationChannel.id,

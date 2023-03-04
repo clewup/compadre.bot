@@ -12,14 +12,14 @@ import config from "../config";
  *    Creates a new instance of the MemberService.
  */
 class MemberService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();
   }
 
-  public async getMember(id: string): Promise<Member | null> {
-    return await this.database.member.findFirst({ where: { id: id } });
+  public async getMember(member: DiscordMember): Promise<Member | null> {
+    return await this.database.member.findFirst({ where: { id: member.id } });
   }
 
   public async createMember(member: DiscordMember): Promise<Member> {

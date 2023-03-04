@@ -2,16 +2,12 @@ import { Event } from "../structures/event";
 import {
   AuditLogEvent,
   Colors,
-  Embed,
   EmbedBuilder,
   Events,
+  GuildBan,
   GuildMember,
   PartialGuildMember,
-  TextChannel,
 } from "discord.js";
-import NotificationService from "../services/notificationService";
-import MemberService from "../services/memberService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildMemberRemove
@@ -20,15 +16,6 @@ import LoggingService from "../services/loggingService";
 export default new Event({
   name: Events.GuildMemberRemove,
   async execute(member) {
-    const memberService = new MemberService();
-    const notificationService = new NotificationService();
-
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Red)
-      .setTitle(`${member.displayName} has left the server.`)
-      .setThumbnail(member.avatar);
-
-    // [Logging]
     member.client.logger.logInfo(
       `${member.client.functions.getUserString(
         member.user
@@ -37,21 +24,11 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
-    await handleGuildLogging(member);
-
-    // [Database]: Update the database.
+    const memberService = member.client.services.memberService;
     await memberService.deleteMember(member);
 
-    // [Notification]: Send the notification.
-    const notificationConfig = await notificationService.getNotificationConfig(
-      member.guild
-    );
-    if (notificationConfig?.enabled === true) {
-      const notificationChannel =
-        await notificationService.getNotificationChannel(member.guild);
-      await notificationChannel?.send({ embeds: [embed] });
-    }
+    await handleGuildLogging(member);
+    await handleGuildNotification(member);
   },
 });
 
@@ -67,45 +44,41 @@ const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
     kickedBy = kickLog.executor;
   }
 
-  // Create the embed
-  let loggingEmbed = new EmbedBuilder();
-  if (kickedBy) {
-    loggingEmbed = new EmbedBuilder()
-      .setTitle("**User Kicked**")
-      .addFields([
-        {
-          name: "User",
-          value: `${member.client.functions.getUserString(member.user)}`,
-        },
-        {
-          name: "Kicked By",
-          value: `${
-            kickedBy
-              ? member.client.functions.getUserString(kickedBy)
-              : "Unknown"
-          }`,
-        },
-      ])
-      .setFooter({ text: `${new Date().toISOString()}` });
-  } else {
-    loggingEmbed = new EmbedBuilder()
-      .setTitle("**User Left**")
-      .addFields([
-        {
-          name: "User",
-          value: `${member.client.functions.getUserString(member.user)}`,
-        },
-      ])
-      .setFooter({ text: `${new Date().toISOString()}` });
-  }
+  const loggingService = member.client.services.loggingService;
 
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(member.guild);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(member.guild);
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
+  if (kickedBy) {
+    const embed = await loggingService.createLoggingEmbed("**User Kicked**", [
+      {
+        name: "User",
+        value: `${member.client.functions.getUserString(member.user)}`,
+      },
+      {
+        name: "Kicked By",
+        value: `${
+          kickedBy ? member.client.functions.getUserString(kickedBy) : "Unknown"
+        }`,
+      },
+    ]);
+    await loggingService.sendLoggingMessage(member.guild, embed);
+  } else {
+    const embed = await loggingService.createLoggingEmbed("**User Left**", [
+      {
+        name: "User",
+        value: `${member.client.functions.getUserString(member.user)}`,
+      },
+    ]);
+    await loggingService.sendLoggingMessage(member.guild, embed);
   }
+};
+
+const handleGuildNotification = async (
+  member: GuildMember | PartialGuildMember
+) => {
+  const embed = new EmbedBuilder()
+    .setColor(Colors.Red)
+    .setTitle(`${member.displayName} has left the server.`)
+    .setThumbnail(member.avatar);
+
+  const notificationService = member.client.services.notificationService;
+  await notificationService.sendNotificationMessage(member.guild, embed);
 };

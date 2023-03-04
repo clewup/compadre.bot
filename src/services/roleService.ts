@@ -7,14 +7,14 @@ import { Role as DiscordRole } from "discord.js";
  *    Creates a new instance of the RoleService.
  */
 class RoleService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();
   }
 
-  public async getRole(id: string): Promise<Role | null> {
-    return await this.database.role.findFirst({ where: { id: id } });
+  public async getRole(role: DiscordRole): Promise<Role | null> {
+    return await this.database.role.findFirst({ where: { id: role.id } });
   }
 
   public async createRole(role: DiscordRole): Promise<Role> {

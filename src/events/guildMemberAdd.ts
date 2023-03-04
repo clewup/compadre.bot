@@ -2,16 +2,11 @@ import { Event } from "../structures/event";
 import {
   AuditLogEvent,
   Colors,
-  Embed,
   EmbedBuilder,
   Events,
-  GuildBan,
   GuildMember,
-  TextChannel,
+  PartialGuildMember,
 } from "discord.js";
-import NotificationService from "../services/notificationService";
-import MemberService from "../services/memberService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildMemberAdd
@@ -20,60 +15,40 @@ import LoggingService from "../services/loggingService";
 export default new Event({
   name: Events.GuildMemberAdd,
   async execute(member) {
-    const notificationService = new NotificationService();
-    const memberService = new MemberService();
-
-    // [Logging]
     member.client.logger.logInfo(
       `${member.client.functions.getUserString(
         member.user
       )} has joined ${member.client.functions.getGuildString(member.guild)}.`
     );
 
-    const existingMember = await memberService.getMember(member.id);
+    const memberService = member.client.services.memberService;
+    const existingMember = await memberService.getMember(member);
     if (!existingMember) {
       await memberService.createMember(member);
     }
 
-    // [GuildLogging]
     await handleGuildLogging(member);
-
-    // [Notification]: Send the notification.
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Green)
-      .setTitle(`${member.displayName} has joined the server.`)
-      .setThumbnail(member.avatar);
-
-    const notificationConfig = await notificationService.getNotificationConfig(
-      member.guild
-    );
-    if (notificationConfig?.enabled === true) {
-      const notificationChannel =
-        await notificationService.getNotificationChannel(member.guild);
-      await notificationChannel?.send({ embeds: [embed] });
-    }
+    await handleGuildNotification(member);
   },
 });
 
 const handleGuildLogging = async (member: GuildMember) => {
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**New User**")
-    .addFields([
-      {
-        name: "User",
-        value: `${member.client.functions.getUserString(member.user)}`,
-      },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
+  const loggingService = member.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed("**User Joined**", [
+    {
+      name: "User",
+      value: `${member.client.functions.getUserString(member.user)}`,
+    },
+  ]);
+  await loggingService.sendLoggingMessage(member.guild, embed);
+};
 
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(member.guild);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(member.guild);
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+const handleGuildNotification = async (member: GuildMember) => {
+  const embed = new EmbedBuilder()
+    .setColor(Colors.Green)
+    .setTitle(`${member.displayName} has joined the server.`)
+    .setThumbnail(member.avatar);
+
+  const notificationService = member.client.services.notificationService;
+  await notificationService.sendNotificationMessage(member.guild, embed);
 };

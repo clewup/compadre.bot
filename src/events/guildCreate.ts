@@ -1,7 +1,5 @@
 import { Event } from "../structures/event";
-import { Colors, EmbedBuilder, Events, TextChannel } from "discord.js";
-import GuildService from "../services/guildService";
-import NotificationService from "../services/notificationService";
+import { Colors, EmbedBuilder, Events, Guild, GuildMember } from "discord.js";
 
 /**
  *    @name guildCreate
@@ -10,23 +8,14 @@ import NotificationService from "../services/notificationService";
 export default new Event({
   name: Events.GuildCreate,
   async execute(guild) {
-    const guildService = new GuildService();
-    const notificationService = new NotificationService();
-
-    const embed = new EmbedBuilder()
-      .setColor(Colors.Red)
-      .setTitle(`Hello! Thanks for adding me to ${guild.name}`)
-      .setDescription("To get started, type '/help'.");
-
-    // [Logging]
     guild.client.logger.logInfo(
       `${
         guild.client.user.username
       } has been added to ${guild.client.functions.getGuildString(guild)}.`
     );
 
-    // [Database]: Update the database.
-    const existingGuild = await guildService.getGuild(guild.id);
+    const guildService = guild.client.services.guildService;
+    const existingGuild = await guildService.getGuild(guild);
     if (!existingGuild) {
       await guildService.createGuild(guild);
     }
@@ -39,13 +28,16 @@ export default new Event({
       await guildService.updateGuild(guild);
     }
 
-    // [Notification]: Send the notification.
-    const notificationConfig =
-      await notificationService.getNotificationConfig(guild);
-    if (notificationConfig?.enabled === true) {
-      const notificationChannel =
-        await notificationService.getNotificationChannel(guild);
-      await notificationChannel?.send({ embeds: [embed] });
-    }
+    await handleGuildNotification(guild);
   },
 });
+
+const handleGuildNotification = async (guild: Guild) => {
+  const embed = new EmbedBuilder()
+    .setColor(Colors.Red)
+    .setTitle(`Hello! Thanks for adding me to ${guild.name}`)
+    .setDescription("To get started, type '/help'.");
+
+  const notificationService = guild.client.services.notificationService;
+  await notificationService.sendNotificationMessage(guild, embed);
+};

@@ -1,7 +1,5 @@
 import { Event } from "../structures/event";
 import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
-import RoleService from "../services/roleService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name roleUpdate
@@ -10,9 +8,6 @@ import LoggingService from "../services/loggingService";
 export default new Event({
   name: Events.GuildRoleUpdate,
   async execute(role) {
-    const roleService = new RoleService();
-
-    // [Logging]
     role.client.logger.logInfo(
       `Role "${
         role.name
@@ -21,11 +16,10 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
-    await handleGuildLogging(role);
-
-    // [Database]
+    const roleService = role.client.services.roleService;
     await roleService.updateRole(role);
+
+    await handleGuildLogging(role);
   },
 });
 
@@ -41,30 +35,18 @@ const handleGuildLogging = async (role: Role) => {
     updatedBy = roleLog.executor;
   }
 
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**Updated Role**")
-    .addFields([
-      {
-        name: "Role",
-        value: `${role.name}`,
-      },
-      {
-        name: "Updated By",
-        value: `${
-          updatedBy ? role.client.functions.getUserString(updatedBy) : "Unknown"
-        }`,
-      },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
-
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(role.guild);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(role.guild);
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+  const loggingService = role.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed("**Role Updated**", [
+    {
+      name: "Role",
+      value: `${role.name}`,
+    },
+    {
+      name: "Updated By",
+      value: `${
+        updatedBy ? role.client.functions.getUserString(updatedBy) : "Unknown"
+      }`,
+    },
+  ]);
+  await loggingService.sendLoggingMessage(role.guild, embed);
 };

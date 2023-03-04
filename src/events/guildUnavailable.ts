@@ -1,5 +1,5 @@
 import { Event } from "../structures/event";
-import {  Events } from "discord.js";
+import { Events } from "discord.js";
 
 /**
  *    @name guildMemberUpdate
@@ -8,7 +8,6 @@ import {  Events } from "discord.js";
 export default new Event({
   name: Events.GuildUnavailable,
   async execute(guild) {
-    // [Logging]
     guild.client.logger.logInfo(
       `${guild.client.functions.getGuildString(guild)} is unavailable.`
     );

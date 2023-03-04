@@ -5,8 +5,6 @@ import {
   GuildMember,
   PartialGuildMember,
 } from "discord.js";
-import MemberService from "../services/memberService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name guildMemberUpdate
@@ -15,9 +13,6 @@ import LoggingService from "../services/loggingService";
 export default new Event({
   name: Events.GuildMemberUpdate,
   async execute(oldMember, newMember) {
-    const memberService = new MemberService();
-
-    // [Logging]
     newMember.client.logger.logInfo(
       `${newMember.client.functions.getUserString(
         newMember.user
@@ -26,11 +21,10 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
-    await handleGuildLogging(oldMember, newMember);
-
-    // [Database]: Update the database.
+    const memberService = newMember.client.services.memberService;
     await memberService.updateMember(newMember);
+
+    await handleGuildLogging(oldMember, newMember);
   },
 });
 
@@ -38,26 +32,12 @@ const handleGuildLogging = async (
   oldMember: GuildMember | PartialGuildMember,
   newMember: GuildMember
 ) => {
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**User Updated**")
-    .addFields([
-      {
-        name: "User",
-        value: `${newMember.client.functions.getUserString(newMember.user)}`,
-      },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
-
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(newMember.guild);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(
-      newMember.guild
-    );
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+  const loggingService = newMember.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed("**User Updated**", [
+    {
+      name: "User",
+      value: `${newMember.client.functions.getUserString(newMember.user)}`,
+    },
+  ]);
+  await loggingService.sendLoggingMessage(newMember.guild, embed);
 };

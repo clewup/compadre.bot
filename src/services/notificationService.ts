@@ -1,13 +1,14 @@
 import Database from "../structures/database";
 import { NotificationConfig } from "@prisma/client";
-import { TextChannel, Guild as DiscordGuild } from "discord.js";
+import { TextChannel, Guild as DiscordGuild, EmbedBuilder } from "discord.js";
+import { ErrorReasons } from "../data/enums/reasons";
 
 /**
  *    @class
  *    Creates a new instance of the NotificationService.
  */
 class NotificationService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();
@@ -46,6 +47,18 @@ class NotificationService {
       if (channel instanceof TextChannel) {
         return channel;
       }
+    }
+  }
+
+  public async sendNotificationMessage(
+    guild: DiscordGuild,
+    embed: EmbedBuilder
+  ) {
+    const notificationConfig = await this.getNotificationConfig(guild);
+    if (notificationConfig?.enabled === true) {
+      const notificationChannel = await this.getNotificationChannel(guild);
+
+      await notificationChannel?.send({ embeds: [embed] });
     }
   }
 }

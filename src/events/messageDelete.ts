@@ -1,12 +1,12 @@
 import { Event } from "../structures/event";
 import {
   AuditLogEvent,
+  CommandInteraction,
   EmbedBuilder,
   Events,
   Message,
   PartialMessage,
 } from "discord.js";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name messageDelete
@@ -19,7 +19,6 @@ export default new Event({
     if (message.content?.startsWith("/")) return;
     if (!message.guild) return;
 
-    // [Logging]
     message.client.logger.logInfo(
       `The message "${
         message.content
@@ -28,7 +27,6 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
     await handleGuildLogging(message);
   },
 });
@@ -49,43 +47,30 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
     deletedBy = deletionLog.executor;
   }
 
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**Message Deleted**")
-    .addFields([
-      {
-        name: "Author",
-        value: `${
-          message.author
-            ? message.client.functions.getUserString(message.author)
-            : "Unknown"
-        }`,
-      },
-      {
-        name: "Channel",
-        value: `${message.channel}`,
-      },
-      {
-        name: "Message",
-        value: `${message.content}`,
-      },
-      {
-        name: "Deleted By",
-        value: deletedBy
-          ? message.client.functions.getUserString(deletedBy)
-          : "Unknown",
-      },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
-
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(message.guild!);
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(
-      message.guild!
-    );
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+  const loggingService = message.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed("**Message Deleted**", [
+    {
+      name: "Author",
+      value: `${
+        message.author
+          ? message.client.functions.getUserString(message.author)
+          : "Unknown"
+      }`,
+    },
+    {
+      name: "Channel",
+      value: `${message.channel}`,
+    },
+    {
+      name: "Message",
+      value: `${message.content}`,
+    },
+    {
+      name: "Deleted By",
+      value: deletedBy
+        ? message.client.functions.getUserString(deletedBy)
+        : "Unknown",
+    },
+  ]);
+  await loggingService.sendLoggingMessage(message.guild, embed);
 };

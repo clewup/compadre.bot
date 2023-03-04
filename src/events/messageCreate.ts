@@ -1,6 +1,5 @@
 import { Event } from "../structures/event";
 import { Events, Message } from "discord.js";
-import PreventService from "../services/preventService";
 
 /**
  *    @name messageCreate
@@ -12,7 +11,6 @@ export default new Event({
     if (message.author.bot) return;
     if (message.content.startsWith("/")) return;
 
-    // [Logging]
     message.client.logger.logInfo(
       `${message.client.functions.getUserString(
         message.author
@@ -21,17 +19,14 @@ export default new Event({
       }" in ${message.client.functions.getGuildString(message.guild)}.`
     );
 
-    // [Prevent]
     await handlePrevent(message);
   },
 });
 
 const handlePrevent = async (message: Message<boolean>) => {
   if (message.guild) {
-    const preventService = new PreventService();
-    const preventConfig = await preventService.getPreventConfig(
-      message.guild
-    );
+    const preventService = message.client.services.preventService;
+    const preventConfig = await preventService.getPreventConfig(message.guild);
 
     if (preventConfig && preventConfig.enabled) {
       const memberAuthor = await message.guild.members.fetch(message.author.id);
@@ -57,7 +52,7 @@ const handlePrevent = async (message: Message<boolean>) => {
             `"${message.content}" has been detected as containing a link and has been deleted.`
           );
           await message.channel.send({
-            content: `${message.author} you do not have permission to send links.`
+            content: `${message.author} you do not have permission to send links.`,
           });
         }
       }

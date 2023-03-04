@@ -3,13 +3,11 @@ import {
   CommandInteraction,
   EmbedBuilder,
   Events,
-  GuildMember,
   inlineCode,
   Interaction,
 } from "discord.js";
 
 import { Event } from "../structures/event";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name interactionCreate
@@ -22,7 +20,6 @@ export default new Event({
     if (!interaction.isCommand()) return;
     if (!interaction.inCachedGuild()) return;
 
-    // [Logging]
     interaction.client.logger.logInfo(
       `${interaction.client.functions.getUserString(
         interaction.user
@@ -31,7 +28,6 @@ export default new Event({
       }" in ${interaction.client.functions.getGuildString(interaction.guild)}.`
     );
 
-    // [GuildLogging]
     await handleGuildLogging(interaction);
 
     const command = interaction.client.commands.get(interaction.commandName);
@@ -64,10 +60,10 @@ export default new Event({
 });
 
 const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**Command Executed**")
-    .addFields([
+  const loggingService = interaction.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed(
+    "**Command Executed**",
+    [
       {
         name: "User",
         value: `${interaction.client.functions.getUserString(
@@ -78,20 +74,7 @@ const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
         name: "Command",
         value: `${(interaction as CommandInteraction).commandName}`,
       },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
-
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(
-    interaction.guild!
+    ]
   );
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(
-      interaction.guild!
-    );
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
-  }
+  await loggingService.sendLoggingMessage(interaction.guild, embed);
 };

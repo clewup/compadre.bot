@@ -1,26 +1,20 @@
 import Database from "../structures/database";
 import { Guild } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
-import RoleService from "./roleService";
-import MemberService from "./memberService";
 
 /**
  *    @class
  *    Creates a new instance of the GuildService.
  */
 class GuildService {
-  private database;
-  private roleService;
-  private memberService;
+  readonly database;
 
   constructor() {
     this.database = new Database();
-    this.roleService = new RoleService();
-    this.memberService = new MemberService();
   }
 
-  public async getGuild(id: string): Promise<Guild | null> {
-    return await this.database.guild.findFirst({ where: { id: id } });
+  public async getGuild(guild: DiscordGuild): Promise<Guild | null> {
+    return await this.database.guild.findFirst({ where: { id: guild.id } });
   }
 
   public async createGuild(guild: DiscordGuild): Promise<Guild> {
@@ -66,17 +60,19 @@ class GuildService {
       },
     });
 
+    const memberService = guild.client.services.memberService;
     const members = await guild.members.list();
     members.forEach(async (member) => {
-      await this.memberService.createMember(member);
+      await memberService.createMember(member);
     });
 
+    const roleService = guild.client.services.roleService;
     const roles = await guild.roles.valueOf();
     roles.forEach(async (role) => {
-      await this.roleService.createRole(role);
+      await roleService.createRole(role);
     });
 
-    return (await this.getGuild(guild.id))!;
+    return (await this.getGuild(guild))!;
   }
 
   public async updateGuild(guild: DiscordGuild): Promise<Guild> {

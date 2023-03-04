@@ -57,7 +57,7 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const welcomeService = new WelcomeService();
+    const welcomeService = interaction.client.services.welcomeService;
 
     const enabled = interaction.options.getBoolean("enabled");
 
@@ -92,7 +92,6 @@ const handleDisable = async (
     );
   }
 
-  // [Database]: Update the database.
   await welcomeService.updateWelcomeConfig(
     interaction.guild,
     null,
@@ -188,7 +187,6 @@ const handleEnable = async (
     }
   }
 
-  // [Database]: Update the database.
   await welcomeService.updateWelcomeConfig(
     interaction.guild,
     welcomeChannel.id,

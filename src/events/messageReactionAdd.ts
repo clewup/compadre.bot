@@ -2,14 +2,11 @@ import { Event } from "../structures/event";
 import {
   EmbedBuilder,
   Events,
-  GuildMember,
   MessageReaction,
   PartialMessageReaction,
   PartialUser,
   User,
 } from "discord.js";
-import WelcomeService from "../services/welcomeService";
-import LoggingService from "../services/loggingService";
 
 /**
  *    @name messageReactionAdd
@@ -20,9 +17,6 @@ export default new Event({
   async execute(reaction, user) {
     if (!reaction.message.guild) return;
 
-    const welcomeService = new WelcomeService();
-
-    // [Logging]
     reaction.client.logger.logInfo(
       `${reaction.client.functions.getUserString(
         user
@@ -33,26 +27,8 @@ export default new Event({
       )}.`
     );
 
-    // [GuildLogging]
     await handleGuildLogging(reaction, user);
-
-    // [Welcome]: Update the user's role.
-    const welcomeConfig = await welcomeService.getWelcomeConfig(
-      reaction.message.guild
-    );
-    if (
-      welcomeConfig &&
-      welcomeConfig.role &&
-      welcomeConfig.channel === reaction.message.channel.id &&
-      welcomeConfig.enabled === true
-    ) {
-      const role = await reaction.message.guild.roles.fetch(welcomeConfig.role);
-      const guildUser = await reaction.message.guild.members.fetch(user.id);
-
-      if (role && guildUser) {
-        await guildUser.roles.add(role);
-      }
-    }
+    await handleWelcome(reaction, user);
   },
 });
 
@@ -60,28 +36,38 @@ const handleGuildLogging = async (
   reaction: MessageReaction | PartialMessageReaction,
   user: User | PartialUser
 ) => {
-  // Create the embed
-  const loggingEmbed = new EmbedBuilder()
-    .setTitle("**User Reaction**")
-    .addFields([
+  const loggingService = reaction.client.services.loggingService;
+  const embed = await loggingService.createLoggingEmbed(
+    "**Message Reaction**",
+    [
       {
         name: "User",
         value: `${reaction.client.functions.getUserString(user)}`,
       },
-    ])
-    .setFooter({ text: `${new Date().toISOString()}` });
-
-  // Send the logs
-  const loggingService = new LoggingService();
-  const loggingConfig = await loggingService.getLoggingConfig(
-    reaction.message.guild!
+    ]
   );
-  if (loggingConfig?.enabled === true) {
-    const loggingChannel = await loggingService.getLoggingChannel(
-      reaction.message.guild!
-    );
-    await loggingChannel?.send({
-      embeds: [loggingEmbed],
-    });
+  await loggingService.sendLoggingMessage(reaction.message.guild, embed);
+};
+
+const handleWelcome = async (
+  reaction: MessageReaction | PartialMessageReaction,
+  user: User | PartialUser
+) => {
+  const welcomeService = reaction.client.services.welcomeService;
+  const welcomeConfig = await welcomeService.getWelcomeConfig(
+    reaction.message.guild
+  );
+  if (
+    welcomeConfig &&
+    welcomeConfig.role &&
+    welcomeConfig.channel === reaction.message.channel.id &&
+    welcomeConfig.enabled === true
+  ) {
+    const role = await reaction.message.guild!.roles.fetch(welcomeConfig.role);
+    const guildUser = await reaction.message.guild!.members.fetch(user.id);
+
+    if (role && guildUser) {
+      await guildUser.roles.add(role);
+    }
   }
 };

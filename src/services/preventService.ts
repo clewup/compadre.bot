@@ -1,13 +1,13 @@
 import Database from "../structures/database";
 import { PreventConfig } from "@prisma/client";
-import {  Guild as DiscordGuild } from "discord.js";
+import { Guild as DiscordGuild } from "discord.js";
 
 /**
  *    @class
  *    Creates a new instance of the PreventService.
  */
 class PreventService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();

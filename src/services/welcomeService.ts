@@ -7,7 +7,7 @@ import { Guild as DiscordGuild } from "discord.js";
  *    Creates a new instance of the WelcomeService.
  */
 class WelcomeService {
-  private database;
+  readonly database;
 
   constructor() {
     this.database = new Database();

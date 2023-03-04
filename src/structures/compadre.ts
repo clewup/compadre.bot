@@ -13,6 +13,15 @@ import fs from "node:fs";
 import path from "node:path";
 import config from "../config";
 import Soundboard from "./soundboard";
+import GptService from "../services/gptService";
+import GuildService from "../services/guildService";
+import LoggingService from "../services/loggingService";
+import MemberService from "../services/memberService";
+import NotificationService from "../services/notificationService";
+import PreventService from "../services/preventService";
+import RoleService from "../services/roleService";
+import WelcomeService from "../services/welcomeService";
+import Database from "./database";
 
 /**
  *    @extends DiscordClient
@@ -20,10 +29,21 @@ import Soundboard from "./soundboard";
  *    Creates a new instance of Compadre.
  */
 class Compadre<Ready extends boolean = boolean> extends DiscordClient {
-  public logger;
-  public functions;
-  public commands;
-  public soundboard;
+  readonly logger: Logger;
+  readonly functions: Functions;
+  readonly commands: Collection<string, Command>;
+  readonly soundboard: Soundboard;
+
+  readonly services: {
+    gptService: GptService;
+    guildService: GuildService;
+    loggingService: LoggingService;
+    memberService: MemberService;
+    notificationService: NotificationService;
+    preventService: PreventService;
+    roleService: RoleService;
+    welcomeService: WelcomeService;
+  };
 
   constructor() {
     super({
@@ -41,10 +61,22 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
         parse: ["users"],
       },
     });
+
     this.logger = new Logger();
     this.functions = new Functions();
     this.commands = new Collection<string, Command>();
     this.soundboard = new Soundboard();
+
+    this.services = {
+      gptService: new GptService(),
+      guildService: new GuildService(),
+      loggingService: new LoggingService(),
+      memberService: new MemberService(),
+      notificationService: new NotificationService(),
+      preventService: new PreventService(),
+      roleService: new RoleService(),
+      welcomeService: new WelcomeService(),
+    };
   }
 
   private async setCommands() {
