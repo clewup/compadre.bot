@@ -21,7 +21,7 @@ export default new Event({
 
     message.client.logger.logInfo(
       `The message "${
-        message.content || message.embeds[0].title
+        message.content || message.embeds[0].title || "Unknown"
       }" has been deleted in ${message.client.functions.getGuildString(
         message.guild
       )}.`
