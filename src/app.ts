@@ -4,7 +4,6 @@ import { Events } from "discord.js";
 import config from "./config";
 import Database from "./structures/database";
 import expressWinston from "express-winston";
-import { format, transports } from "winston";
 import Logger from "./helpers/logger";
 
 const port = config.port;
