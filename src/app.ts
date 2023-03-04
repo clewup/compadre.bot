@@ -3,12 +3,23 @@ import Compadre from "./structures/compadre";
 import { Events } from "discord.js";
 import config from "./config";
 import Database from "./structures/database";
+import expressWinston from "express-winston";
+import { format, transports } from "winston";
+import Logger from "./helpers/logger";
 
 const port = config.port;
 
 const app = express();
 const database = new Database();
 const compadre = new Compadre();
+const logger = new Logger();
+
+app.use(
+  expressWinston.logger({
+    winstonInstance: logger.winston,
+    statusLevels: true,
+  })
+);
 
 const init = async () => {
   await database.start();

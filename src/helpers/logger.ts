@@ -2,26 +2,44 @@
  *    @class
  *    Creates a new instance of Functions.
  */
+import { createLogger, format, transports } from "winston";
+
 class Logger {
-  public log(message: unknown) {
-    const dateTime = new Date().toISOString();
-    console.log(`${dateTime}: ${message}`);
+  readonly winston;
+
+  constructor() {
+    const logFormat = format.printf(
+      ({ level, message, timestamp, ...metadata }) => {
+        let msg = `${timestamp} [${level}] : ${message} `;
+        if (metadata) {
+          msg += JSON.stringify(metadata);
+        }
+        return msg;
+      }
+    );
+
+    this.winston = createLogger({
+      transports: [
+        new transports.Console(),
+        new transports.File({
+          filename: "logs.log",
+        }),
+      ],
+      format: format.combine(format.splat(), format.timestamp(), logFormat),
+    });
   }
+
   public logInfo(message: unknown) {
-    const dateTime = new Date().toISOString();
-    console.log(`\x1b[36m${dateTime}: [INFO] \x1b[0m${message}`);
+    this.winston.info(`${message}`);
   }
   public logWarning(message: unknown) {
-    const dateTime = new Date().toISOString();
-    console.log(`\x1b[33m${dateTime}: [WARNING] \x1b[0m${message}`);
+    this.winston.warn(`${message}`);
   }
   public logError(message: unknown) {
-    const dateTime = new Date().toISOString();
-    console.log(`\x1b[31m${dateTime}: [ERROR] \x1b[0m${message}`);
+    this.winston.error(`${message}`);
   }
   public logDb(message: unknown) {
-    const dateTime = new Date().toISOString();
-    console.log(`\x1b[35m${dateTime}: [DB] \x1b[0m${message}`);
+    this.winston.debug(`${message}`);
   }
 }
 export default Logger;
