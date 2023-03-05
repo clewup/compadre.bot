@@ -6,7 +6,6 @@ import expressWinston from "express-winston";
 import { charityCron } from "./cron";
 import { logger } from "./helpers";
 import {
-  authRouter,
   guildRouter,
   loggingRouter,
   memberRouter,
@@ -29,7 +28,6 @@ app.use(
   })
 );
 
-app.use("/auth", authRouter);
 app.use("/guild", guildRouter);
 app.use("/logging", loggingRouter);
 app.use("/member", memberRouter);

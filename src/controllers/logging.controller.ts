@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { loggingService } from "../services";
-import { functions } from "../helpers";
+import { functions, mappers } from "../helpers";
 
 export default class LoggingController {
   async get(req: Request, res: Response) {
@@ -8,7 +8,12 @@ export default class LoggingController {
       const guildId = req.params.guildId;
       const config = await loggingService.get(guildId);
 
-      return res.json(config);
+      if (config) {
+        const mappedConfig = mappers.mapLogging(config);
+        return res.json(mappedConfig);
+      }
+
+      return res.sendStatus(204);
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));

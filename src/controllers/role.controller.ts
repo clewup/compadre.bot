@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { roleService } from "../services";
-import { functions } from "../helpers";
+import { functions, mappers } from "../helpers";
 
 export default class RoleController {
   async getAll(req: Request, res: Response) {
@@ -8,7 +8,16 @@ export default class RoleController {
       const guildId = req.params.guildId;
       const roles = await roleService.getAll(guildId);
 
-      return res.json(roles);
+      if (roles.length) {
+        const mappedRoles: object[] = [];
+        roles.forEach((role) => {
+          mappedRoles.push(mappers.mapRole(role));
+        });
+
+        return res.json(mappedRoles);
+      }
+
+      return res.sendStatus(204);
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));
@@ -20,7 +29,12 @@ export default class RoleController {
       const id = req.params.id;
       const role = await roleService.get(id);
 
-      return res.json(role);
+      if (role) {
+        const mappedRole = mappers.mapRole(role);
+        return res.json(mappedRole);
+      }
+
+      return res.sendStatus(204);
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));

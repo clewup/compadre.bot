@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { memberService } from "../services";
-import { functions } from "../helpers";
+import { functions, mappers } from "../helpers";
 
 export default class MemberController {
   async getAll(req: Request, res: Response) {
@@ -8,7 +8,16 @@ export default class MemberController {
       const guildId = req.params.guildId;
       const members = await memberService.getAll(guildId);
 
-      return res.json(members);
+      if (members.length) {
+        const mappedMembers: object[] = [];
+        members.forEach((member) => {
+          mappedMembers.push(mappers.mapMember(member));
+        });
+
+        return res.json(mappedMembers);
+      }
+
+      return res.sendStatus(204);
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));
@@ -20,7 +29,12 @@ export default class MemberController {
       const id = req.params.id;
       const member = await memberService.get(id);
 
-      return res.json(member);
+      if (member) {
+        const mappedMember = mappers.mapMember(member);
+        return res.json(mappedMember);
+      }
+
+      return res.sendStatus(204);
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));

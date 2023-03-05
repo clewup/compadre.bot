@@ -1,4 +1,3 @@
-import authRouter from "./auth.router";
 import guildRouter from "./guild.router";
 import loggingRouter from "./logging.router";
 import memberRouter from "./member.router";
@@ -8,7 +7,6 @@ import roleRouter from "./role.router";
 import welcomeRouter from "./welcome.router";
 
 export {
-  authRouter,
   guildRouter,
   loggingRouter,
   memberRouter,
