@@ -7,6 +7,8 @@ import {
   Message,
   PartialMessage,
 } from "discord.js";
+import { loggingService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name messageDelete
@@ -19,12 +21,10 @@ export default new Event({
     if (message.content?.startsWith("/")) return;
     if (!message.guild) return;
 
-    message.client.logger.logInfo(
+    logger.info(
       `The message "${
         message.content || message.embeds[0].title || "Unknown"
-      }" has been deleted in ${message.client.functions.getGuildString(
-        message.guild
-      )}.`
+      }" has been deleted in ${functions.getGuildString(message.guild)}.`
     );
 
     await handleGuildLogging(message);
@@ -47,8 +47,7 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
     deletedBy = deletionLog.executor;
   }
 
-  const loggingService = message.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**Message Deleted**", [
+  const embed = await loggingService.createEmbed("**Message Deleted**", [
     {
       name: "Author",
       value: `${
@@ -56,21 +55,25 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
           ? message.client.functions.getUserMentionString(message.author)
           : "Unknown"
       }`,
+      inline: false,
     },
     {
       name: "Channel",
       value: `${message.channel}`,
+      inline: false,
     },
     {
       name: "Message",
       value: `${message.content || message.embeds[0]?.title || "Unknown"}`,
+      inline: false,
     },
     {
       name: "Deleted By",
       value: deletedBy
         ? message.client.functions.getUserMentionString(deletedBy)
         : "Unknown",
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(message.guild, embed);
+  await loggingService.send(message.guild!, embed);
 };

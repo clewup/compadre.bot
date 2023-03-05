@@ -1,15 +1,15 @@
-import config from "../../config";
+import config from "../config";
 
 /**
  *    Bot reasoning/responses.
  */
-export const CrudReasons = {
+export const CrudReasons = Object.freeze({
   ADDED: `Added by ${config.clientName}.`,
   REMOVED: `Removed by ${config.clientName}.`,
   UPDATED: `Updated by ${config.clientName}.`,
-};
+});
 
-export const ErrorReasons = {
+export const ErrorReasons = Object.freeze({
   INVALID_TEXT_CHANNEL: "You are not in a text channel.",
   INVALID_VOICE_CHANNEL: "You are not in a voice channel.",
   INVALID_ROLE: "You must provide a role.",
@@ -25,4 +25,4 @@ export const ErrorReasons = {
     `There was a problem creating the ${channel} channel.`,
   ROLE_PROBLEM: (role: string) =>
     `There was a problem creating the ${role} role.`,
-};
+});

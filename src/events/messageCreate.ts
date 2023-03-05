@@ -1,5 +1,7 @@
 import { Event } from "../structures/event";
 import { Events, Message } from "discord.js";
+import { preventService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name messageCreate
@@ -11,12 +13,10 @@ export default new Event({
     if (message.author.bot) return;
     if (message.content.startsWith("/")) return;
 
-    message.client.logger.logInfo(
-      `${message.client.functions.getUserString(
-        message.author
-      )} has sent the message "${
+    logger.info(
+      `${functions.getUserString(message.author)} has sent the message "${
         message.content
-      }" in ${message.client.functions.getGuildString(message.guild)}.`
+      }" in ${functions.getGuildString(message.guild!)}.`
     );
 
     await handlePrevent(message);
@@ -25,13 +25,12 @@ export default new Event({
 
 const handlePrevent = async (message: Message<boolean>) => {
   if (message.guild) {
-    const preventService = message.client.services.preventService;
-    const preventConfig = await preventService.getPreventConfig(message.guild);
+    const config = await preventService.get(message.guild);
 
-    if (preventConfig && preventConfig.enabled) {
+    if (config && config.enabled) {
       const memberAuthor = await message.guild.members.fetch(message.author.id);
-      const role = preventConfig.role
-        ? await message.guild.roles.fetch(preventConfig.role)
+      const role = config.role
+        ? await message.guild.roles.fetch(config.role)
         : null;
 
       if (
@@ -43,12 +42,9 @@ const handlePrevent = async (message: Message<boolean>) => {
         const adExpression = /\b(?:.?)ad(?:.?)\b/;
 
         // Links
-        if (
-          preventConfig.links &&
-          message.content.match(new RegExp(linkExpression))
-        ) {
+        if (config.links && message.content.match(new RegExp(linkExpression))) {
           await message.delete();
-          message.client.logger.logInfo(
+          logger.info(
             `"${message.content}" has been detected as containing a link and has been deleted.`
           );
           await message.channel.send({

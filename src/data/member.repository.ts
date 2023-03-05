@@ -1,28 +1,24 @@
 import Database from "../structures/database";
-import { Member } from "@prisma/client";
 import {
   GuildMember as DiscordMember,
   PartialGuildMember as PartialDiscordMember,
   PermissionsBitField,
 } from "discord.js";
+import { Member } from "@prisma/client";
 import config from "../config";
 
-/**
- *    @class
- *    Creates a new instance of the MemberService.
- */
-class MemberService {
-  readonly database;
+export default class MemberRepository {
+  private readonly database;
 
-  constructor() {
-    this.database = new Database();
+  constructor(database: Database) {
+    this.database = database;
   }
 
-  public async getMember(member: DiscordMember): Promise<Member | null> {
+  async get(member: DiscordMember) {
     return await this.database.member.findFirst({ where: { id: member.id } });
   }
 
-  public async createMember(member: DiscordMember): Promise<Member> {
+  async create(member: DiscordMember) {
     return await this.database.member.create({
       data: {
         id: member.id,
@@ -41,7 +37,7 @@ class MemberService {
     });
   }
 
-  public async updateMember(member: DiscordMember): Promise<Member> {
+  async update(member: DiscordMember) {
     return await this.database.member.update({
       where: { id: member.id },
       data: {
@@ -55,10 +51,7 @@ class MemberService {
     });
   }
 
-  public async deleteMember(
-    member: DiscordMember | PartialDiscordMember
-  ): Promise<void> {
+  async delete(member: DiscordMember | PartialDiscordMember) {
     await this.database.member.delete({ where: { id: member.id } });
   }
 }
-export default MemberService;

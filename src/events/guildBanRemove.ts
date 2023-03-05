@@ -6,6 +6,8 @@ import {
   Events,
   GuildBan,
 } from "discord.js";
+import { loggingService, notificationService } from "../services";
+import { logger } from "../helpers";
 
 /**
  *    @name guildBanRemove
@@ -14,7 +16,7 @@ import {
 export default new Event({
   name: Events.GuildBanRemove,
   async execute(guildBan) {
-    guildBan.client.logger.logInfo(
+    logger.info(
       `${guildBan.client.functions.getUserString(
         guildBan.user
       )} has been unbanned from ${guildBan.client.functions.getGuildString(
@@ -39,11 +41,11 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
     unbannedBy = banLog.executor;
   }
 
-  const loggingService = guildBan.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**User Unbanned**", [
+  const embed = await loggingService.createEmbed("**User Unbanned**", [
     {
       name: "Unbanned User",
       value: `${guildBan.client.functions.getUserMentionString(guildBan.user)}`,
+      inline: false,
     },
     {
       name: "Unbanned By",
@@ -52,13 +54,15 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
           ? guildBan.client.functions.getUserMentionString(unbannedBy)
           : "Unknown"
       }`,
+      inline: false,
     },
     {
       name: "Reason",
       value: `${guildBan.reason}`,
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(guildBan.guild, embed);
+  await loggingService.send(guildBan.guild, embed);
 };
 
 const handleGuildNotification = async (guildBan: GuildBan) => {
@@ -67,6 +71,5 @@ const handleGuildNotification = async (guildBan: GuildBan) => {
     .setTitle(`${guildBan.user.username} has been unbanned from the server.`)
     .setThumbnail(guildBan.user.avatar);
 
-  const notificationService = guildBan.client.services.notificationService;
-  await notificationService.sendNotificationMessage(guildBan.guild, embed);
+  await notificationService.send(guildBan.guild, embed);
 };

@@ -6,9 +6,9 @@ import {
   SlashCommandBuilder,
   TextChannel,
 } from "discord.js";
-import NotificationService from "../../services/notificationService";
-import { Categories } from "../../data/enums/categories";
-import { ErrorReasons, CrudReasons } from "../../data/enums/reasons";
+import { notificationService } from "../../services";
+import { Categories } from "../../enums/categories";
+import { ErrorReasons, CrudReasons } from "../../enums/reasons";
 
 /**
  *    @name notifications
@@ -42,15 +42,13 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const notificationService = interaction.client.services.notificationService;
-
     const enabled = interaction.options.getBoolean("enabled");
 
     if (enabled === false) {
-      await handleDisable(interaction, notificationService);
+      await handleDisable(interaction);
     }
     if (enabled === true) {
-      await handleEnable(interaction, notificationService);
+      await handleEnable(interaction);
     }
 
     await interaction.reply({
@@ -61,49 +59,37 @@ export default new Command({
 });
 
 const handleDisable = async (
-  interaction: ChatInputCommandInteraction<"cached">,
-  notificationService: NotificationService
+  interaction: ChatInputCommandInteraction<"cached">
 ) => {
   // Looks for and deletes the default notification channel (#notifications).
-  const defaultNotificationChannel =
+  const defaultChannel =
     interaction.guild.channels.cache.find(
       (channel) =>
         channel.name === "notifications" &&
         channel.type === ChannelType.GuildText
     ) || null;
-  if (defaultNotificationChannel) {
+  if (defaultChannel) {
     await interaction.guild.channels.delete(
-      defaultNotificationChannel,
+      defaultChannel,
       CrudReasons.REMOVED
     );
   }
 
-  const notificationConfig = await notificationService.getNotificationConfig(
-    interaction.guild
-  );
+  const config = await notificationService.get(interaction.guild);
 
-  if (!notificationConfig) {
-    await notificationService.createNotificationConfig(
-      interaction.guild,
-      null,
-      false
-    );
+  if (!config) {
+    await notificationService.create(interaction.guild, null, false);
   } else {
-    await notificationService.updateNotificationConfig(
-      interaction.guild,
-      null,
-      false
-    );
+    await notificationService.update(interaction.guild, null, false);
   }
 };
 
 const handleEnable = async (
-  interaction: ChatInputCommandInteraction<"cached">,
-  notificationService: NotificationService
+  interaction: ChatInputCommandInteraction<"cached">
 ) => {
-  let notificationChannel = interaction.options.getChannel("channel");
+  let channel = interaction.options.getChannel("channel");
 
-  if (notificationChannel && !(notificationChannel instanceof TextChannel)) {
+  if (channel && !(channel instanceof TextChannel)) {
     return interaction.reply({
       content: ErrorReasons.INVALID_TEXT_CHANNEL,
       ephemeral: true,
@@ -111,16 +97,16 @@ const handleEnable = async (
   }
 
   // Create the notification channel with necessary permissions if one is not provided and does not already exist.
-  if (!notificationChannel) {
-    notificationChannel =
+  if (!channel) {
+    channel =
       interaction.guild.channels.cache.find(
         (channel) =>
           channel.name === "notifications" &&
           channel.type === ChannelType.GuildText
       ) || null;
 
-    if (!notificationChannel) {
-      notificationChannel = await interaction.guild.channels.create({
+    if (!channel) {
+      channel = await interaction.guild.channels.create({
         name: "notifications",
         type: ChannelType.GuildText,
         permissionOverwrites: [
@@ -136,7 +122,7 @@ const handleEnable = async (
     }
   } else {
     // Overwrite the permissions for the provided notification channel.
-    await notificationChannel.permissionOverwrites.set([
+    await channel.permissionOverwrites.set([
       {
         id: interaction.guild.roles.everyone.id,
         allow: [
@@ -147,27 +133,17 @@ const handleEnable = async (
     ]);
   }
 
-  if (!(notificationChannel instanceof TextChannel))
+  if (!(channel instanceof TextChannel))
     return interaction.reply({
       content: ErrorReasons.CHANNEL_PROBLEM("notification"),
       ephemeral: true,
     });
 
-  const notificationConfig = await notificationService.getNotificationConfig(
-    interaction.guild
-  );
+  const config = await notificationService.get(interaction.guild);
 
-  if (!notificationConfig) {
-    await notificationService.createNotificationConfig(
-      interaction.guild,
-      notificationChannel.id,
-      true
-    );
+  if (!config) {
+    await notificationService.create(interaction.guild, channel.id, true);
   } else {
-    await notificationService.updateNotificationConfig(
-      interaction.guild,
-      notificationChannel.id,
-      true
-    );
+    await notificationService.update(interaction.guild, channel.id, true);
   }
 };

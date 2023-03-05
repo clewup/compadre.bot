@@ -5,9 +5,9 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { SoundEffects } from "../../data/enums/soundEffects";
-import { Categories } from "../../data/enums/categories";
-import { ErrorReasons } from "../../data/enums/reasons";
+import { SoundEffects } from "../../enums/soundEffects";
+import { Categories } from "../../enums/categories";
+import { ErrorReasons } from "../../enums/reasons";
 
 /**
  *    @name sb

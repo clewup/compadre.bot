@@ -1,6 +1,7 @@
 import { Event } from "../structures/event";
 import { Events } from "discord.js";
 import config from "../config";
+import { logger } from "../helpers";
 
 /**
  *    @name ready
@@ -10,7 +11,7 @@ export default new Event({
   name: Events.ClientReady,
   once: true,
   async execute(client) {
-    client.logger.logInfo(
+    logger.info(
       `${config.clientName} is online and serving ${client.users.cache.size} user(s).`
     );
   },

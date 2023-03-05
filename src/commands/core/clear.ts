@@ -5,8 +5,8 @@ import {
   SlashCommandBuilder,
   TextChannel,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
-import { ErrorReasons } from "../../data/enums/reasons";
+import { Categories } from "../../enums/categories";
+import { ErrorReasons } from "../../enums/reasons";
 
 /**
  *    @name clear

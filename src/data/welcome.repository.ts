@@ -1,33 +1,27 @@
 import Database from "../structures/database";
-import { PreventConfig, WelcomeConfig } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
+import { WelcomeConfig } from "@prisma/client";
 
-/**
- *    @class
- *    Creates a new instance of the WelcomeService.
- */
-class WelcomeService {
-  readonly database;
+export default class WelcomeRepository {
+  private readonly database;
 
-  constructor() {
-    this.database = new Database();
+  constructor(database: Database) {
+    this.database = database;
   }
 
-  public async getWelcomeConfig(
-    guild: DiscordGuild
-  ): Promise<WelcomeConfig | null> {
+  async get(guild: DiscordGuild) {
     return await this.database.welcomeConfig.findFirst({
       where: { guildId: guild.id },
     });
   }
 
-  public async createWelcomeConfig(
+  async create(
     guild: DiscordGuild,
     channel: string | null,
     role: string | null,
     message: string | null,
     enabled: boolean
-  ): Promise<WelcomeConfig> {
+  ) {
     return await this.database.welcomeConfig.create({
       data: {
         channel: channel,
@@ -43,13 +37,13 @@ class WelcomeService {
     });
   }
 
-  public async updateWelcomeConfig(
+  async update(
     guild: DiscordGuild,
     channel: string | null,
     role: string | null,
     message: string | null,
     enabled: boolean
-  ): Promise<WelcomeConfig> {
+  ) {
     return this.database.welcomeConfig.update({
       where: { guildId: guild.id },
       data: {
@@ -60,5 +54,8 @@ class WelcomeService {
       },
     });
   }
+
+  async delete(guild: DiscordGuild) {
+    await this.database.welcomeConfig.delete({ where: { guildId: guild.id } });
+  }
 }
-export default WelcomeService;

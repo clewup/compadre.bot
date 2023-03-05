@@ -47,9 +47,9 @@ const refreshCommands = async () => {
         { body: commands }
       )) as Command["data"][];
 
-      logger.logInfo(`Successfully refreshed ${data.length} commands.`);
+      logger.info(`Successfully refreshed ${data.length} commands.`);
     } catch (error) {
-      logger.logError(error);
+      logger.error(error);
     }
   })();
 };

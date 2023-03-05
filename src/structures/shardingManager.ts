@@ -1,21 +1,18 @@
 import { ShardingManager as DiscordShardingManager } from "discord.js";
 import config from "../config";
 import Logger from "../helpers/logger";
+import { logger } from "../helpers";
 
 class ShardingManager extends DiscordShardingManager {
-  readonly logger;
-
   constructor() {
     super("dist/app.js", {
       token: config.discordClientToken,
     });
-
-    this.logger = new Logger();
   }
 
-  public init() {
+  init() {
     this.on("shardCreate", (shard) => {
-      this.logger.logInfo(`Sharding Manager has launched shard ${shard.id}.`);
+      logger.info(`Sharding Manager has launched shard ${shard.id}.`);
     });
   }
 }

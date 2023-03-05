@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import Logger from "../helpers/logger";
-import config from "../config";
+import { logger } from "../helpers";
 
 /**
  *    @extends PrismaClient
@@ -11,8 +10,6 @@ class Database extends PrismaClient<
   Prisma.PrismaClientOptions,
   "query" | "error" | "warn"
 > {
-  public logger;
-
   constructor() {
     super({
       log: [
@@ -31,24 +28,23 @@ class Database extends PrismaClient<
       ],
     });
     this.$on("query", (e) => {
-      this.logger.logDb(`${e.query}, ${e.params}, ${e.duration}ms`);
+      logger.db(`${e.query}, ${e.params}, ${e.duration}ms`);
     });
     this.$on("error", (e) => {
-      this.logger.logError(`${e.message}`);
+      logger.error(`${e.message}`);
     });
     this.$on("warn", (e) => {
-      this.logger.logWarning(`${e.message}`);
+      logger.warning(`${e.message}`);
     });
-    this.logger = new Logger();
   }
 
-  public async start() {
+  async init() {
     try {
-      this.logger.logInfo("Initializing database connection.");
+      logger.info("Initializing database connection.");
       await this.$connect();
       await this.$disconnect();
     } catch (error) {
-      this.logger.logError(`Could not initialize the database (${error}).`);
+      logger.error(`Could not initialize the database (${error}).`);
     }
   }
 }

@@ -6,8 +6,9 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
-import { ErrorReasons } from "../../data/enums/reasons";
+import { Categories } from "../../enums/categories";
+import { ErrorReasons } from "../../enums/reasons";
+import { notificationService } from "../../services";
 
 /**
  *    @name broadcast
@@ -46,17 +47,14 @@ export default new Command({
       .setTitle("Attention!")
       .setDescription(`${message} ${interaction.guild.roles.everyone}`);
 
-    const notificationService =
-      interaction.guild.client.services.notificationService;
-    const notificationChannel =
-      await notificationService.getNotificationChannel(interaction.guild);
-    if (!notificationChannel) {
+    const channel = await notificationService.getChannel(interaction.guild);
+    if (!channel) {
       return await interaction.reply({
         ephemeral: true,
         content: ErrorReasons.INVALID_CHANNEL_NONEXISTENT("notification"),
       });
     }
-    await notificationService.sendNotificationMessage(interaction.guild, embed);
+    await notificationService.send(interaction.guild, embed);
 
     await interaction.reply({
       ephemeral: true,

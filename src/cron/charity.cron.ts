@@ -1,16 +1,17 @@
 import CronJob from "node-cron";
 import Compadre from "../structures/compadre";
 import { Colors, EmbedBuilder } from "discord.js";
-import { CronSchedules } from "../data/enums/cronSchedules";
-import { Charities } from "../data/enums/charities";
+import { CronSchedules } from "../enums/cronSchedules";
+import { Charities } from "../enums/charities";
+import { notificationService } from "../services";
+import { functions, logger } from "../helpers";
 
-class CharityFunction {
-  public init(compadre: Compadre) {
+export default class CharityCron {
+  init(compadre: Compadre) {
     const charityFunction = CronJob.schedule(CronSchedules.DAILY_8AM, () => {
-      compadre.logger.logInfo("Executed the scheduled CharityFunction.");
+      logger.info("Executed the scheduled CharityFunction.");
 
-      const notificationService = compadre.services.notificationService;
-      const charity = compadre.functions.randomArrayItem(Charities);
+      const charity = functions.randomArrayItem(Charities);
 
       compadre.guilds.cache.forEach(async (guild) => {
         const embed = new EmbedBuilder()
@@ -19,10 +20,9 @@ class CharityFunction {
           .setColor(Colors.Purple)
           .setImage(charity.image);
 
-        await notificationService.sendNotificationMessage(guild, embed);
+        await notificationService.send(guild, embed);
       });
     });
     charityFunction.start();
   }
 }
-export default CharityFunction;

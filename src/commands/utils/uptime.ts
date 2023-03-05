@@ -4,11 +4,11 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
+import { Categories } from "../../enums/categories";
 
 /**
  *    @name uptime
- *    @description Returns the bot's uptime.
+ *    @description Returns compadre's uptime.
  *    The command requires a permission of SendMessages.
  */
 export default new Command({

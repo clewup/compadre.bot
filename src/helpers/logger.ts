@@ -1,10 +1,10 @@
 /**
  *    @class
- *    Creates a new instance of Functions.
+ *    Creates a new instance of Logger.
  */
 import { createLogger, format, transports } from "winston";
 
-class Logger {
+export default class Logger {
   readonly winston;
 
   constructor() {
@@ -29,17 +29,16 @@ class Logger {
     });
   }
 
-  public logInfo(message: unknown) {
+  info(message: unknown) {
     this.winston.info(`${message}`);
   }
-  public logWarning(message: unknown) {
+  warning(message: unknown) {
     this.winston.warn(`${message}`);
   }
-  public logError(message: unknown) {
+  error(message: unknown) {
     this.winston.error(`${message}`);
   }
-  public logDb(message: unknown) {
+  db(message: unknown) {
     this.winston.debug(`${message}`);
   }
 }
-export default Logger;

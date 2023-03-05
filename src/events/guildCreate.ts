@@ -1,5 +1,7 @@
 import { Event } from "../structures/event";
 import { Colors, EmbedBuilder, Events, Guild, GuildMember } from "discord.js";
+import { guildService, notificationService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name guildCreate
@@ -8,16 +10,15 @@ import { Colors, EmbedBuilder, Events, Guild, GuildMember } from "discord.js";
 export default new Event({
   name: Events.GuildCreate,
   async execute(guild) {
-    guild.client.logger.logInfo(
+    logger.info(
       `${
         guild.client.user.username
-      } has been added to ${guild.client.functions.getGuildString(guild)}.`
+      } has been added to ${functions.getGuildString(guild)}.`
     );
 
-    const guildService = guild.client.services.guildService;
-    const existingGuild = await guildService.getGuild(guild);
+    const existingGuild = await guildService.get(guild);
     if (!existingGuild) {
-      await guildService.createGuild(guild);
+      await guildService.create(guild);
     }
     if (
       existingGuild &&
@@ -25,7 +26,7 @@ export default new Event({
         existingGuild.ownerId !== guild.ownerId ||
         existingGuild.memberCount !== guild.memberCount)
     ) {
-      await guildService.updateGuild(guild);
+      await guildService.update(guild);
     }
 
     await handleGuildNotification(guild);
@@ -38,6 +39,5 @@ const handleGuildNotification = async (guild: Guild) => {
     .setTitle(`Hello! Thanks for adding me to ${guild.name}`)
     .setDescription("To get started, type '/help'.");
 
-  const notificationService = guild.client.services.notificationService;
-  await notificationService.sendNotificationMessage(guild, embed);
+  await notificationService.send(guild, embed);
 };

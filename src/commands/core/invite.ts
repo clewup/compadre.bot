@@ -8,7 +8,7 @@ import {
   SlashCommandBuilder,
 } from "discord.js";
 import config from "../../config";
-import { Categories } from "../../data/enums/categories";
+import { Categories } from "../../enums/categories";
 
 /**
  *    @name invite

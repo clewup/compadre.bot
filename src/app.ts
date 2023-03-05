@@ -1,19 +1,16 @@
 import express from "express";
 import Compadre from "./structures/compadre";
-import { Events } from "discord.js";
 import config from "./config";
 import Database from "./structures/database";
 import expressWinston from "express-winston";
-import Logger from "./helpers/logger";
-import CharityFunction from "./cron/charity";
+import { charityCron } from "./cron";
+import { logger } from "./helpers";
 
 const port = config.port;
 
 const app = express();
 const database = new Database();
 const compadre = new Compadre();
-const logger = new Logger();
-const charityFunction = new CharityFunction();
 
 app.use(
   expressWinston.logger({
@@ -23,16 +20,14 @@ app.use(
 );
 
 const init = async () => {
-  await database.start();
-  await compadre.start();
+  await database.init();
+  await compadre.init();
 
-  charityFunction.init(compadre);
+  charityCron.init(compadre);
 };
 
 init();
 
 app.listen(port, () => {
-  return compadre.logger.logInfo(
-    `Server is listening at http://localhost:${port}.`
-  );
+  return logger.info(`Server is listening at http://localhost:${port}.`);
 });

@@ -1,5 +1,7 @@
 import { Event } from "../structures/event";
 import { Events } from "discord.js";
+import { guildService } from "../services";
+import { logger } from "../helpers";
 
 /**
  *    @name guildDelete
@@ -8,13 +10,12 @@ import { Events } from "discord.js";
 export default new Event({
   name: Events.GuildDelete,
   async execute(guild) {
-    guild.client.logger.logInfo(
+    logger.info(
       `${
         guild.client.user.username
       } has been removed from ${guild.client.functions.getGuildString(guild)}.`
     );
 
-    const guildService = guild.client.services.guildService;
-    await guildService.deleteGuild(guild);
+    await guildService.delete(guild);
   },
 });

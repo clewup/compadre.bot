@@ -4,7 +4,7 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
+import { Categories } from "../../enums/categories";
 
 /**
  *    @name slowmode

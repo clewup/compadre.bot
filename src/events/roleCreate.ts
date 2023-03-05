@@ -1,5 +1,7 @@
 import { Event } from "../structures/event";
 import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
+import { loggingService, roleService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name roleCreate
@@ -8,16 +10,13 @@ import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
 export default new Event({
   name: Events.GuildRoleCreate,
   async execute(role) {
-    role.client.logger.logInfo(
-      `Role "${
-        role.name
-      }" has been created in ${role.client.functions.getGuildString(
+    logger.info(
+      `Role "${role.name}" has been created in ${functions.getGuildString(
         role.guild
       )}.`
     );
 
-    const roleService = role.client.services.roleService;
-    await roleService.createRole(role);
+    await roleService.create(role);
 
     await handleGuildLogging(role);
   },
@@ -37,28 +36,29 @@ const handleGuildLogging = async (role: Role) => {
     reason = roleLog.reason;
   }
 
-  const loggingService = role.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**Role Created**", [
+  const embed = await loggingService.createEmbed("**Role Created**", [
     {
       name: "Role",
       value: `${role.name}`,
+      inline: false,
     },
     {
       name: "Created By",
       value: `${
-        createdBy
-          ? role.client.functions.getUserMentionString(createdBy)
-          : "Unknown"
+        createdBy ? functions.getUserMentionString(createdBy) : "Unknown"
       }`,
+      inline: false,
     },
     {
       name: "Permissions",
       value: `${role.permissions.toJSON()}`,
+      inline: false,
     },
     {
       name: "Reason",
       value: `${reason ? reason : "Unknown"}`,
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(role.guild, embed);
+  await loggingService.send(role.guild, embed);
 };

@@ -8,6 +8,8 @@ import {
 } from "discord.js";
 
 import { Event } from "../structures/event";
+import { loggingService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name interactionCreate
@@ -20,12 +22,12 @@ export default new Event({
     if (!interaction.isCommand()) return;
     if (!interaction.inCachedGuild()) return;
 
-    interaction.client.logger.logInfo(
-      `${interaction.client.functions.getUserString(
+    logger.info(
+      `${functions.getUserString(
         interaction.user
       )} has issued the interaction "${
         interaction.commandName
-      }" in ${interaction.client.functions.getGuildString(interaction.guild)}.`
+      }" in ${functions.getGuildString(interaction.guild)}.`
     );
 
     await handleGuildLogging(interaction);
@@ -39,7 +41,7 @@ export default new Event({
         )}!`,
         ephemeral: true,
       });
-      interaction.client.logger.logWarning(
+      logger.warning(
         `No command matching ${interaction.commandName} was found.`
       );
       return;
@@ -52,42 +54,38 @@ export default new Event({
         content: `There was an error while executing this command. \nCheck the console for more info.`,
         ephemeral: true,
       });
-      interaction.client.logger.logWarning(
-        `Error executing ${interaction.commandName}: ${error}`
-      );
+      logger.warning(`Error executing ${interaction.commandName}: ${error}`);
     }
   },
 });
 
 const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
-  const loggingService = interaction.client.services.loggingService;
   const parameters: unknown[] = [];
   (interaction as CommandInteraction).options.data.forEach((param) =>
     parameters.push(param.value)
   );
 
-  const embed = await loggingService.createLoggingEmbed(
-    "**Command Executed**",
-    [
-      {
-        name: "User",
-        value: `${interaction.client.functions.getUserMentionString(
-          interaction.user
-        )}`,
-      },
-      {
-        name: "Command",
-        value: `${(interaction as CommandInteraction).commandName}`,
-      },
-      {
-        name: "Parameters",
-        value: `${parameters.length ? parameters.join("\n") : "None"}`,
-      },
-      {
-        name: "Channel",
-        value: `${interaction.channel}`,
-      },
-    ]
-  );
-  await loggingService.sendLoggingMessage(interaction.guild, embed);
+  const embed = await loggingService.createEmbed("**Command Executed**", [
+    {
+      name: "User",
+      value: `${functions.getUserMentionString(interaction.user)}`,
+      inline: false,
+    },
+    {
+      name: "Command",
+      value: `${(interaction as CommandInteraction).commandName}`,
+      inline: false,
+    },
+    {
+      name: "Parameters",
+      value: `${parameters.length ? parameters.join("\n") : "None"}`,
+      inline: false,
+    },
+    {
+      name: "Channel",
+      value: `${interaction.channel}`,
+      inline: false,
+    },
+  ]);
+  await loggingService.send(interaction.guild!, embed);
 };

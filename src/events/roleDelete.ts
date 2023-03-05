@@ -1,5 +1,7 @@
 import { Event } from "../structures/event";
 import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
+import { loggingService, roleService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name roleDelete
@@ -8,16 +10,13 @@ import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
 export default new Event({
   name: Events.GuildRoleDelete,
   async execute(role) {
-    role.client.logger.logInfo(
-      `Role "${
-        role.name
-      }" has been deleted in ${role.client.functions.getGuildString(
+    logger.info(
+      `Role "${role.name}" has been deleted in ${functions.getGuildString(
         role.guild
       )}.`
     );
 
-    const roleService = role.client.services.roleService;
-    await roleService.deleteRole(role);
+    await roleService.delete(role);
 
     await handleGuildLogging(role);
   },
@@ -37,24 +36,24 @@ const handleGuildLogging = async (role: Role) => {
     reason = roleLog.reason;
   }
 
-  const loggingService = role.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**Role Deleted**", [
+  const embed = await loggingService.createEmbed("**Role Deleted**", [
     {
       name: "Role",
       value: `${role.name}`,
+      inline: false,
     },
     {
       name: "Deleted By",
       value: `${
-        deletedBy
-          ? role.client.functions.getUserMentionString(deletedBy)
-          : "Unknown"
+        deletedBy ? functions.getUserMentionString(deletedBy) : "Unknown"
       }`,
+      inline: false,
     },
     {
       name: "Reason",
       value: `${reason ? reason : "Unknown"}`,
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(role.guild, embed);
+  await loggingService.send(role.guild, embed);
 };

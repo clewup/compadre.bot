@@ -8,6 +8,12 @@ import {
   GuildMember,
   PartialGuildMember,
 } from "discord.js";
+import {
+  loggingService,
+  memberService,
+  notificationService,
+} from "../services";
+import { logger } from "../helpers";
 
 /**
  *    @name guildMemberRemove
@@ -16,7 +22,7 @@ import {
 export default new Event({
   name: Events.GuildMemberRemove,
   async execute(member) {
-    member.client.logger.logInfo(
+    logger.info(
       `${member.client.functions.getUserString(
         member.user
       )} has left/been kicked from ${member.client.functions.getGuildString(
@@ -24,8 +30,7 @@ export default new Event({
       )}.`
     );
 
-    const memberService = member.client.services.memberService;
-    await memberService.deleteMember(member);
+    await memberService.delete(member);
 
     await handleGuildLogging(member);
     await handleGuildNotification(member);
@@ -44,13 +49,12 @@ const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
     kickedBy = kickLog.executor;
   }
 
-  const loggingService = member.client.services.loggingService;
-
   if (kickedBy) {
-    const embed = await loggingService.createLoggingEmbed("**User Kicked**", [
+    const embed = await loggingService.createEmbed("**User Kicked**", [
       {
         name: "User",
         value: `${member.client.functions.getUserMentionString(member.user)}`,
+        inline: false,
       },
       {
         name: "Kicked By",
@@ -59,17 +63,19 @@ const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
             ? member.client.functions.getUserMentionString(kickedBy)
             : "Unknown"
         }`,
+        inline: false,
       },
     ]);
-    await loggingService.sendLoggingMessage(member.guild, embed);
+    await loggingService.send(member.guild, embed);
   } else {
-    const embed = await loggingService.createLoggingEmbed("**User Left**", [
+    const embed = await loggingService.createEmbed("**User Left**", [
       {
         name: "User",
         value: `${member.client.functions.getUserMentionString(member.user)}`,
+        inline: false,
       },
     ]);
-    await loggingService.sendLoggingMessage(member.guild, embed);
+    await loggingService.send(member.guild, embed);
   }
 };
 
@@ -81,6 +87,5 @@ const handleGuildNotification = async (
     .setTitle(`${member.displayName} has left the server.`)
     .setThumbnail(member.avatar);
 
-  const notificationService = member.client.services.notificationService;
-  await notificationService.sendNotificationMessage(member.guild, embed);
+  await notificationService.send(member.guild, embed);
 };

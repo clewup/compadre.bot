@@ -1,5 +1,6 @@
 import { Event } from "../structures/event";
 import { Events } from "discord.js";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name userUpdate
@@ -8,10 +9,8 @@ import { Events } from "discord.js";
 export default new Event({
   name: Events.UserUpdate,
   async execute(user) {
-    user.client.logger.logInfo(
-      `${user.client.functions.getUserString(
-        user
-      )} has updated their credentials.`
+    logger.info(
+      `${functions.getUserString(user)} has updated their credentials.`
     );
   },
 });

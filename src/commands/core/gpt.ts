@@ -4,8 +4,9 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
-import { ErrorReasons } from "../../data/enums/reasons";
+import { Categories } from "../../enums/categories";
+import { ErrorReasons } from "../../enums/reasons";
+import { openAiService } from "../../services";
 
 /**
  *    @name gpt
@@ -41,8 +42,7 @@ export default new Command({
     }
 
     await interaction.deferReply();
-    const gptService = interaction.client.services.gptService;
-    const gptResponse = await gptService.askGpt(question);
+    const gptResponse = await openAiService.askGpt(question);
 
     await interaction.followUp({
       ephemeral: true,

@@ -1,23 +1,19 @@
 import Database from "../structures/database";
-import { Role } from "@prisma/client";
 import { Role as DiscordRole } from "discord.js";
+import { Role } from "@prisma/client";
 
-/**
- *    @class
- *    Creates a new instance of the RoleService.
- */
-class RoleService {
-  readonly database;
+export default class RoleRepository {
+  private readonly database;
 
-  constructor() {
-    this.database = new Database();
+  constructor(database: Database) {
+    this.database = database;
   }
 
-  public async getRole(role: DiscordRole): Promise<Role | null> {
+  async get(role: DiscordRole) {
     return await this.database.role.findFirst({ where: { id: role.id } });
   }
 
-  public async createRole(role: DiscordRole): Promise<Role> {
+  async create(role: DiscordRole) {
     return await this.database.role.create({
       data: {
         id: role.id,
@@ -31,7 +27,7 @@ class RoleService {
     });
   }
 
-  public async updateRole(role: DiscordRole): Promise<Role> {
+  async update(role: DiscordRole) {
     return await this.database.role.update({
       where: { id: role.id },
       data: {
@@ -40,8 +36,7 @@ class RoleService {
     });
   }
 
-  public async deleteRole(role: DiscordRole): Promise<void> {
+  async delete(role: DiscordRole) {
     await this.database.role.delete({ where: { id: role.id } });
   }
 }
-export default RoleService;

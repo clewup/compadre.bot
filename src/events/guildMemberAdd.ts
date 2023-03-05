@@ -7,6 +7,12 @@ import {
   GuildMember,
   PartialGuildMember,
 } from "discord.js";
+import {
+  loggingService,
+  memberService,
+  notificationService,
+} from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name guildMemberAdd
@@ -15,16 +21,15 @@ import {
 export default new Event({
   name: Events.GuildMemberAdd,
   async execute(member) {
-    member.client.logger.logInfo(
-      `${member.client.functions.getUserString(
+    logger.info(
+      `${functions.getUserString(
         member.user
-      )} has joined ${member.client.functions.getGuildString(member.guild)}.`
+      )} has joined ${functions.getGuildString(member.guild)}.`
     );
 
-    const memberService = member.client.services.memberService;
-    const existingMember = await memberService.getMember(member);
+    const existingMember = await memberService.get(member);
     if (!existingMember) {
-      await memberService.createMember(member);
+      await memberService.create(member);
     }
 
     await handleGuildLogging(member);
@@ -33,14 +38,14 @@ export default new Event({
 });
 
 const handleGuildLogging = async (member: GuildMember) => {
-  const loggingService = member.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**User Joined**", [
+  const embed = await loggingService.createEmbed("**User Joined**", [
     {
       name: "User",
-      value: `${member.client.functions.getUserMentionString(member.user)}`,
+      value: `${functions.getUserMentionString(member.user)}`,
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(member.guild, embed);
+  await loggingService.send(member.guild, embed);
 };
 
 const handleGuildNotification = async (member: GuildMember) => {
@@ -49,6 +54,5 @@ const handleGuildNotification = async (member: GuildMember) => {
     .setTitle(`${member.displayName} has joined the server.`)
     .setThumbnail(member.avatar);
 
-  const notificationService = member.client.services.notificationService;
-  await notificationService.sendNotificationMessage(member.guild, embed);
+  await notificationService.send(member.guild, embed);
 };

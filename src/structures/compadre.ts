@@ -13,16 +13,7 @@ import { Command } from "./command";
 import fs from "node:fs";
 import path from "node:path";
 import config from "../config";
-import Soundboard from "./soundboard";
-import GptService from "../services/gptService";
-import GuildService from "../services/guildService";
-import LoggingService from "../services/loggingService";
-import MemberService from "../services/memberService";
-import NotificationService from "../services/notificationService";
-import PreventService from "../services/preventService";
-import RoleService from "../services/roleService";
-import WelcomeService from "../services/welcomeService";
-import Database from "./database";
+import { logger } from "../helpers";
 
 /**
  *    @extends DiscordClient
@@ -30,21 +21,7 @@ import Database from "./database";
  *    Creates a new instance of Compadre.
  */
 class Compadre<Ready extends boolean = boolean> extends DiscordClient {
-  readonly logger: Logger;
-  readonly functions: Functions;
   readonly commands: Collection<string, Command>;
-  readonly soundboard: Soundboard;
-
-  readonly services: {
-    gptService: GptService;
-    guildService: GuildService;
-    loggingService: LoggingService;
-    memberService: MemberService;
-    notificationService: NotificationService;
-    preventService: PreventService;
-    roleService: RoleService;
-    welcomeService: WelcomeService;
-  };
 
   constructor() {
     super({
@@ -63,38 +40,20 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
       },
     });
 
-    this.logger = new Logger();
-    this.functions = new Functions();
     this.commands = new Collection<string, Command>();
-    this.soundboard = new Soundboard();
 
-    this.services = {
-      gptService: new GptService(),
-      guildService: new GuildService(),
-      loggingService: new LoggingService(),
-      memberService: new MemberService(),
-      notificationService: new NotificationService(),
-      preventService: new PreventService(),
-      roleService: new RoleService(),
-      welcomeService: new WelcomeService(),
-    };
-
-    this.on(Events.ShardDisconnect, () =>
-      this.logger.logInfo("Bot Disconnected")
-    )
-      .on(Events.ShardReconnecting, () =>
-        this.logger.logInfo("Bot Reconnecting")
-      )
-      .on(Events.ShardError, (e) => this.logger.logError(e))
-      .on(Events.Error, (e) => this.logger.logError(e))
-      .on(Events.Warn, (info) => this.logger.logWarning(info));
+    this.on(Events.ShardDisconnect, () => logger.info("Bot Disconnected"))
+      .on(Events.ShardReconnecting, () => logger.info("Bot Reconnecting"))
+      .on(Events.ShardError, (e) => logger.error(e))
+      .on(Events.Error, (e) => logger.error(e))
+      .on(Events.Warn, (info) => logger.warning(info));
   }
 
   private async setCommands() {
     const commandsPath = path.join(__dirname, "..", "commands");
     const commandFolders = fs.readdirSync(commandsPath);
 
-    this.logger.logInfo(`Initializing commands.`);
+    logger.info(`Initializing commands.`);
 
     for (const folder of commandFolders) {
       const commandFiles = fs
@@ -114,9 +73,9 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
         ) {
           this.commands.set(command.data.name, command);
         } else if (command.details.enabled === false) {
-          this.logger.logWarning(`The command at ${filePath} is disabled.`);
+          logger.warning(`The command at ${filePath} is disabled.`);
         } else {
-          this.logger.logWarning(
+          logger.warning(
             `The command at ${filePath} is missing a required "data", "details" or "execute" property.`
           );
         }
@@ -130,7 +89,7 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
       .readdirSync(eventsPath)
       .filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
 
-    this.logger.logInfo(`Initializing events.`);
+    logger.info(`Initializing events.`);
     for (const file of eventFiles) {
       const filePath = path.join(eventsPath, file);
       let event = await import(filePath);
@@ -143,14 +102,14 @@ class Compadre<Ready extends boolean = boolean> extends DiscordClient {
           this.on(event.name, (...args) => event.execute(...args));
         }
       } else {
-        this.logger.logWarning(
+        logger.warning(
           `The event at ${filePath} is missing a required "name" or "execute" property.`
         );
       }
     }
   }
 
-  public async start() {
+  async init() {
     await this.setCommands();
     await this.setEvents();
     await this.login(config.discordClientToken);

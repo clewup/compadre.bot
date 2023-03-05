@@ -5,7 +5,8 @@ import {
   PermissionsBitField,
   SlashCommandBuilder,
 } from "discord.js";
-import { Categories } from "../../data/enums/categories";
+import { Categories } from "../../enums/categories";
+import { preventService } from "../../services";
 
 /**
  *    @name prevent
@@ -47,44 +48,30 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    const preventService = interaction.client.services.preventService;
-
     const enabled = interaction.options.getBoolean("enabled");
     const links = interaction.options.getBoolean("links");
     const role = interaction.options.getRole("role");
 
-    const preventConfig = await preventService.getPreventConfig(
-      interaction.guild
-    );
+    const config = await preventService.get(interaction.guild);
 
-    if (!preventConfig) {
+    if (!config) {
       enabled === true
-        ? await preventService.createPreventConfig(
+        ? await preventService.create(
             interaction.guild,
             role ? role.id : null,
             !!links,
             true
           )
-        : await preventService.createPreventConfig(
-            interaction.guild,
-            null,
-            false,
-            false
-          );
+        : await preventService.create(interaction.guild, null, false, false);
     } else {
       enabled === true
-        ? await preventService.updatePreventConfig(
+        ? await preventService.update(
             interaction.guild,
             role ? role.id : null,
             !!links,
             true
           )
-        : await preventService.updatePreventConfig(
-            interaction.guild,
-            null,
-            false,
-            false
-          );
+        : await preventService.update(interaction.guild, null, false, false);
     }
 
     await interaction.reply({

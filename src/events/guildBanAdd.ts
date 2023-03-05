@@ -6,6 +6,8 @@ import {
   Events,
   GuildBan,
 } from "discord.js";
+import { loggingService, notificationService } from "../services";
+import { functions, logger } from "../helpers";
 
 /**
  *    @name guildBanAdd
@@ -14,12 +16,10 @@ import {
 export default new Event({
   name: Events.GuildBanAdd,
   async execute(guildBan) {
-    guildBan.client.logger.logInfo(
-      `${guildBan.client.functions.getUserString(
+    logger.info(
+      `${functions.getUserString(
         guildBan.user
-      )} has been banned from ${guildBan.client.functions.getGuildString(
-        guildBan.guild
-      )}.`
+      )} has been banned from ${functions.getGuildString(guildBan.guild)}.`
     );
 
     await handleGuildLogging(guildBan);
@@ -39,11 +39,11 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
     bannedBy = banLog.executor;
   }
 
-  const loggingService = guildBan.client.services.loggingService;
-  const embed = await loggingService.createLoggingEmbed("**User Banned**", [
+  const embed = await loggingService.createEmbed("**User Banned**", [
     {
       name: "Banned User",
       value: `${guildBan.client.functions.getUserMentionString(guildBan.user)}`,
+      inline: false,
     },
     {
       name: "Banned By",
@@ -52,13 +52,15 @@ const handleGuildLogging = async (guildBan: GuildBan) => {
           ? guildBan.client.functions.getUserMentionString(bannedBy)
           : "Unknown"
       }`,
+      inline: false,
     },
     {
       name: "Reason",
       value: `${guildBan.reason}`,
+      inline: false,
     },
   ]);
-  await loggingService.sendLoggingMessage(guildBan.guild, embed);
+  await loggingService.send(guildBan.guild, embed);
 };
 
 const handleGuildNotification = async (guildBan: GuildBan) => {
@@ -67,6 +69,5 @@ const handleGuildNotification = async (guildBan: GuildBan) => {
     .setTitle(`${guildBan.user.username} has been banned from the server.`)
     .setThumbnail(guildBan.user.avatar);
 
-  const notificationService = guildBan.client.services.notificationService;
-  await notificationService.sendNotificationMessage(guildBan.guild, embed);
+  await notificationService.send(guildBan.guild, embed);
 };

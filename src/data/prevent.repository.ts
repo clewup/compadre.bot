@@ -1,32 +1,26 @@
 import Database from "../structures/database";
-import { NotificationConfig, PreventConfig } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
+import { PreventConfig } from "@prisma/client";
 
-/**
- *    @class
- *    Creates a new instance of the PreventService.
- */
-class PreventService {
-  readonly database;
+export default class PreventRepository {
+  private readonly database;
 
-  constructor() {
-    this.database = new Database();
+  constructor(database: Database) {
+    this.database = database;
   }
 
-  public async getPreventConfig(
-    guild: DiscordGuild
-  ): Promise<PreventConfig | null> {
+  async get(guild: DiscordGuild) {
     return await this.database.preventConfig.findFirst({
       where: { guildId: guild.id },
     });
   }
 
-  public async createPreventConfig(
+  async create(
     guild: DiscordGuild,
-    role: string,
+    role: string | null,
     links: boolean,
     enabled: boolean
-  ): Promise<PreventConfig> {
+  ) {
     return await this.database.preventConfig.create({
       data: {
         role: role,
@@ -41,12 +35,12 @@ class PreventService {
     });
   }
 
-  public async updatePreventConfig(
+  async update(
     guild: DiscordGuild,
     role: string | null,
     links: boolean,
     enabled: boolean
-  ): Promise<PreventConfig> {
+  ) {
     return this.database.preventConfig.update({
       where: { guildId: guild.id },
       data: {
@@ -56,5 +50,8 @@ class PreventService {
       },
     });
   }
+
+  async delete(guild: DiscordGuild) {
+    await this.database.preventConfig.delete({ where: { guildId: guild.id } });
+  }
 }
-export default PreventService;
