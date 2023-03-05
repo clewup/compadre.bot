@@ -9,9 +9,9 @@ export default class LoggingRepository {
     this.database = database;
   }
 
-  async get(guild: DiscordGuild) {
+  async get(guildId: string) {
     return await this.database.loggingConfig.findFirst({
-      where: { guildId: guild.id },
+      where: { guildId: guildId },
     });
   }
 

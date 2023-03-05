@@ -90,7 +90,7 @@ const handleDisable = async (
     );
   }
 
-  const config = await welcomeService.get(interaction.guild);
+  const config = await welcomeService.get(interaction.guild.id);
 
   if (!config) {
     await welcomeService.create(interaction.guild, null, null, null, false);
@@ -184,7 +184,7 @@ const handleEnable = async (
     }
   }
 
-  const config = await welcomeService.get(interaction.guild);
+  const config = await welcomeService.get(interaction.guild.id);
 
   if (!config) {
     await welcomeService.create(

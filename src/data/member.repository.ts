@@ -14,8 +14,12 @@ export default class MemberRepository {
     this.database = database;
   }
 
-  async get(member: DiscordMember) {
-    return await this.database.member.findFirst({ where: { id: member.id } });
+  async getAll(guildId: string) {
+    return await this.database.member.findMany({ where: { guildId: guildId } });
+  }
+
+  async get(id: string) {
+    return await this.database.member.findFirst({ where: { id: id } });
   }
 
   async create(member: DiscordMember) {

@@ -25,7 +25,7 @@ export default new Event({
 
 const handlePrevent = async (message: Message<boolean>) => {
   if (message.guild) {
-    const config = await preventService.get(message.guild);
+    const config = await preventService.get(message.guild.id);
 
     if (config && config.enabled) {
       const memberAuthor = await message.guild.members.fetch(message.author.id);

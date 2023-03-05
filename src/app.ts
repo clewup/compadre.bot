@@ -5,6 +5,15 @@ import Database from "./structures/database";
 import expressWinston from "express-winston";
 import { charityCron } from "./cron";
 import { logger } from "./helpers";
+import {
+  guildRouter,
+  loggingRouter,
+  memberRouter,
+  notificationRouter,
+  preventRouter,
+  roleRouter,
+  welcomeRouter,
+} from "./routes";
 
 const port = config.port;
 
@@ -18,6 +27,14 @@ app.use(
     statusLevels: true,
   })
 );
+
+app.use("/guild", guildRouter);
+app.use("/logging", loggingRouter);
+app.use("/member", memberRouter);
+app.use("/notification", notificationRouter);
+app.use("/prevent", preventRouter);
+app.use("/role", roleRouter);
+app.use("/welcome", welcomeRouter);
 
 const init = async () => {
   await database.init();

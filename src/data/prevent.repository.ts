@@ -9,9 +9,9 @@ export default class PreventRepository {
     this.database = database;
   }
 
-  async get(guild: DiscordGuild) {
+  async get(guildId: string) {
     return await this.database.preventConfig.findFirst({
-      where: { guildId: guild.id },
+      where: { guildId: guildId },
     });
   }
 

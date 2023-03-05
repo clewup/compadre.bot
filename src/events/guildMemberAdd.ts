@@ -27,7 +27,7 @@ export default new Event({
       )} has joined ${functions.getGuildString(member.guild)}.`
     );
 
-    const existingMember = await memberService.get(member);
+    const existingMember = await memberService.get(member.id);
     if (!existingMember) {
       await memberService.create(member);
     }

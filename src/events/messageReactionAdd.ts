@@ -62,7 +62,7 @@ const handleWelcome = async (
   reaction: MessageReaction | PartialMessageReaction,
   user: User | PartialUser
 ) => {
-  const config = await welcomeService.get(reaction.message.guild!);
+  const config = await welcomeService.get(reaction.message.guild!.id);
   if (
     config &&
     config.role &&

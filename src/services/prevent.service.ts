@@ -1,4 +1,5 @@
 import { Guild as DiscordGuild } from "discord.js";
+import { preventRepository } from "../data";
 import PreventRepository from "../data/prevent.repository";
 
 /**
@@ -6,14 +7,8 @@ import PreventRepository from "../data/prevent.repository";
  *    Creates a new instance of the PreventService.
  */
 export default class PreventService {
-  private readonly repository: PreventRepository;
-
-  constructor(repository: PreventRepository) {
-    this.repository = repository;
-  }
-
-  async get(guild: DiscordGuild) {
-    return await this.repository.get(guild);
+  async get(guildId: string) {
+    return await preventRepository.get(guildId);
   }
 
   async create(
@@ -22,7 +17,7 @@ export default class PreventService {
     links: boolean,
     enabled: boolean
   ) {
-    return await this.repository.create(guild, role, links, enabled);
+    return await preventRepository.create(guild, role, links, enabled);
   }
 
   async update(
@@ -31,10 +26,10 @@ export default class PreventService {
     links: boolean,
     enabled: boolean
   ) {
-    return await this.repository.update(guild, role, links, enabled);
+    return await preventRepository.update(guild, role, links, enabled);
   }
 
   async delete(guild: DiscordGuild) {
-    await this.repository.delete(guild);
+    await preventRepository.delete(guild);
   }
 }

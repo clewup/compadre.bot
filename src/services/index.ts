@@ -6,28 +6,15 @@ import OpenAiService from "./openai.service";
 import PreventService from "./prevent.service";
 import RoleService from "./role.service";
 import WelcomeService from "./welcome.service";
-import {
-  guildRepository,
-  loggingRepository,
-  memberRepository,
-  notificationRepository,
-  preventRepository,
-  roleRepository,
-  welcomeRepository,
-} from "../data";
 
-const guildService = new GuildService(
-  guildRepository,
-  memberRepository,
-  roleRepository
-);
-const loggingService = new LoggingService(loggingRepository);
-const memberService = new MemberService(memberRepository);
-const notificationService = new NotificationService(notificationRepository);
+const guildService = new GuildService();
+const loggingService = new LoggingService();
+const memberService = new MemberService();
+const notificationService = new NotificationService();
 const openAiService = new OpenAiService();
-const preventService = new PreventService(preventRepository);
-const roleService = new RoleService(roleRepository);
-const welcomeService = new WelcomeService(welcomeRepository);
+const preventService = new PreventService();
+const roleService = new RoleService();
+const welcomeService = new WelcomeService();
 
 export {
   guildService,

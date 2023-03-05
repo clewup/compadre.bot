@@ -9,8 +9,12 @@ export default class RoleRepository {
     this.database = database;
   }
 
-  async get(role: DiscordRole) {
-    return await this.database.role.findFirst({ where: { id: role.id } });
+  async getAll(guildId: string) {
+    return await this.database.role.findMany({ where: { guildId: guildId } });
+  }
+
+  async get(id: string) {
+    return await this.database.role.findFirst({ where: { id: id } });
   }
 
   async create(role: DiscordRole) {

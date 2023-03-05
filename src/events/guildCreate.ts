@@ -16,7 +16,7 @@ export default new Event({
       } has been added to ${functions.getGuildString(guild)}.`
     );
 
-    const existingGuild = await guildService.get(guild);
+    const existingGuild = await guildService.get(guild.id);
     if (!existingGuild) {
       await guildService.create(guild);
     }

@@ -9,8 +9,8 @@ export default class GuildRepository {
     this.database = database;
   }
 
-  async get(guild: DiscordGuild) {
-    return await this.database.guild.findFirst({ where: { id: guild.id } });
+  async get(id: string) {
+    return await this.database.guild.findFirst({ where: { id: id } });
   }
 
   async create(guild: DiscordGuild) {

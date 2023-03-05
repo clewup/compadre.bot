@@ -25,4 +25,11 @@ export default class Functions {
   getUserMentionString(user: User | PartialUser) {
     return `${user} (${user.id})`;
   }
+
+  formatApiError(message: unknown) {
+    return {
+      error: true,
+      message: message,
+    };
+  }
 }

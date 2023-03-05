@@ -9,9 +9,9 @@ export default class WelcomeRepository {
     this.database = database;
   }
 
-  async get(guild: DiscordGuild) {
+  async get(guildId: string) {
     return await this.database.welcomeConfig.findFirst({
-      where: { guildId: guild.id },
+      where: { guildId: guildId },
     });
   }
 

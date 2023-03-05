@@ -52,7 +52,7 @@ export default new Command({
     const links = interaction.options.getBoolean("links");
     const role = interaction.options.getRole("role");
 
-    const config = await preventService.get(interaction.guild);
+    const config = await preventService.get(interaction.guild.id);
 
     if (!config) {
       enabled === true

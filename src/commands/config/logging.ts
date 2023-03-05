@@ -81,7 +81,7 @@ const handleDisable = async (
     );
   }
 
-  const config = await loggingService.get(interaction.guild);
+  const config = await loggingService.get(interaction.guild.id);
 
   if (!config) {
     await loggingService.create(interaction.guild, null, null, false);
@@ -160,7 +160,7 @@ const handleEnable = async (
       ephemeral: true,
     });
 
-  const config = await loggingService.get(interaction.guild);
+  const config = await loggingService.get(interaction.guild.id);
 
   if (!config) {
     await loggingService.create(interaction.guild, role.id, channel.id, true);

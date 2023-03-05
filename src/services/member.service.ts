@@ -4,31 +4,30 @@ import {
   GuildMember as DiscordMember,
   PartialGuildMember as PartialDiscordMember,
 } from "discord.js";
+import { memberRepository } from "../data";
 
 /**
  *    @class
  *    Creates a new instance of the MemberService.
  */
 export default class MemberService {
-  private readonly repository: MemberRepository;
-
-  constructor(repository: MemberRepository) {
-    this.repository = repository;
+  async getAll(guildId: string) {
+    return await memberRepository.getAll(guildId);
   }
 
-  async get(member: DiscordMember) {
-    return await this.repository.get(member);
+  async get(id: string) {
+    return await memberRepository.get(id);
   }
 
   async create(member: DiscordMember) {
-    return await this.repository.create(member);
+    return await memberRepository.create(member);
   }
 
   async update(member: DiscordMember) {
-    return await this.repository.update(member);
+    return await memberRepository.update(member);
   }
 
   async delete(member: DiscordMember | PartialDiscordMember) {
-    await this.repository.delete(member);
+    await memberRepository.delete(member);
   }
 }

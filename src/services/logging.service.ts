@@ -4,6 +4,7 @@ import {
   EmbedField,
   EmbedBuilder,
 } from "discord.js";
+import { loggingRepository } from "../data";
 import LoggingRepository from "../data/logging.repository";
 
 /**
@@ -11,14 +12,8 @@ import LoggingRepository from "../data/logging.repository";
  *    Creates a new instance of the LoggingService.
  */
 export default class LoggingService {
-  private readonly repository: LoggingRepository;
-
-  constructor(repository: LoggingRepository) {
-    this.repository = repository;
-  }
-
-  async get(guild: DiscordGuild) {
-    return this.repository.get(guild);
+  async get(guildId: string) {
+    return loggingRepository.get(guildId);
   }
 
   async create(
@@ -27,7 +22,7 @@ export default class LoggingService {
     channel: string | null,
     enabled: boolean
   ) {
-    return this.repository.create(guild, role, channel, enabled);
+    return loggingRepository.create(guild, role, channel, enabled);
   }
 
   async update(
@@ -36,15 +31,15 @@ export default class LoggingService {
     channel: string | null,
     enabled: boolean
   ) {
-    return this.repository.update(guild, role, channel, enabled);
+    return loggingRepository.update(guild, role, channel, enabled);
   }
 
   async delete(guild: DiscordGuild) {
-    await this.repository.delete(guild);
+    await loggingRepository.delete(guild);
   }
 
   async getChannel(guild: DiscordGuild) {
-    const config = await this.repository.get(guild);
+    const config = await loggingRepository.get(guild.id);
 
     if (config && config.channel) {
       const channel = await guild.channels.fetch(config.channel);
@@ -63,7 +58,7 @@ export default class LoggingService {
   }
 
   async send(guild: DiscordGuild, embed: EmbedBuilder) {
-    const config = await this.repository.get(guild);
+    const config = await loggingRepository.get(guild.id);
 
     if (config?.enabled === true) {
       const channel = await this.getChannel(guild);

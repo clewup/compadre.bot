@@ -1,19 +1,14 @@
 import WelcomeRepository from "../data/welcome.repository";
 import { Guild as DiscordGuild } from "discord.js";
+import { welcomeRepository } from "../data";
 
 /**
  *    @class
  *    Creates a new instance of the WelcomeService.
  */
 export default class WelcomeService {
-  private readonly repository: WelcomeRepository;
-
-  constructor(repository: WelcomeRepository) {
-    this.repository = repository;
-  }
-
-  async get(guild: DiscordGuild) {
-    return await this.repository.get(guild);
+  async get(guildId: string) {
+    return await welcomeRepository.get(guildId);
   }
 
   async create(
@@ -23,7 +18,13 @@ export default class WelcomeService {
     message: string | null,
     enabled: boolean
   ) {
-    return await this.repository.create(guild, channel, role, message, enabled);
+    return await welcomeRepository.create(
+      guild,
+      channel,
+      role,
+      message,
+      enabled
+    );
   }
 
   async update(
@@ -33,10 +34,16 @@ export default class WelcomeService {
     message: string | null,
     enabled: boolean
   ) {
-    return await this.repository.update(guild, channel, role, message, enabled);
+    return await welcomeRepository.update(
+      guild,
+      channel,
+      role,
+      message,
+      enabled
+    );
   }
 
   async delete(guild: DiscordGuild) {
-    await this.repository.delete(guild);
+    await welcomeRepository.delete(guild);
   }
 }

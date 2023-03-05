@@ -75,7 +75,7 @@ const handleDisable = async (
     );
   }
 
-  const config = await notificationService.get(interaction.guild);
+  const config = await notificationService.get(interaction.guild.id);
 
   if (!config) {
     await notificationService.create(interaction.guild, null, false);
@@ -139,7 +139,7 @@ const handleEnable = async (
       ephemeral: true,
     });
 
-  const config = await notificationService.get(interaction.guild);
+  const config = await notificationService.get(interaction.guild.id);
 
   if (!config) {
     await notificationService.create(interaction.guild, channel.id, true);
