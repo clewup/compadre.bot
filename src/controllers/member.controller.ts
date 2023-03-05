@@ -8,10 +8,10 @@ export default class MemberController {
       const guildId = req.params.guildId;
       const members = await memberService.getAll(guildId);
 
-      return res.send(members);
+      return res.json(members);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 
@@ -20,10 +20,10 @@ export default class MemberController {
       const id = req.params.id;
       const member = await memberService.get(id);
 
-      return res.send(member);
+      return res.json(member);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 }

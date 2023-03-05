@@ -12,6 +12,7 @@ const config = {
   clientName: process.env.CLIENT_NAME,
   clientInviteUrl: process.env.CLIENT_INVITE_URL,
   openAiKey: process.env.OPENAI_KEY,
+  jwtKey: process.env.JWT_KEY,
 
   // Configuration
   clientAdmins: clientAdmins,

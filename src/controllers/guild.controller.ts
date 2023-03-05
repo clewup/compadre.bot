@@ -8,10 +8,10 @@ export default class GuildController {
       const id = req.params.id;
       const guild = await guildService.get(id);
 
-      return res.send(guild);
+      return res.json(guild);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 }

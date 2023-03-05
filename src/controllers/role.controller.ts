@@ -8,10 +8,10 @@ export default class RoleController {
       const guildId = req.params.guildId;
       const roles = await roleService.getAll(guildId);
 
-      return res.send(roles);
+      return res.json(roles);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 
@@ -20,10 +20,10 @@ export default class RoleController {
       const id = req.params.id;
       const role = await roleService.get(id);
 
-      return res.send(role);
+      return res.json(role);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 }

@@ -9,10 +9,10 @@ export default class WelcomeController {
       const guildId = req.params.guildId;
       const config = await welcomeService.get(guildId);
 
-      return res.send(config);
+      return res.json(config);
     } catch (error) {
       res.statusCode = 500;
-      res.send(functions.formatApiError(error));
+      res.json(functions.formatApiError(error));
     }
   }
 }
