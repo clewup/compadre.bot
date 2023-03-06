@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { notificationService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { notificationMapper } from "../mappers";
 
 export default class NotificationController {
   async get(req: Request, res: Response) {
@@ -9,7 +10,7 @@ export default class NotificationController {
       const config = await notificationService.get(guildId);
 
       if (config) {
-        const mappedConfig = mappers.mapNotification(config);
+        const mappedConfig = notificationMapper.map(config);
         return res.json(mappedConfig);
       }
 

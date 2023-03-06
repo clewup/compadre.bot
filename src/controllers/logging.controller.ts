@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { loggingService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { loggingMapper } from "../mappers";
 
 export default class LoggingController {
   async get(req: Request, res: Response) {
@@ -9,7 +10,7 @@ export default class LoggingController {
       const config = await loggingService.get(guildId);
 
       if (config) {
-        const mappedConfig = mappers.mapLogging(config);
+        const mappedConfig = loggingMapper.map(config);
         return res.json(mappedConfig);
       }
 

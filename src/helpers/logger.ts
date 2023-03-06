@@ -1,8 +1,9 @@
+import { createLogger, format, transports } from "winston";
+
 /**
  *    @class
  *    Creates a new instance of Logger.
  */
-import { createLogger, format, transports } from "winston";
 
 export default class Logger {
   readonly winston;

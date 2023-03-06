@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { roleService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { roleMapper } from "../mappers";
 
 export default class RoleController {
   async getAll(req: Request, res: Response) {
@@ -11,7 +12,7 @@ export default class RoleController {
       if (roles.length) {
         const mappedRoles: object[] = [];
         roles.forEach((role) => {
-          mappedRoles.push(mappers.mapRole(role));
+          mappedRoles.push(roleMapper.map(role));
         });
 
         return res.json(mappedRoles);
@@ -30,7 +31,7 @@ export default class RoleController {
       const role = await roleService.get(id);
 
       if (role) {
-        const mappedRole = mappers.mapRole(role);
+        const mappedRole = roleMapper.map(role);
         return res.json(mappedRole);
       }
 

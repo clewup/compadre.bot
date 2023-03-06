@@ -5,7 +5,9 @@ import NotificationController from "./notification.controller";
 import PreventController from "./prevent.controller";
 import RoleController from "./role.controller";
 import WelcomeController from "./welcome.controller";
+import AuthController from "./auth.controller";
 
+const authController = new AuthController();
 const guildController = new GuildController();
 const loggingController = new LoggingController();
 const memberController = new MemberController();
@@ -15,6 +17,7 @@ const roleController = new RoleController();
 const welcomeController = new WelcomeController();
 
 export {
+  authController,
   guildController,
   loggingController,
   memberController,

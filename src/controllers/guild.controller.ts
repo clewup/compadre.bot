@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { guildService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
 import { Guild } from "@prisma/client";
+import { guildMapper } from "../mappers";
 
 export default class GuildController {
   async get(req: Request, res: Response) {
@@ -10,7 +11,7 @@ export default class GuildController {
       let guild = await guildService.get(id);
 
       if (guild) {
-        const mappedGuild = mappers.mapGuild(guild);
+        const mappedGuild = guildMapper.map(guild);
         return res.json(mappedGuild);
       }
 

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import WelcomeService from "../services/welcome.service";
 import { welcomeService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { welcomeMapper } from "../mappers";
 
 export default class WelcomeController {
   async get(req: Request, res: Response) {
@@ -10,7 +11,7 @@ export default class WelcomeController {
       const config = await welcomeService.get(guildId);
 
       if (config) {
-        const mappedConfig = mappers.mapWelcome(config);
+        const mappedConfig = welcomeMapper.map(config);
         return res.json(mappedConfig);
       }
 

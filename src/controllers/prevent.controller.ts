@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { preventService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { preventMapper } from "../mappers";
 
 export default class PreventController {
   async get(req: Request, res: Response) {
@@ -9,7 +10,7 @@ export default class PreventController {
       const config = await preventService.get(guildId);
 
       if (config) {
-        const mappedConfig = mappers.mapPrevent(config);
+        const mappedConfig = preventMapper.map(config);
         return res.json(mappedConfig);
       }
 

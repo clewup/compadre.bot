@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { memberService } from "../services";
-import { functions, mappers } from "../helpers";
+import { functions } from "../helpers";
+import { memberMapper } from "../mappers";
 
 export default class MemberController {
   async getAll(req: Request, res: Response) {
@@ -11,7 +12,7 @@ export default class MemberController {
       if (members.length) {
         const mappedMembers: object[] = [];
         members.forEach((member) => {
-          mappedMembers.push(mappers.mapMember(member));
+          mappedMembers.push(memberMapper.map(member));
         });
 
         return res.json(mappedMembers);
@@ -30,7 +31,7 @@ export default class MemberController {
       const member = await memberService.get(id);
 
       if (member) {
-        const mappedMember = mappers.mapMember(member);
+        const mappedMember = memberMapper.map(member);
         return res.json(mappedMember);
       }
 
