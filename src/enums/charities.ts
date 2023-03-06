@@ -1,4 +1,4 @@
-import { Charity } from "../types/chairty";
+import { Charity } from "../types/charity";
 
 export const Charities: Charity[] = [
   Object.freeze({

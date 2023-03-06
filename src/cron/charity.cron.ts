@@ -5,7 +5,7 @@ import { CronSchedules } from "../enums/cronSchedules";
 import { Charities } from "../enums/charities";
 import { notificationService } from "../services";
 import { functions, logger } from "../helpers";
-import { Charity } from "../types/chairty";
+import { Charity } from "../types/charity";
 
 export default class CharityCron {
   init(compadre: Compadre) {
