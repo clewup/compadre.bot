@@ -1,8 +1,4 @@
-interface Charity {
-  title: string;
-  description: string;
-  image: string;
-}
+import { Charity } from "../types/chairty";
 
 export const Charities: Charity[] = [
   Object.freeze({

@@ -1,5 +1,5 @@
 import { Event } from "../structures/event";
-import { Colors, EmbedBuilder, Events, Guild, GuildMember } from "discord.js";
+import { Colors, EmbedBuilder, Events, Guild } from "discord.js";
 import { guildService, notificationService } from "../services";
 import { functions, logger } from "../helpers";
 

@@ -1,7 +1,6 @@
 import {
   CacheType,
   CommandInteraction,
-  EmbedBuilder,
   Events,
   inlineCode,
   Interaction,
@@ -60,6 +59,8 @@ export default new Event({
 });
 
 const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
+  if (!interaction.guild) return;
+
   const parameters: unknown[] = [];
   (interaction as CommandInteraction).options.data.forEach((param) =>
     parameters.push(param.value)
@@ -87,5 +88,5 @@ const handleGuildLogging = async (interaction: Interaction<CacheType>) => {
       inline: false,
     },
   ]);
-  await loggingService.send(interaction.guild!, embed);
+  await loggingService.send(interaction.guild, embed);
 };

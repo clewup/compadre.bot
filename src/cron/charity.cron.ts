@@ -5,13 +5,14 @@ import { CronSchedules } from "../enums/cronSchedules";
 import { Charities } from "../enums/charities";
 import { notificationService } from "../services";
 import { functions, logger } from "../helpers";
+import { Charity } from "../types/chairty";
 
 export default class CharityCron {
   init(compadre: Compadre) {
     const charityFunction = CronJob.schedule(CronSchedules.DAILY_8AM, () => {
       logger.info("Executed the scheduled CharityFunction.");
 
-      const charity = functions.randomArrayItem(Charities);
+      const charity: Charity = functions.randomArrayItem(Charities);
 
       compadre.guilds.cache.forEach(async (guild) => {
         const embed = new EmbedBuilder()

@@ -1,4 +1,3 @@
-import WelcomeRepository from "../data/welcome.repository";
 import { Guild as DiscordGuild } from "discord.js";
 import { welcomeRepository } from "../data";
 

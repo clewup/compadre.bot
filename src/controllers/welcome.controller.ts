@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import WelcomeService from "../services/welcome.service";
 import { welcomeService } from "../services";
 import { functions } from "../helpers";
 import { welcomeMapper } from "../mappers";

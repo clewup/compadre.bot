@@ -1,6 +1,5 @@
 import { Command } from "../../structures/command";
 import {
-  ButtonStyle,
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,

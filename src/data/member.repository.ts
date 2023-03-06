@@ -4,7 +4,6 @@ import {
   PartialGuildMember as PartialDiscordMember,
   PermissionsBitField,
 } from "discord.js";
-import { Member } from "@prisma/client";
 import config from "../config";
 
 export default class MemberRepository {

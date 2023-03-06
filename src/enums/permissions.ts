@@ -1,5 +1,3 @@
-import { PermissionsBitField } from "discord.js";
-
 /**
  *    An object of shared permissions.
  */

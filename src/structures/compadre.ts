@@ -4,11 +4,7 @@ import {
   Events,
   IntentsBitField as Intents,
   Partials,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-  RESTPostAPIContextMenuApplicationCommandsJSONBody,
 } from "discord.js";
-import Logger from "../helpers/logger";
-import Functions from "../helpers/functions";
 import { Command } from "./command";
 import fs from "node:fs";
 import path from "node:path";
@@ -20,6 +16,7 @@ import { logger } from "../helpers";
  *    @class
  *    Creates a new instance of Compadre.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Compadre<Ready extends boolean = boolean> extends DiscordClient {
   readonly commands: Collection<string, Command>;
 

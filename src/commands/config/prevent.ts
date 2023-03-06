@@ -1,6 +1,5 @@
 import { Command } from "../../structures/command";
 import {
-  ChannelType,
   ChatInputCommandInteraction,
   PermissionsBitField,
   SlashCommandBuilder,

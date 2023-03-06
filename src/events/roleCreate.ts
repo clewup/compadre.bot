@@ -1,5 +1,5 @@
 import { Event } from "../structures/event";
-import { AuditLogEvent, EmbedBuilder, Events, Role } from "discord.js";
+import { AuditLogEvent, Events, Role } from "discord.js";
 import { loggingService, roleService } from "../services";
 import { functions, logger } from "../helpers";
 

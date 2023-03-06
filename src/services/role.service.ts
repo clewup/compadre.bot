@@ -1,4 +1,3 @@
-import RoleRepository from "../data/role.repository";
 import { Role as DiscordRole } from "discord.js";
 import { roleRepository } from "../data";
 

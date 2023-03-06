@@ -28,8 +28,10 @@ export default new Event({
 });
 
 const handleGuildLogging = async (guildBan: GuildBan) => {
+  if (!guildBan.guild) return;
+
   // Fetch the user who banned the user
-  const fetchedLogs = await guildBan.guild!.fetchAuditLogs({
+  const fetchedLogs = await guildBan.guild.fetchAuditLogs({
     limit: 1,
     type: AuditLogEvent.MemberBanAdd,
   });

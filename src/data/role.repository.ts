@@ -1,6 +1,5 @@
 import Database from "../structures/database";
 import { Role as DiscordRole } from "discord.js";
-import { Role } from "@prisma/client";
 
 export default class RoleRepository {
   private readonly database;

@@ -1,6 +1,5 @@
 import { ShardingManager as DiscordShardingManager } from "discord.js";
 import config from "../config";
-import Logger from "../helpers/logger";
 import { logger } from "../helpers";
 
 class ShardingManager extends DiscordShardingManager {

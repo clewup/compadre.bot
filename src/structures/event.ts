@@ -8,6 +8,7 @@ interface OverriddenClientEvents extends Omit<ClientEvents, "ready"> {
 interface EventOptions<Key extends keyof ClientEvents> {
   name: Key;
   once?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   execute: (...args: OverriddenClientEvents[Key]) => any;
 }
 

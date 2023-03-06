@@ -36,6 +36,13 @@ export default new Command({
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
     const amount = interaction.options.getInteger("amount");
 
+    if (!amount) {
+      return await interaction.reply({
+        ephemeral: true,
+        content: ErrorReasons.INVALID_PARAMETER("amount"),
+      });
+    }
+
     if (
       !interaction.channel ||
       (interaction.channel && !(interaction.channel instanceof TextChannel))
@@ -46,7 +53,7 @@ export default new Command({
       });
     }
 
-    await interaction.channel.bulkDelete(amount!, true);
+    await interaction.channel.bulkDelete(amount, true);
     await interaction.reply({
       ephemeral: true,
       content: `${amount} messages cleared.`,

@@ -1,6 +1,5 @@
 import { Event } from "../structures/event";
 import {
-  EmbedBuilder,
   Events,
   MessageReaction,
   PartialMessageReaction,
@@ -34,6 +33,8 @@ const handleGuildLogging = async (
   reaction: MessageReaction | PartialMessageReaction,
   user: User | PartialUser
 ) => {
+  if (!reaction.message.guild) return;
+
   const embed = await loggingService.createEmbed("**Message Reaction**", [
     {
       name: "User",
@@ -55,22 +56,24 @@ const handleGuildLogging = async (
       inline: false,
     },
   ]);
-  await loggingService.send(reaction.message.guild!, embed);
+  await loggingService.send(reaction.message.guild, embed);
 };
 
 const handleWelcome = async (
   reaction: MessageReaction | PartialMessageReaction,
   user: User | PartialUser
 ) => {
-  const config = await welcomeService.get(reaction.message.guild!.id);
+  if (!reaction.message.guild) return;
+
+  const config = await welcomeService.get(reaction.message.guild.id);
   if (
     config &&
     config.role &&
     config.channel === reaction.message.channel.id &&
     config.enabled === true
   ) {
-    const role = await reaction.message.guild!.roles.fetch(config.role);
-    const guildUser = await reaction.message.guild!.members.fetch(user.id);
+    const role = await reaction.message.guild.roles.fetch(config.role);
+    const guildUser = await reaction.message.guild.members.fetch(user.id);
 
     if (role && guildUser) {
       await guildUser.roles.add(role);

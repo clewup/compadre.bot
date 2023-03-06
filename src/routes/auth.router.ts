@@ -1,7 +1,4 @@
-import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import config from "../config";
-import { functions } from "../helpers";
+import express from "express";
 import { authController } from "../controllers";
 
 const authRouter = express.Router();

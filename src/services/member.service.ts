@@ -1,5 +1,3 @@
-import LoggingRepository from "../data/logging.repository";
-import MemberRepository from "../data/member.repository";
 import {
   GuildMember as DiscordMember,
   PartialGuildMember as PartialDiscordMember,

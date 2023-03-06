@@ -1,12 +1,5 @@
 import { Event } from "../structures/event";
-import {
-  AuditLogEvent,
-  CommandInteraction,
-  EmbedBuilder,
-  Events,
-  Message,
-  PartialMessage,
-} from "discord.js";
+import { AuditLogEvent, Events, Message, PartialMessage } from "discord.js";
 import { loggingService } from "../services";
 import { functions, logger } from "../helpers";
 
@@ -32,8 +25,10 @@ export default new Event({
 });
 
 const handleGuildLogging = async (message: Message | PartialMessage) => {
+  if (!message.guild) return;
+
   // Fetch the user who deleted the message
-  const fetchedLogs = await message.guild!.fetchAuditLogs({
+  const fetchedLogs = await message.guild.fetchAuditLogs({
     limit: 1,
     type: AuditLogEvent.MessageDelete,
   });
@@ -75,5 +70,5 @@ const handleGuildLogging = async (message: Message | PartialMessage) => {
       inline: false,
     },
   ]);
-  await loggingService.send(message.guild!, embed);
+  await loggingService.send(message.guild, embed);
 };

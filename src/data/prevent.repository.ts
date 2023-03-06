@@ -1,6 +1,5 @@
 import Database from "../structures/database";
 import { Guild as DiscordGuild } from "discord.js";
-import { PreventConfig } from "@prisma/client";
 
 export default class PreventRepository {
   private readonly database;

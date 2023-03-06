@@ -7,6 +7,7 @@ import config from "../config";
 import Logger from "../helpers/logger";
 
 const logger = new Logger();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const commands: any[] = [];
 
 const commandsPath = path.join(__dirname, "..", "commands");
@@ -40,9 +41,7 @@ const refreshCommands = async () => {
 
   await (async () => {
     try {
-      let data: string | any[];
-
-      data = (await rest.put(
+      const data = (await rest.put(
         Routes.applicationCommands(config.discordApplicationId || ""),
         { body: commands }
       )) as Command["data"][];

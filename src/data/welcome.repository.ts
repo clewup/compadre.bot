@@ -1,6 +1,5 @@
 import Database from "../structures/database";
 import { Guild as DiscordGuild } from "discord.js";
-import { WelcomeConfig } from "@prisma/client";
 
 export default class WelcomeRepository {
   private readonly database;

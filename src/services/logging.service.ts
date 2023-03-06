@@ -5,7 +5,6 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { loggingRepository } from "../data";
-import LoggingRepository from "../data/logging.repository";
 
 /**
  *    @class

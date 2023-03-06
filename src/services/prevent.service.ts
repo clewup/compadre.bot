@@ -1,6 +1,5 @@
 import { Guild as DiscordGuild } from "discord.js";
 import { preventRepository } from "../data";
-import PreventRepository from "../data/prevent.repository";
 
 /**
  *    @class

@@ -4,7 +4,6 @@ import {
   Colors,
   EmbedBuilder,
   Events,
-  GuildBan,
   GuildMember,
   PartialGuildMember,
 } from "discord.js";
@@ -38,8 +37,10 @@ export default new Event({
 });
 
 const handleGuildLogging = async (member: GuildMember | PartialGuildMember) => {
+  if (!member.guild) return;
+
   // Fetch the user who kicked the user
-  const fetchedLogs = await member.guild!.fetchAuditLogs({
+  const fetchedLogs = await member.guild.fetchAuditLogs({
     limit: 1,
     type: AuditLogEvent.MemberKick,
   });

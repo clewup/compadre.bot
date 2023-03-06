@@ -25,7 +25,7 @@ export default new Command({
   },
 
   async execute(interaction: ChatInputCommandInteraction<"cached">) {
-    let channel = interaction.channel;
+    const channel = interaction.channel;
 
     interaction.guild.roles.cache.forEach((role) => {
       if (channel instanceof TextChannel || channel instanceof VoiceChannel) {

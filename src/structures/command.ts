@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ContextMenuCommandBuilder } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 
 interface CommandDetails {
   category: string;
@@ -8,6 +8,7 @@ interface CommandDetails {
 interface CommandOptions {
   data: SlashCommandBuilder;
   details: CommandDetails;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   execute: (...args: any) => any;
 }
 

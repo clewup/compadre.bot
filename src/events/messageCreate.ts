@@ -12,11 +12,12 @@ export default new Event({
   async execute(message) {
     if (message.author.bot) return;
     if (message.content.startsWith("/")) return;
+    if (!message.guild) return;
 
     logger.info(
       `${functions.getUserString(message.author)} has sent the message "${
         message.content
-      }" in ${functions.getGuildString(message.guild!)}.`
+      }" in ${functions.getGuildString(message.guild)}.`
     );
 
     await handlePrevent(message);
@@ -38,8 +39,7 @@ const handlePrevent = async (message: Message<boolean>) => {
         (role && memberAuthor.roles.highest.comparePositionTo(role) < 1)
       ) {
         const linkExpression =
-          /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-        const adExpression = /\b(?:.?)ad(?:.?)\b/;
+          /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
 
         // Links
         if (config.links && message.content.match(new RegExp(linkExpression))) {

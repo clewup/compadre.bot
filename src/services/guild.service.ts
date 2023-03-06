@@ -1,5 +1,3 @@
-import Database from "../structures/database";
-import { Guild } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 import { guildRepository, memberRepository, roleRepository } from "../data";
 
@@ -16,13 +14,13 @@ export default class GuildService {
     await guildRepository.create(guild);
 
     const members = await guild.members.list();
-    members.forEach(async (member) => {
-      await memberRepository.create(member);
+    members.forEach((member) => {
+      memberRepository.create(member);
     });
 
     const roles = await guild.roles.valueOf();
-    roles.forEach(async (role) => {
-      await roleRepository.create(role);
+    roles.forEach((role) => {
+      roleRepository.create(role);
     });
 
     return await guildRepository.get(guild.id);

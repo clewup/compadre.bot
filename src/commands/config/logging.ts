@@ -94,7 +94,7 @@ const handleEnable = async (
   interaction: ChatInputCommandInteraction<"cached">
 ) => {
   let channel = interaction.options.getChannel("channel");
-  let role = interaction.options.getRole("role");
+  const role = interaction.options.getRole("role");
 
   if (channel && !(channel instanceof TextChannel)) {
     return interaction.reply({

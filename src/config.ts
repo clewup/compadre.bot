@@ -4,7 +4,7 @@ const clientAdmins = ["1034517161726713857"];
 
 const config = {
   // Environment Variables
-  port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+  port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   discordClientToken: process.env.DISCORD_CLIENT_TOKEN,
   discordApplicationId: process.env.DISCORD_APPLICATION_ID,
   discordPublicKey: process.env.DISCORD_PUBLIC_KEY,

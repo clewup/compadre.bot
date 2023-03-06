@@ -1,12 +1,5 @@
 import { Event } from "../structures/event";
-import {
-  AuditLogEvent,
-  Colors,
-  EmbedBuilder,
-  Events,
-  GuildMember,
-  PartialGuildMember,
-} from "discord.js";
+import { Colors, EmbedBuilder, Events, GuildMember } from "discord.js";
 import {
   loggingService,
   memberService,

@@ -1,10 +1,5 @@
 import { Event } from "../structures/event";
-import {
-  EmbedBuilder,
-  Events,
-  GuildMember,
-  PartialGuildMember,
-} from "discord.js";
+import { Events, GuildMember, PartialGuildMember } from "discord.js";
 import { loggingService, memberService } from "../services";
 import { logger } from "../helpers";
 

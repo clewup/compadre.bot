@@ -1,7 +1,4 @@
-import Database from "../structures/database";
 import { TextChannel, Guild as DiscordGuild, EmbedBuilder } from "discord.js";
-import NotificationRepository from "../data/notification.repository";
-import GuildRepository from "../data/guild.repository";
 import { notificationRepository } from "../data";
 
 /**
@@ -42,7 +39,9 @@ export default class NotificationService {
     if (config?.enabled === true) {
       const channel = await this.getChannel(guild);
 
-      await channel!.send({ embeds: [embed] });
+      if (!channel) return;
+
+      await channel.send({ embeds: [embed] });
     }
   }
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { loggingController, memberController } from "../controllers";
+import { memberController } from "../controllers";
 import { authenticate } from "../middleware/auth";
 
 const memberRouter = express.Router();
