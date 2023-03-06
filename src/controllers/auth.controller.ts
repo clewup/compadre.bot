@@ -8,18 +8,13 @@ export default class AuthController {
     try {
       const user = req.body;
 
-      jwt.sign(
-        { user },
-        config.jwtKey || "",
-        { expiresIn: "1h" },
-        (err, token) => {
-          if (err) {
-            res.status(500).json({ error: "Error signing token." });
-          } else {
-            res.json({ token });
-          }
+      jwt.sign({ user }, config.jwtKey!, { expiresIn: "1h" }, (err, token) => {
+        if (err) {
+          res.status(500).json({ error: "Error signing token." });
+        } else {
+          res.json({ token });
         }
-      );
+      });
     } catch (error) {
       res.statusCode = 500;
       res.json(functions.formatApiError(error));
