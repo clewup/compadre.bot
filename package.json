@@ -73,8 +73,8 @@
   },
   "jest": {
     "testMatch": [
-      "**/__tests__/**/*.+(js|jsx)",
-      "**/?(*.)+(spec|test).+(js|jsx)"
+      "**/__tests__/**/*.+(ts|tsx)",
+      "**/?(*.)+(spec|test).+(ts|tsx)"
     ]
   }
 }
